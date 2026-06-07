@@ -8,6 +8,10 @@
   <meta name="description" content="Ein eleganter, minimalistischer PDF-Tageskalender für das aktuelle Jahr im Soft Modern Neon Glassmorphismus Stil mit Notizfunktion und Lesezeichen.">
   <meta name="theme-color" content="#050505">
   
+  <!-- App Icon Integration -->
+  <link rel="icon" type="image/jpeg" href="AufDeinWort.jpeg">
+  <link rel="apple-touch-icon" href="AufDeinWort.jpeg">
+  
   <!-- Premium Google Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -832,6 +836,24 @@
       border-color: rgba(255, 159, 10, 0.3);
       box-shadow: var(--glow-orange);
     }
+
+    /* Brand Logo Style in Sidebar */
+    .menu-brand-section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 8px 0 16px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      margin-bottom: 16px;
+    }
+    .menu-brand-logo {
+      width: 90px;
+      height: 90px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 15px rgba(182, 102, 255, 0.2), 0 10px 25px rgba(0, 0, 0, 0.5);
+      object-fit: cover;
+    }
   </style>
 </head>
 <body>
@@ -941,6 +963,11 @@
     </div>
 
     <div class="slide-over-content">
+      <!-- App Brand Logo -->
+      <div class="menu-brand-section">
+        <img src="AufDeinWort.jpeg" class="menu-brand-logo" alt="Auf dein Wort Logo" onerror="this.style.display='none'">
+      </div>
+
       <!-- Section 1: Graphical Monthly Calendar Navigation -->
       <div class="menu-section">
         <h3>Kalendersprung</h3>
