@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Auf dein Wort — PDF-Tageskalender</title>
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Ein eleganter, minimalistischer PDF-Tageskalender für das aktuelle Jahr im Soft Modern Neon Glassmorphismus Stil mit Notizfunktion und Lesezeichen.">
+  <meta name="theme-color" content="#050505">
+  
+  <!-- Premium Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;600&display=swap" rel="stylesheet">
+  
+  <!-- PDF.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  
+  <style>
+    /* 1. FARBPALETTE & THEME TOKENS */
+    :root {
+      --bg-base: #050505;
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.4);
+      
+      /* Neon-Akzentfarben (Pastell-Neon) */
+      --color-purple: #b666ff;
+      --color-blue: #3b82f6;
+      --color-orange: #ff9f0a;
+      --color-green: #30d158;
+      --color-red: #ff3b30;
+      
+      /* Standard-Glows */
+      --glow-purple: 0 0 15px rgba(182, 102, 255, 0.35), 0 0 35px rgba(182, 102, 255, 0.15);
+      --glow-blue: 0 0 15px rgba(59, 130, 246, 0.35), 0 0 35px rgba(59, 130, 246, 0.15);
+      --glow-orange: 0 0 15px rgba(255, 159, 10, 0.35), 0 0 35px rgba(255, 159, 10, 0.15);
+      --glow-green: 0 0 15px rgba(48, 209, 88, 0.35), 0 0 35px rgba(48, 209, 88, 0.15);
+      --glow-red: 0 0 15px rgba(255, 59, 48, 0.35), 0 0 35px rgba(255, 59, 48, 0.15);
+    }
+
+    /* 6. MOBILE OPTIMIERUNG & SCROLL-VERHALTEN */
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      height: 100dvh;
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Textauswahl nur für bestimmte Textfelder erlauben */
+    input, textarea {
+      user-select: text;
+      -webkit-user-select: text;
+    }
+
+    /* 2. HINTERGRUND-AURA */
+    .bg-aura {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 50% 35%, rgba(182, 102, 255, 0.08) 0%, rgba(59, 130, 246, 0.03) 45%, rgba(0, 0, 0, 0) 80%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* Layout-Hauptcontainer */
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: 480px;
+      height: 100%;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+      padding: 10px;
+      box-sizing: border-box;
+      gap: 10px;
+    }
+
+    /* 3. GLASSMORPHISMUS-STIL */
+    .glass-card {
+      background: rgba(8, 8, 8, 0.45);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    /* 4. TYPOGRAFIE & LAYOUT */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 12px;
+      border-radius: 16px;
+      height: 48px;
+      box-sizing: border-box;
+    }
+
+    /* Symmetrischer Tagesswitcher im Header */
+    .date-switcher {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+      justify-content: center;
+      min-width: 0;
+    }
+
+    h1.header-date {
+      font-weight: 300;
+      font-size: 13px;
+      letter-spacing: 2px;
+      margin: 0;
+      color: var(--text-primary);
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
+      text-align: center;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .header-left, .header-right {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    /* 5. FORM-ELEMENTE & INTERAKTIONEN - BUTTONS */
+    .glass-icon-btn {
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .glass-icon-btn:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .btn-purple {
+      border-color: rgba(182, 102, 255, 0.3);
+    }
+    .btn-purple:hover {
+      background: rgba(182, 102, 255, 0.1);
+      border-color: var(--color-purple);
+      box-shadow: 0 0 10px rgba(182, 102, 255, 0.25);
+    }
+
+    .btn-orange {
+      border-color: rgba(255, 159, 10, 0.3);
+    }
+    .btn-orange:hover {
+      background: rgba(255, 159, 10, 0.1);
+      border-color: var(--color-orange);
+      box-shadow: 0 0 10px rgba(255, 159, 10, 0.25);
+    }
+
+    .btn-blue {
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+    .btn-blue:hover {
+      background: rgba(59, 130, 246, 0.1);
+      border-color: var(--color-blue);
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.25);
+    }
+
+    /* Kleine Pfeiltasten im Header */
+    .glass-icon-btn.nav-arrow {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      border-color: rgba(255, 255, 255, 0.08);
+      flex-shrink: 0;
+    }
+
+    /* Aktivierter Lesezeichen-Status */
+    .glass-icon-btn.bookmarked {
+      background: rgba(59, 130, 246, 0.15);
+      border-color: var(--color-blue);
+      box-shadow: var(--glow-blue);
+    }
+    .glass-icon-btn.bookmarked .bookmark-icon-svg {
+      fill: var(--color-blue);
+    }
+
+    /* Pulsieren: Wichtige Call-to-Action-Elements */
+    .breathing-glow-purple {
+      animation: breathing-purple 3s infinite ease-in-out;
+    }
+
+    @keyframes breathing-purple {
+      0% {
+        box-shadow: 0 0 8px rgba(182, 102, 255, 0.2);
+        border-color: rgba(182, 102, 255, 0.3);
+      }
+      50% {
+        box-shadow: 0 0 18px rgba(182, 102, 255, 0.4), 0 0 30px rgba(182, 102, 255, 0.15);
+        border-color: rgba(182, 102, 255, 0.6);
+      }
+      100% {
+        box-shadow: 0 0 8px rgba(182, 102, 255, 0.2);
+        border-color: rgba(182, 102, 255, 0.3);
+      }
+    }
+
+    .menu-toggle-btn {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      border-radius: 10px;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .menu-toggle-btn:hover {
+      border-color: var(--color-purple);
+      background: rgba(182, 102, 255, 0.08);
+      box-shadow: 0 0 10px rgba(182, 102, 255, 0.2);
+    }
+
+    .icon {
+      width: 16px;
+      height: 16px;
+      stroke-width: 2px;
+    }
+
+    /* PDF Viewer Container - Maximierte Größe */
+    .pdf-viewer {
+      flex: 1;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-height: 0;
+    }
+
+    .pdf-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 10px;
+      color: var(--text-secondary);
+    }
+
+    .pdf-file-info {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .text-red {
+      color: var(--color-red);
+    }
+
+    .pdf-zoom {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .zoom-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-primary);
+      font-size: 13px;
+      cursor: pointer;
+      padding: 1px 6px;
+      opacity: 0.6;
+      transition: opacity 0.2s ease;
+    }
+
+    .zoom-btn:hover {
+      opacity: 1;
+    }
+
+    /* Keine großen Pfeilleisten mehr an den Seiten für 100% Platz */
+    .pdf-page-container {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: stretch;
+      justify-content: stretch;
+      min-height: 0;
+    }
+
+    /* PDF Page Content Layout */
+    .pdf-page-content {
+      flex: 1;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: stretch;
+      overflow: hidden;
+    }
+
+    /* Zoomable Canvas Wrapper */
+    #pdf-canvas-container {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      position: relative;
+      border-radius: 0 0 20px 20px;
+      background: rgba(0, 0, 0, 0.15);
+      /* Smooth touch scrolling on iOS */
+      -webkit-overflow-scrolling: touch;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Wenn die Scrollbars aktiv werden, oben ausrichten */
+    #pdf-canvas-container.scroll-active {
+      align-items: flex-start;
+    }
+
+    #pdf-canvas {
+      display: block;
+      margin: auto;
+      border-radius: 4px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Fallback display styled as frosted glass container */
+    .pdf-fallback-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 14px;
+      border-radius: 14px;
+      background: rgba(255, 159, 10, 0.03);
+      border: 1px dashed rgba(255, 159, 10, 0.2);
+      text-align: center;
+      box-sizing: border-box;
+      width: 90%;
+      margin: auto;
+      box-shadow: 0 0 20px rgba(255, 159, 10, 0.02);
+    }
+
+    .pdf-loading-spinner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 5;
+    }
+
+    .spinner {
+      width: 24px;
+      height: 24px;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-top-color: var(--color-purple);
+      border-radius: 50%;
+      animation: spin 1s infinite linear;
+      box-shadow: 0 0 8px rgba(182, 102, 255, 0.2);
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .pdf-footer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .page-number-input-container {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 9px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .page-number-input {
+      width: 42px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      border-radius: 6px;
+      padding: 2px;
+      text-align: center;
+      font-family: inherit;
+      font-size: 10px;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .page-number-input:focus {
+      border-color: var(--color-purple);
+      box-shadow: 0 0 10px rgba(182, 102, 255, 0.4);
+    }
+
+    /* Chrome/Safari spin buttons */
+    .page-number-input::-webkit-outer-spin-button,
+    .page-number-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .page-number-input[type=number] {
+      -moz-appearance: textfield;
+    }
+
+    /* Extrem kompakte Notizen-Leiste am Fußende */
+    .bottom-notes-bar {
+      padding: 8px 12px;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      box-sizing: border-box;
+    }
+
+    .notes-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2px;
+    }
+
+    .notes-header label {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+    }
+
+    .saved-indicator {
+      font-size: 8px;
+      color: var(--color-green);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .saved-indicator.show {
+      opacity: 0.8;
+    }
+
+    /* 5. FORM-ELEMENTE - TEXTAREA */
+    .glass-textarea {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-primary);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 13px;
+      outline: none;
+      transition: all 0.3s ease;
+      width: 100%;
+      box-sizing: border-box;
+      height: 48px;
+      resize: none;
+      font-family: inherit;
+      line-height: 1.35;
+    }
+
+    .glass-textarea:focus {
+      border-color: var(--color-purple);
+      box-shadow: var(--glow-purple);
+      background: rgba(182, 102, 255, 0.01);
+    }
+
+    /* 6. SLIDE-OVER MENÜ */
+    .slide-over {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 85%;
+      max-width: 380px;
+      height: 100%;
+      background: rgba(5, 5, 5, 0.75);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border-left: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: -10px 0 40px rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .slide-over.open {
+      right: 0;
+    }
+
+    .backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+      z-index: 999;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .backdrop.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .slide-over-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .slide-over-header h2 {
+      font-weight: 200;
+      font-size: 14px;
+      letter-spacing: 3px;
+      margin: 0;
+      text-transform: uppercase;
+      color: #ffffff;
+      text-shadow: 0 0 10px rgba(182, 102, 255, 0.3);
+    }
+
+    .close-btn {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.7;
+      transition: all 0.3s ease;
+    }
+
+    .close-btn:hover {
+      opacity: 1;
+      border-color: var(--color-red);
+      background: rgba(255, 59, 48, 0.08);
+    }
+
+    .slide-over-content {
+      flex: 1;
+      overflow-y: auto;
+      overscroll-behavior: none;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .menu-section {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .menu-section h3 {
+      margin: 0;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      padding-left: 4px;
+    }
+
+    /* Grafischer Kalender im Slide-Over */
+    .calendar-nav-container {
+      padding: 10px;
+      border-radius: 14px;
+    }
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    #calendar-month-year {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #ffffff;
+    }
+
+    .calendar-nav-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .calendar-nav-btn:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .weekdays-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .days-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+
+    .calendar-cell {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .calendar-cell:hover:not(.empty) {
+      background: rgba(182, 102, 255, 0.15);
+      border-color: rgba(182, 102, 255, 0.3);
+      color: #ffffff;
+    }
+
+    .calendar-cell.active {
+      background: var(--color-purple) !important;
+      color: #000000 !important;
+      font-weight: 600;
+      box-shadow: 0 0 10px var(--color-purple);
+    }
+
+    .calendar-cell.today {
+      border-color: var(--color-purple);
+      color: var(--color-purple);
+    }
+
+    .calendar-cell.empty {
+      cursor: default;
+    }
+
+    /* Bookmarks list in Slide-over */
+    .bookmarks-list-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 250px;
+      overflow-y: auto;
+      overscroll-behavior: none;
+      padding-right: 4px;
+    }
+
+    .empty-state {
+      font-size: 10px;
+      color: var(--text-secondary);
+      text-align: center;
+      padding: 14px 0;
+      border: 1px dashed rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .bookmark-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 8px 12px;
+      transition: all 0.3s ease;
+    }
+
+    .bookmark-item:hover {
+      background: rgba(59, 130, 246, 0.05);
+      border-color: rgba(59, 130, 246, 0.2);
+    }
+
+    .bookmark-info {
+      flex: 1;
+      cursor: pointer;
+      min-width: 0;
+    }
+
+    .bookmark-date {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 1px;
+    }
+
+    .bookmark-preview {
+      font-size: 10px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 210px;
+    }
+
+    .delete-bookmark-btn {
+      background: transparent;
+      border: none;
+      color: var(--color-red);
+      opacity: 0.6;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .delete-bookmark-btn:hover {
+      opacity: 1;
+      background: rgba(255, 59, 48, 0.1);
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 2px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Toast Notification Style */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: rgba(10, 10, 10, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      z-index: 2000;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+      pointer-events: none;
+      opacity: 0;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+    .toast.success {
+      border-color: rgba(48, 209, 88, 0.3);
+      box-shadow: var(--glow-green);
+    }
+    .toast.warning {
+      border-color: rgba(255, 159, 10, 0.3);
+      box-shadow: var(--glow-orange);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient background light glows -->
+  <div class="bg-aura"></div>
+
+  <div class="app-container">
+    <!-- Top Header Navigation -->
+    <header class="top-bar glass-card">
+      <div class="header-left">
+        <button id="today-btn" class="glass-icon-btn btn-purple breathing-glow-purple" title="Zum aktuellen Tag (Heute)">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+        </button>
+        <button id="random-btn" class="glass-icon-btn btn-orange" title="Zufällige Seite laden">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><circle cx="15.5" cy="15.5" r="1.5"></circle><circle cx="15.5" cy="8.5" r="1.5"></circle><circle cx="8.5" cy="15.5" r="1.5"></circle><circle cx="12" cy="12" r="1.5"></circle></svg>
+        </button>
+      </div>
+      
+      <!-- Deutsche Datumsanzeige direkt in der App-Headerleiste mit zwei kleinen Pfeiltasten -->
+      <div class="date-switcher">
+        <button id="header-prev-btn" class="glass-icon-btn nav-arrow btn-purple" title="Vorheriger Tag">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="icon"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <h1 class="header-date" id="header-date-display">1. Januar 2026</h1>
+        <button id="header-next-btn" class="glass-icon-btn nav-arrow btn-purple" title="Nächster Tag">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="icon"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+      
+      <div class="header-right">
+        <button id="bookmark-btn" class="glass-icon-btn btn-blue" title="Lesezeichen setzen">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon bookmark-icon-svg"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+        </button>
+        <button id="menu-btn" class="menu-toggle-btn" title="Menü öffnen">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Simulated PDF Viewer Container -->
+    <main class="pdf-viewer glass-card">
+      <!-- simulated toolbar -->
+      <div class="pdf-toolbar">
+        <div class="pdf-file-info">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon text-red"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          <span>book.pdf</span>
+        </div>
+        <div class="pdf-zoom">
+          <button class="zoom-btn" id="zoom-out" title="Herauszoomen">&minus;</button>
+          <span class="zoom-level" id="zoom-value">100%</span>
+          <button class="zoom-btn" id="zoom-in" title="Hineinzoomen">&plus;</button>
+        </div>
+      </div>
+
+      <!-- PDF Page Content - Keine seitlichen Pfeilleisten mehr, 100% Platz für PDF -->
+      <div class="pdf-page-container">
+        <div class="pdf-page-content">
+          <!-- PDF.js Canvas wrapper - Maximale Größe ohne Paddings -->
+          <div id="pdf-canvas-container">
+            <canvas id="pdf-canvas"></canvas>
+            
+            <!-- Loading Spinner -->
+            <div id="pdf-loading" class="pdf-loading-spinner" style="display: none;">
+              <div class="spinner"></div>
+            </div>
+
+            <!-- Fallback if PDF fails to load -->
+            <div id="pdf-fallback-message" class="pdf-fallback-container" style="display: none;">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon text-orange" style="width: 40px; height: 40px; margin-bottom: 10px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+              <p style="font-size: 12px; font-weight: 600; margin: 0 0 6px 0; color: #ffffff; text-transform: uppercase; letter-spacing: 1px;">DATEI "book.pdf" NICHT GEFUNDEN</p>
+              <p class="pdf-fallback-desc" style="font-size: 10px; color: var(--text-secondary); line-height: 1.4; margin: 0; max-width: 280px;">
+                Bitte lege die PDF-Datei <strong>book.pdf</strong> in denselben Ordner wie diese HTML-Datei, um die Kalenderseiten anzuzeigen.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- simulated PDF reader footer -->
+      <div class="pdf-footer">
+        <div class="page-number-input-container">
+          <span>Seite</span>
+          <input type="number" id="page-input" class="page-number-input" min="1" max="365" value="1">
+          <span>von <span id="total-pages-label">365</span></span>
+        </div>
+      </div>
+    </main>
+
+    <!-- Extrem kompakte Notizen-Leiste am Fußende -->
+    <section class="bottom-notes-bar glass-card">
+      <div class="notes-header">
+        <label for="notes-textarea">Persönliche Notizen</label>
+        <span class="saved-indicator" id="saved-indicator">Auto-gespeichert</span>
+      </div>
+      <textarea id="notes-textarea" class="glass-textarea" placeholder="Deine Gedanken zu diesem Tag... (wird automatisch gesichert)"></textarea>
+    </section>
+  </div>
+
+  <!-- Navigation Slide-Over Sidebar Menu -->
+  <div id="slide-over" class="slide-over">
+    <div class="slide-over-header">
+      <h2>Menü &amp; Navigation</h2>
+      <button id="close-menu-btn" class="close-btn" title="Menü schließen">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+
+    <div class="slide-over-content">
+      <!-- Section 1: Graphical Monthly Calendar Navigation -->
+      <div class="menu-section">
+        <h3>Kalendersprung</h3>
+        <div class="calendar-nav-container glass-card">
+          <div class="calendar-header">
+            <button id="prev-month-btn" class="calendar-nav-btn" title="Vorheriger Monat">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="icon"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            <span id="calendar-month-year">Juni 2026</span>
+            <button id="next-month-btn" class="calendar-nav-btn" title="Nächster Monat">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="icon"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+          </div>
+          <div class="weekdays-grid">
+            <div>MO</div><div>DI</div><div>MI</div><div>DO</div><div>FR</div><div>SA</div><div>SO</div>
+          </div>
+          <div id="calendar-grid" class="days-grid"></div>
+        </div>
+      </div>
+
+      <!-- Section 2: Favorited bookmarks lists -->
+      <div class="menu-section">
+        <h3>Gesetzte Lesezeichen</h3>
+        <div id="bookmarks-list" class="bookmarks-list-container">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Menu Backdrop -->
+  <div id="backdrop" class="backdrop"></div>
+
+  <!-- Success Toast popup -->
+  <div id="toast" class="toast">Aktion erfolgreich</div>
+
+  <script>
+    // Config PDF.js Worker
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+    // -------------------------------------------------------------
+    // KERN-LOGIK & STATE-MANAGEMENT
+    // -------------------------------------------------------------
+    const currentYear = new Date().getFullYear();
+    
+    // Schaltjahrprüfung (1. Kernfunktion: Schaltjahr-Berücksichtigung)
+    const isLeapYear = (year) => (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+    const daysInYear = isLeapYear(currentYear) ? 366 : 365;
+
+    // Initialisierung der Standardwerte (Offset=0 für book.pdf)
+    let pdfOffset = 0; // Kein Vorspann-Offset (Cover ist auf Seite 1, Notizseiten sind am Ende)
+    let pdfDays = 366; // 366 Tage Schaltjahr-Kalender für book.pdf
+
+    // Dynamic date-to-page calculation matching leap-year state of PDF calendar
+    function getPageForDate(date, offset, days) {
+      const isLeapPDF = (days === 366);
+      const testYear = isLeapPDF ? 2024 : 2026; // Nutze Schaltjahr 2024 falls PDF 366 Tage hat, sonst 2026
+      
+      const d = new Date(testYear, date.getMonth(), date.getDate(), 12, 0, 0);
+      const jan1 = new Date(testYear, 0, 1, 12, 0, 0);
+      const diff = d - jan1;
+      const oneDay = 1000 * 60 * 60 * 24;
+      const dayOfYear = Math.round(diff / oneDay) + 1;
+      
+      return dayOfYear + offset;
+    }
+
+    // Dynamic page-to-date calculation with leap-year adjustments
+    function getDateForPage(pageNum, offset, days) {
+      const dayOfYear = pageNum - offset;
+      const year = new Date().getFullYear();
+      
+      if (dayOfYear <= 0) {
+        return null; // Titelseiten/Cover vor dem 1. Januar
+      }
+      
+      const isLeapPDF = (days === 366);
+      const isSystemLeap = isLeapYear(year);
+      
+      if (isLeapPDF && !isSystemLeap) {
+        // PDF hat Schaltjahr, Systemjahr nicht (z.B. PDF=2024, System=2026)
+        if (dayOfYear === 60) {
+          // Zeige Schalttag an (29. Februar)
+          return new Date(2024, 1, 29, 12, 0, 0);
+        }
+        if (dayOfYear > 60) {
+          // Versatz um 1 Tag korrigieren nach dem 29. Feb
+          const date = new Date(year, 0, 1, 12, 0, 0);
+          date.setDate(dayOfYear - 1);
+          return date;
+        }
+      } else if (!isLeapPDF && isSystemLeap) {
+        // PDF hat kein Schaltjahr, Systemjahr schon (z.B. PDF=2026, System=2028)
+        if (dayOfYear >= 60) {
+          const date = new Date(year, 0, 1, 12, 0, 0);
+          date.setDate(dayOfYear + 1);
+          return date;
+        }
+      }
+      
+      const date = new Date(year, 0, 1, 12, 0, 0);
+      date.setDate(dayOfYear);
+      return date;
+    }
+
+    // German day formatter
+    function formatGermanDate(date) {
+      const options = { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' };
+      return date.toLocaleDateString('de-DE', options);
+    }
+
+    // Initialize State
+    let todayPage = getPageForDate(new Date(), 0, 366); // Offset=0 für book.pdf
+    let currentPage = todayPage;
+    let zoomLevel = 100;
+    
+    // Calendar Picker Month/Year state
+    let calendarMonth = new Date().getMonth();
+    let calendarYear = new Date().getFullYear();
+
+    // LocalStorage loading (4. Kernfunktion: Favoriten & Notizen)
+    let bookmarks = JSON.parse(localStorage.getItem('adw_bookmarks') || '[]');
+    let notes = JSON.parse(localStorage.getItem('adw_notes') || '{}');
+
+    // PDF.js State Variables
+    let pdfDoc = null;
+    let pageRendering = false;
+    let pageNumPending = null;
+    const url = 'book.pdf';
+
+    // DOM References
+    const headerDateDisplay = document.getElementById('header-date-display');
+    const pageInput = document.getElementById('page-input');
+    const totalPagesLabel = document.getElementById('total-pages-label');
+    const notesArea = document.getElementById('notes-textarea');
+    const bookmarkBtn = document.getElementById('bookmark-btn');
+    const savedIndicator = document.getElementById('saved-indicator');
+    const toast = document.getElementById('toast');
+    const zoomValue = document.getElementById('zoom-value');
+    const canvas = document.getElementById('pdf-canvas');
+    const canvasContainer = document.getElementById('pdf-canvas-container');
+
+    // Set static labels (fallback until PDF loads)
+    totalPagesLabel.textContent = daysInYear;
+    pageInput.max = daysInYear;
+
+    // Load PDF Document und analysiere Seitenanzahl zur automatischen Justierung
+    pdfjsLib.getDocument(url).promise.then(doc => {
+      pdfDoc = doc;
+      const numPages = doc.numPages;
+      console.log(`PDF geladen. Gesamte Seitenanzahl: ${numPages}`);
+      
+      // Auto-Konfiguration des Offsets anhand der Seitenanzahl
+      if (numPages === 376) {
+        // 376 Seiten = 366 Kalendertage (Schaltjahr) + 10 Notizseiten am Ende!
+        pdfOffset = 0; // Januar 1. startet direkt auf Seite 1
+        pdfDays = 366;
+      } else if (numPages === 366) {
+        pdfOffset = 0;
+        pdfDays = 366;
+      } else if (numPages === 365) {
+        pdfOffset = 0;
+        pdfDays = 365;
+      } else if (numPages > 366) {
+        // Falls ein Vorspann vorhanden ist, aber book.pdf hat Notizseiten am Ende
+        pdfOffset = 0; 
+        pdfDays = 366;
+      } else {
+        pdfOffset = 0;
+        pdfDays = numPages;
+      }
+      
+      // Maxima für Navigation setzen
+      pageInput.max = numPages;
+      totalPagesLabel.textContent = numPages;
+      
+      // Berechne Startseite neu anhand der korrekten PDF-Konfiguration
+      todayPage = getPageForDate(new Date(), pdfOffset, pdfDays);
+      goToPage(todayPage);
+    }).catch(err => {
+      console.error("Fehler beim Laden der PDF: ", err);
+      showPdfError(err);
+    });
+
+    function showPdfError(err) {
+      pdfDoc = null;
+      canvas.style.display = 'none';
+      document.getElementById('pdf-loading').style.display = 'none';
+      const fallback = document.getElementById('pdf-fallback-message');
+      fallback.style.display = 'flex';
+      
+      const isFileProtocol = window.location.protocol === 'file:';
+      let detailsText = 'Bitte lege die PDF-Datei <strong>book.pdf</strong> in denselben Ordner wie diese HTML-Datei, um die Kalenderseiten anzuzeigen.';
+      
+      if (isFileProtocol) {
+        detailsText += '<br><br><span style="color: var(--color-orange); font-size: 10px;">HINWEIS: Da diese App über die "file://" URL geöffnet wurde, blockiert dein Browser evtl. lokale Zugriffe (CORS). Nutze einen lokalen Server (z.B. VS Code Live Server) oder Firefox.</span>';
+      }
+      
+      fallback.querySelector('.pdf-fallback-desc').innerHTML = detailsText;
+    }
+
+    // -------------------------------------------------------------
+    // PDF RENDERING CORE LOGIC (Retina-optimiert, A4 mobil ausfüllend)
+    // -------------------------------------------------------------
+    function renderPage(num) {
+      if (!pdfDoc) return;
+      pageRendering = true;
+      
+      pdfDoc.getPage(num).then(page => {
+        const ctx = canvas.getContext('2d');
+        const containerWidth = canvasContainer.clientWidth || 380;
+        const containerHeight = canvasContainer.clientHeight || 500;
+        
+        // Unskalierte PDF-Seitengröße auslesen
+        const unscaledViewport = page.getViewport({ scale: 1 });
+        
+        // Berechne Skalierungsfaktoren
+        const scaleX = containerWidth / unscaledViewport.width;
+        const scaleY = containerHeight / unscaledViewport.height;
+        
+        // A4 Optimierung: Auf Handys (Portrait) die Breite voll ausnutzen (Fit Width).
+        // Auf Desktops (Landscape) in die Höhe einpassen, um die ganze Seite anzuzeigen.
+        let baseScale;
+        if (containerHeight / containerWidth > 1.3) {
+          baseScale = scaleX; // Handy-Format voll ausnutzen!
+        } else {
+          baseScale = Math.min(scaleX, scaleY);
+        }
+        
+        // Zoomfaktor multiplizieren
+        const userScale = zoomLevel / 100;
+        const scale = baseScale * userScale;
+        
+        // Retina Support: Canvas-Zeichenoberfläche in hoher Auflösung anlegen
+        const dpRatio = window.devicePixelRatio || 1;
+        const renderScale = scale * dpRatio;
+        const viewport = page.getViewport({ scale: renderScale });
+        
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        
+        // CSS-Maße zur Skalierung und Anpassung im Card-Layout
+        const displayWidth = unscaledViewport.width * scale;
+        const displayHeight = unscaledViewport.height * scale;
+        canvas.style.width = `${displayWidth}px`;
+        canvas.style.height = `${displayHeight}px`;
+        
+        // Scroll-Ausrichtung korrigieren (oben ausrichten bei Scrollbedarf)
+        if (displayHeight > containerHeight || displayWidth > containerWidth) {
+          canvasContainer.classList.add('scroll-active');
+        } else {
+          canvasContainer.classList.remove('scroll-active');
+        }
+        
+        const renderContext = {
+          canvasContext: ctx,
+          viewport: viewport
+        };
+        
+        const renderTask = page.render(renderContext);
+        
+        renderTask.promise.then(() => {
+          document.getElementById('pdf-loading').style.display = 'none';
+          pageRendering = false;
+          if (pageNumPending !== null) {
+            renderPage(pageNumPending);
+            pageNumPending = null;
+          }
+        });
+      }).catch(err => {
+        console.error("Fehler beim Zeichnen der PDF-Seite: ", err);
+        document.getElementById('pdf-loading').style.display = 'none';
+        pageRendering = false;
+      });
+    }
+
+    function queueRenderPage(num) {
+      if (pageRendering) {
+        pageNumPending = num;
+      } else {
+        renderPage(num);
+      }
+    }
+
+    // Window resize handler to maintain responsiveness
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      if (pdfDoc) {
+        if (resizeTimeout) clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+          queueRenderPage(currentPage);
+        }, 150);
+      }
+    });
+
+    // Pinch-to-Zoom und Wisch-Gesten auf dem PDF-Canvas-Container (Links/Rechts wischen mit 1 Finger für Blättern)
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchEndX = 0;
+    let touchEndY = 0;
+    let isSingleTouch = false;
+    let isPinching = false;
+    let pinchStartDist = 0;
+    let initialZoomLevel = 100;
+
+    canvasContainer.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+        isSingleTouch = true;
+        isPinching = false;
+      } else if (e.touches.length === 2) {
+        isSingleTouch = false;
+        isPinching = true;
+        pinchStartDist = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+        initialZoomLevel = zoomLevel;
+        canvas.style.transition = 'none';
+      }
+    }, { passive: false });
+
+    canvasContainer.addEventListener('touchmove', (e) => {
+      if (isPinching && e.touches.length === 2) {
+        e.preventDefault(); // Verhindere Standard-Browser-Zoom/Scroll
+        const currentDist = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+        if (pinchStartDist > 0) {
+          let scale = currentDist / pinchStartDist;
+          // Verhindere optisch das Verkleinern unter 100%
+          if (initialZoomLevel * scale < 100) {
+            scale = 100 / initialZoomLevel;
+          }
+          // Visuelles Echtzeit-Feedback über CSS scale (Hardware-beschleunigt)
+          canvas.style.transform = `scale(${scale})`;
+          canvas.style.transformOrigin = 'center center';
+        }
+      }
+    }, { passive: false });
+
+    canvasContainer.addEventListener('touchend', (e) => {
+      if (isPinching) {
+        isPinching = false;
+        const transform = canvas.style.transform;
+        let scale = 1;
+        if (transform && transform.includes('scale(')) {
+          const match = transform.match(/scale\(([^)]+)\)/);
+          if (match) {
+            scale = parseFloat(match[1]);
+          }
+        }
+        
+        // CSS scale zurücksetzen
+        canvas.style.transform = '';
+        canvas.style.transformOrigin = '';
+        
+        // Zoom-Level berechnen und auf die nächste 10% runden
+        let newZoom = initialZoomLevel * scale;
+        newZoom = Math.min(300, Math.max(100, newZoom));
+        zoomLevel = Math.round(newZoom / 10) * 10;
+        applyZoom();
+      } else if (isSingleTouch && e.changedTouches.length === 1) {
+        touchEndX = e.changedTouches[0].clientX;
+        touchEndY = e.changedTouches[0].clientY;
+        handleSwipe();
+      }
+      isSingleTouch = false;
+    }, { passive: true });
+
+    canvasContainer.addEventListener('touchcancel', () => {
+      if (isPinching) {
+        isPinching = false;
+        canvas.style.transform = '';
+        canvas.style.transformOrigin = '';
+      }
+      isSingleTouch = false;
+    });
+
+    function handleSwipe() {
+      const swipeThreshold = 55;
+      const swipeX = touchStartX - touchEndX;
+      const swipeY = touchStartY - touchEndY;
+      
+      // Swipe nur horizontal werten, wenn es kein diagonal/vertikales Scrollen war
+      if (Math.abs(swipeX) > swipeThreshold && Math.abs(swipeY) < 40) {
+        if (swipeX > 0) {
+          goToPage(currentPage + 1);
+        } else {
+          goToPage(currentPage - 1);
+        }
+      }
+    }
+
+    // Deaktiviere das Zoomen der Internetseite an sich (Viewport Zoom Lock)
+    document.addEventListener('gesturestart', (e) => {
+      e.preventDefault();
+    }, { passive: false });
+
+    document.addEventListener('gesturechange', (e) => {
+      e.preventDefault();
+    }, { passive: false });
+
+    document.addEventListener('gestureend', (e) => {
+      e.preventDefault();
+    }, { passive: false });
+
+    // Verhindere das Scrollen/Zoomen bei Mehrfinger-Touch auf Dokumentebene
+    document.addEventListener('touchstart', (e) => {
+      if (e.touches.length > 1) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    document.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 1) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    // -------------------------------------------------------------
+    // NAVIGATION FUNKTIONEN
+    // -------------------------------------------------------------
+    function goToPage(pageNumber) {
+      const maxPages = pdfDoc ? pdfDoc.numPages : daysInYear;
+      if (pageNumber < 1) pageNumber = 1;
+      if (pageNumber > maxPages) pageNumber = maxPages;
+      
+      currentPage = pageNumber;
+      
+      // Berechne Datum für die aktuelle Seite
+      const pageDate = getDateForPage(currentPage, pdfOffset, pdfDays);
+      
+      // Update Header-Datumsanzeige
+      if (pageDate === null) {
+        headerDateDisplay.textContent = `Titelseite ${currentPage}`;
+      } else {
+        if (pageDate.getMonth() === 1 && pageDate.getDate() === 29) {
+          const weekdayStr = pageDate.toLocaleDateString('de-DE', { weekday: 'short' });
+          headerDateDisplay.textContent = `${weekdayStr}, 29. Feb (Schalttag)`;
+        } else {
+          headerDateDisplay.textContent = formatGermanDate(pageDate);
+        }
+      }
+      
+      // Update Page Input
+      pageInput.value = currentPage;
+
+      // Render PDF page
+      if (pdfDoc) {
+        canvas.style.display = 'block';
+        document.getElementById('pdf-fallback-message').style.display = 'none';
+        document.getElementById('pdf-loading').style.display = 'flex';
+        queueRenderPage(currentPage);
+      } else {
+        canvas.style.display = 'none';
+        document.getElementById('pdf-fallback-message').style.display = 'flex';
+      }
+      
+      // Load saved Note
+      notesArea.value = notes[currentPage] || '';
+      
+      // Update Bookmark indicator
+      if (bookmarks.includes(currentPage)) {
+        bookmarkBtn.classList.add('bookmarked');
+      } else {
+        bookmarkBtn.classList.remove('bookmarked');
+      }
+    }
+
+    // -------------------------------------------------------------
+    // BIND EVENT LISTENERS
+    // -------------------------------------------------------------
+    
+    // Kleine Pfeiltasten im Header
+    document.getElementById('header-prev-btn').addEventListener('click', () => {
+      goToPage(currentPage - 1);
+    });
+    
+    document.getElementById('header-next-btn').addEventListener('click', () => {
+      goToPage(currentPage + 1);
+    });
+
+    // Page Number Input field
+    pageInput.addEventListener('change', () => {
+      const val = parseInt(pageInput.value, 10);
+      if (!isNaN(val)) {
+        goToPage(val);
+      } else {
+        pageInput.value = currentPage;
+      }
+    });
+
+    pageInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        pageInput.blur();
+      }
+    });
+
+    // 2. "Heute"-Button: Bringt Nutzer sofort zum aktuellen Tag zurück
+    document.getElementById('today-btn').addEventListener('click', () => {
+      const todayP = getPageForDate(new Date(), pdfOffset, pdfDays);
+      goToPage(todayP);
+      showToast('Heute geladen', 'success');
+    });
+
+    // 3. "Zufällige Seite"-Button: Würfel / Inspiration
+    document.getElementById('random-btn').addEventListener('click', () => {
+      const maxPages = pdfDoc ? pdfDoc.numPages : daysInYear;
+      const rand = Math.floor(Math.random() * maxPages) + 1;
+      goToPage(rand);
+      showToast('Zufällige Seite geladen', 'warning');
+    });
+
+    // 4. Lesezeichen & Notizen speichern
+    bookmarkBtn.addEventListener('click', () => {
+      const idx = bookmarks.indexOf(currentPage);
+      if (idx > -1) {
+        bookmarks.splice(idx, 1);
+        showToast('Lesezeichen entfernt', 'warning');
+      } else {
+        bookmarks.push(currentPage);
+        showToast('Lesezeichen hinzugefügt', 'success');
+      }
+      localStorage.setItem('adw_bookmarks', JSON.stringify(bookmarks));
+      goToPage(currentPage);
+      updateBookmarkUI();
+    });
+
+    // Auto-Saving Notes
+    let saveTimeout;
+    notesArea.addEventListener('input', () => {
+      const val = notesArea.value;
+      if (val.trim() === '') {
+        delete notes[currentPage];
+      } else {
+        notes[currentPage] = val;
+      }
+      localStorage.setItem('adw_notes', JSON.stringify(notes));
+      
+      // Auto-save visual indicator
+      savedIndicator.classList.add('show');
+      if (saveTimeout) clearTimeout(saveTimeout);
+      saveTimeout = setTimeout(() => {
+        savedIndicator.classList.remove('show');
+      }, 1000);
+
+      updateBookmarkUI();
+    });
+
+    // Zoom-Simulation (Unterstützt größeren Zoom von 100% bis 300%)
+    document.getElementById('zoom-out').addEventListener('click', () => {
+      if (zoomLevel > 100) {
+        zoomLevel -= 20;
+        applyZoom();
+      }
+    });
+
+    document.getElementById('zoom-in').addEventListener('click', () => {
+      if (zoomLevel < 300) {
+        zoomLevel += 20;
+        applyZoom();
+      }
+    });
+
+    function applyZoom() {
+      zoomValue.textContent = `${zoomLevel}%`;
+      if (pdfDoc) {
+        document.getElementById('pdf-loading').style.display = 'flex';
+        queueRenderPage(currentPage);
+      }
+    }
+
+    // -------------------------------------------------------------
+    // SLIDE-OVER MENÜ & KALENDER GRID
+    // -------------------------------------------------------------
+    const menuBtn = document.getElementById('menu-btn');
+    const closeMenuBtn = document.getElementById('close-menu-btn');
+    const slideOver = document.getElementById('slide-over');
+    const backdrop = document.getElementById('backdrop');
+
+    menuBtn.addEventListener('click', openSlideOver);
+    closeMenuBtn.addEventListener('click', closeSlideOver);
+    backdrop.addEventListener('click', closeSlideOver);
+
+    function openSlideOver() {
+      const activeDate = getDateForPage(currentPage, pdfOffset, pdfDays) || new Date();
+      calendarMonth = activeDate.getMonth();
+      calendarYear = activeDate.getFullYear();
+      if (calendarYear === 2024 && !isLeapYear(new Date().getFullYear())) {
+        calendarYear = new Date().getFullYear();
+      }
+      
+      updateCalendarDisplay();
+      updateBookmarkUI();
+      
+      slideOver.classList.add('open');
+      backdrop.classList.add('open');
+    }
+
+    function closeSlideOver() {
+      slideOver.classList.remove('open');
+      backdrop.classList.remove('open');
+    }
+
+    // Month Navigation buttons inside slide-over
+    document.getElementById('prev-month-btn').addEventListener('click', () => {
+      calendarMonth--;
+      if (calendarMonth < 0) {
+        calendarMonth = 11;
+        calendarYear--;
+      }
+      updateCalendarDisplay();
+    });
+
+    document.getElementById('next-month-btn').addEventListener('click', () => {
+      calendarMonth++;
+      if (calendarMonth > 11) {
+        calendarMonth = 0;
+        calendarYear++;
+      }
+      updateCalendarDisplay();
+    });
+
+    function updateCalendarDisplay() {
+      const monthNames = [
+        "Januar", "Februar", "März", "April", "Mai", "Juni", 
+        "Juli", "August", "September", "Oktober", "November", "Dezember"
+      ];
+      document.getElementById('calendar-month-year').textContent = `${monthNames[calendarMonth]} ${calendarYear}`;
+      renderCalendarGrid(calendarYear, calendarMonth);
+    }
+
+    // Monatsraster generieren (6. Kernfunktion)
+    function renderCalendarGrid(year, month) {
+      const firstDayIndex = new Date(year, month, 1).getDay();
+      const firstDayOffset = firstDayIndex === 0 ? 6 : firstDayIndex - 1;
+      
+      const totalDays = new Date(year, month + 1, 0).getDate();
+      const gridContainer = document.getElementById('calendar-grid');
+      gridContainer.innerHTML = '';
+
+      const monthNames = [
+        "Januar", "Februar", "März", "April", "Mai", "Juni", 
+        "Juli", "August", "September", "Oktober", "November", "Dezember"
+      ];
+
+      // Leere Zellen am Anfang rendern
+      for (let i = 0; i < firstDayOffset; i++) {
+        const emptyCell = document.createElement('div');
+        emptyCell.className = 'calendar-cell empty';
+        gridContainer.appendChild(emptyCell);
+      }
+
+      // Tage rendern
+      for (let day = 1; day <= totalDays; day++) {
+        const cell = document.createElement('div');
+        cell.className = 'calendar-cell';
+        cell.textContent = day;
+        
+        const cellDate = new Date(year, month, day);
+        const cellPage = getPageForDate(cellDate, pdfOffset, pdfDays);
+
+        // Aktuell ausgewählte Seite hervorheben
+        if (cellPage === currentPage) {
+          cell.classList.add('active');
+        }
+
+        // Heute-Rahmen hervorheben
+        const cellToday = new Date();
+        const cellTodayPage = getPageForDate(cellToday, pdfOffset, pdfDays);
+        if (cellPage === cellTodayPage && cellDate.getFullYear() === cellToday.getFullYear()) {
+          cell.classList.add('today');
+        }
+
+        cell.addEventListener('click', () => {
+          goToPage(cellPage);
+          closeSlideOver();
+          showToast(`${day}. ${monthNames[month]} geladen`, 'success');
+        });
+
+        gridContainer.appendChild(cell);
+      }
+    }
+
+    // Lesezeichenliste aktualisieren (6. Kernfunktion: Lesezeichen-Liste mit Vorschau)
+    function updateBookmarkUI() {
+      const container = document.getElementById('bookmarks-list');
+      container.innerHTML = '';
+
+      if (bookmarks.length === 0) {
+        container.innerHTML = '<div class="empty-state">Keine Lesezeichen gesetzt</div>';
+        return;
+      }
+
+      // Sortiere nach Seitennummer
+      const sorted = [...bookmarks].sort((a, b) => a - b);
+
+      sorted.forEach(page => {
+        const date = getDateForPage(page, pdfOffset, pdfDays);
+        let dateStr = "";
+        
+        if (date === null) {
+          dateStr = `Titelseite ${page}`;
+        } else {
+          dateStr = formatGermanDate(date);
+        }
+        
+        const noteText = notes[page] || '';
+        const preview = noteText.trim().split('\n')[0] || 'Keine Notizen vorhanden...';
+
+        const item = document.createElement('div');
+        item.className = 'bookmark-item';
+        
+        item.innerHTML = `
+          <div class="bookmark-info">
+            <div class="bookmark-date">${dateStr}</div>
+            <div class="bookmark-preview">${preview}</div>
+          </div>
+          <button class="delete-bookmark-btn" title="Lesezeichen entfernen">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          </button>
+        `;
+
+        // Klick auf Inhalt springt zum Tag
+        item.querySelector('.bookmark-info').addEventListener('click', () => {
+          goToPage(page);
+          closeSlideOver();
+        });
+
+        // Klick auf Löschen-Symbol entfernt Bookmark
+        item.querySelector('.delete-bookmark-btn').addEventListener('click', (e) => {
+          e.stopPropagation();
+          const idx = bookmarks.indexOf(page);
+          if (idx > -1) {
+            bookmarks.splice(idx, 1);
+            localStorage.setItem('adw_bookmarks', JSON.stringify(bookmarks));
+            updateBookmarkUI();
+            if (page === currentPage) {
+              goToPage(currentPage);
+            }
+            showToast('Lesezeichen gelöscht', 'warning');
+          }
+        });
+
+        container.appendChild(item);
+      });
+    }
+
+    // -------------------------------------------------------------
+    // TOAST NOTIFICATION UTILITY
+    // -------------------------------------------------------------
+    let toastTimeout;
+    function showToast(message, type = 'success') {
+      toast.textContent = message;
+      toast.className = `toast show ${type}`;
+
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.className = 'toast';
+      }, 2500);
+    }
+
+    // -------------------------------------------------------------
+    // INITIALISIERUNG BEIM START (1. Kernfunktion)
+    // -------------------------------------------------------------
+    goToPage(todayPage);
+  </script>
+</body>
+</html>
