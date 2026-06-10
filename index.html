@@ -250,8 +250,8 @@
       stroke-width: 2px;
     }
 
-    /* PDF Viewer Container - Maximierte Größe */
-    .pdf-viewer {
+    /* Devotional Reader Container - Maximierte Größe */
+    .reader-card {
       flex: 1;
       border-radius: 20px;
       display: flex;
@@ -260,10 +260,12 @@
       min-height: 0;
     }
 
-    .pdf-toolbar {
+    .reader-toolbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      gap: 6px 12px;
       padding: 6px 12px;
       background: rgba(255, 255, 255, 0.02);
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -271,17 +273,18 @@
       color: var(--text-secondary);
     }
 
-    .pdf-file-info {
+    .reader-info {
       display: flex;
       align-items: center;
-      gap: 5px;
+      flex-wrap: wrap;
+      gap: 6px;
     }
 
     .text-red {
       color: var(--color-red);
     }
 
-    .pdf-zoom {
+    .reader-controls {
       display: flex;
       align-items: center;
       gap: 4px;
@@ -303,7 +306,7 @@
     }
 
     /* Keine großen Pfeilleisten mehr an den Seiten für 100% Platz */
-    .pdf-page-container {
+    .reader-viewport {
       flex: 1;
       position: relative;
       display: flex;
@@ -312,8 +315,8 @@
       min-height: 0;
     }
 
-    /* PDF Page Content Layout */
-    .pdf-page-content {
+    /* Reader Content Layout */
+    .reader-content {
       flex: 1;
       padding: 0;
       display: flex;
@@ -324,7 +327,7 @@
     }
 
     /* Scrollable Text Wrapper */
-    #pdf-canvas-container {
+    #reader-scroll-container {
       flex: 1;
       width: 100%;
       height: 100%;
@@ -338,13 +341,13 @@
       box-sizing: border-box;
     }
 
-    #pdf-canvas-container.fallback-active {
+    #reader-scroll-container.fallback-active {
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    #pdf-canvas-container.dragover {
+    #reader-scroll-container.dragover {
       background: rgba(182, 102, 255, 0.08);
       border: 2px dashed rgba(182, 102, 255, 0.4);
       box-shadow: var(--glow-purple);
@@ -421,7 +424,7 @@
     }
 
     /* Fallback display styled as frosted glass container */
-    .pdf-fallback-container {
+    .reader-fallback-container {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -460,7 +463,7 @@
       box-shadow: var(--glow-purple);
     }
 
-    .pdf-loading-spinner {
+    .reader-loading-spinner {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -485,7 +488,7 @@
       to { transform: rotate(360deg); }
     }
 
-    .pdf-footer {
+    .reader-footer {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -493,6 +496,13 @@
       background: rgba(255, 255, 255, 0.02);
       border-top: 1px solid rgba(255, 255, 255, 0.05);
     }
+
+    .glass-select:focus {
+      border-color: var(--color-purple) !important;
+      box-shadow: 0 0 8px rgba(182, 102, 255, 0.4);
+    }
+
+
 
     .page-number-input-container {
       display: flex;
@@ -983,15 +993,18 @@
       </div>
     </header>
 
-    <!-- Simulated PDF Viewer Container -->
-    <main class="pdf-viewer glass-card">
-      <!-- simulated toolbar -->
-      <div class="pdf-toolbar">
-        <div class="pdf-file-info">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon text-purple" style="color: var(--color-purple);"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-          <span>Auf dein Wort</span>
+    <!-- Reader Card Container -->
+    <main class="reader-card glass-card">
+      <!-- Reader Toolbar -->
+      <div class="reader-toolbar">
+        <div class="reader-info">
+          <!-- Left side empty or reserved for future title info -->
         </div>
-        <div class="pdf-zoom">
+        <div class="reader-controls">
+          <!-- Share Button (Apple Style) -->
+          <button id="share-btn" class="zoom-btn" title="Andacht teilen" style="margin-right: 12px; display: inline-flex; align-items: center; justify-content: center; padding: 2px;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+          </button>
           <button class="zoom-btn" id="text-size-out" title="Schriftgröße verkleinern">A&minus;</button>
           <span class="zoom-level" id="text-size-value">15px</span>
           <button class="zoom-btn" id="text-size-in" title="Schriftgröße vergrößern">A&plus;</button>
@@ -999,23 +1012,23 @@
       </div>
 
       <!-- Devotional Content Card - 100% responsive space -->
-      <div class="pdf-page-container">
-        <div class="pdf-page-content">
-          <div id="pdf-canvas-container">
+      <div class="reader-viewport">
+        <div class="reader-content">
+          <div id="reader-scroll-container">
             <div id="devotional-content-card" class="devotional-content-card">
               <!-- Dynamischer Textinhalt wird hier gerendert -->
             </div>
             
             <!-- Loading Spinner -->
-            <div id="pdf-loading" class="pdf-loading-spinner" style="display: none;">
+            <div id="reader-loading" class="reader-loading-spinner" style="display: none;">
               <div class="spinner"></div>
             </div>
 
-            <!-- Fallback if Markdown fails to load (CORS block or missing file) -->
-            <div id="pdf-fallback-message" class="pdf-fallback-container" style="display: none;">
+            <!-- Fallback if Markdown fails to load -->
+            <div id="reader-fallback-message" class="reader-fallback-container" style="display: none;">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon text-orange" style="width: 40px; height: 40px; margin-bottom: 10px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="9" y1="15" x2="15" y2="15"></line></svg>
               <p style="font-size: 12px; font-weight: 600; margin: 0 0 6px 0; color: #ffffff; text-transform: uppercase; letter-spacing: 1px;">TEXT-DATEI NICHT GEFUNDEN</p>
-              <p class="pdf-fallback-desc" style="font-size: 10px; color: var(--text-secondary); line-height: 1.4; margin: 0; max-width: 280px; margin-bottom: 12px;">
+              <p class="reader-fallback-desc" style="font-size: 10px; color: var(--text-secondary); line-height: 1.4; margin: 0; max-width: 280px; margin-bottom: 12px;">
                 Bitte lege die Datei <strong>Auf_dein_Wort_digitalisiert.md</strong> in denselben Ordner wie diese App.
               </p>
               
@@ -1037,7 +1050,7 @@
         <label for="notes-textarea">Persönliche Notizen</label>
         <span class="saved-indicator" id="saved-indicator">Auto-gespeichert</span>
       </div>
-      <textarea id="notes-textarea" class="glass-textarea" placeholder="Deine Gedanken zu diesem Tag... (wird automatisch gesichert)"></textarea>
+      <textarea id="notes-textarea" class="glass-textarea" placeholder=""></textarea>
     </section>
   </div>
 
@@ -1110,9 +1123,7 @@
     const isLeapYear = (year) => (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
     const daysInYear = isLeapYear(currentYear) ? 366 : 365;
 
-    // Kalender-Offsets (Januar 1. startet auf Seite 7 in Auf_dein_Wort_digitalisiert.md)
-    let pdfOffset = 6; 
-    let pdfDays = 366; 
+ 
     
     // Parsed Pages Cache
     let parsedPages = {};
@@ -1191,10 +1202,10 @@
     const bookmarkBtn = document.getElementById('bookmark-btn');
     const savedIndicator = document.getElementById('saved-indicator');
     const toast = document.getElementById('toast');
-    const canvasContainer = document.getElementById('pdf-canvas-container');
+    const canvasContainer = document.getElementById('reader-scroll-container');
     const devotionalCard = document.getElementById('devotional-content-card');
-    const fallbackMessage = document.getElementById('pdf-fallback-message');
-    const loadingSpinner = document.getElementById('pdf-loading');
+    const fallbackMessage = document.getElementById('reader-fallback-message');
+    const loadingSpinner = document.getElementById('reader-loading');
     const textSizeValue = document.getElementById('text-size-value');
 
     // -------------------------------------------------------------
@@ -1430,6 +1441,8 @@
       if (pageNumber < 7) pageNumber = 7;
       if (pageNumber > 372) pageNumber = 372;
       
+
+      
       currentPage = pageNumber;
       
       // Check if data is loaded
@@ -1475,9 +1488,9 @@
     }
 
     function renderDevotionalText(item) {
-      let bodyHtml = '';
+      let bodyParagraphsHtml = '';
       for (const p of item.paragraphs) {
-        bodyHtml += `<p>${p}</p>`;
+        bodyParagraphsHtml += `<p>${p}</p>`;
       }
       
       devotionalCard.innerHTML = `
@@ -1486,7 +1499,7 @@
           <div class="scripture-reference">${item.reference}</div>
         </div>
         <div class="devotional-body" style="font-size: ${baseFontSize}px;">
-          ${bodyHtml}
+          ${bodyParagraphsHtml}
         </div>
       `;
     }
@@ -1911,6 +1924,40 @@
 
     // Apply font size state
     textSizeValue.textContent = `${baseFontSize}px`;
+
+
+    
+    // -------------------------------------------------------------
+    // TEILEN-BUTTON LOGIC
+    // -------------------------------------------------------------
+    const shareBtn = document.getElementById('share-btn');
+    if (shareBtn) {
+      shareBtn.addEventListener('click', () => {
+        const item = parsedPages[currentPage];
+        if (!item) return;
+        
+        const shareText = `Andacht vom ${item.date}\n„${item.quote}“ (${item.reference})\n\n${item.paragraphs.join('\n\n')}`;
+        
+        if (navigator.share) {
+          navigator.share({
+            title: `Andacht vom ${item.date}`,
+            text: shareText
+          })
+          .then(() => showToast('Erfolgreich geteilt', 'success'))
+          .catch(err => console.log('Share error:', err));
+        } else {
+          // Fallback: copy to clipboard
+          navigator.clipboard.writeText(shareText)
+            .then(() => {
+              showToast('In Zwischenablage kopiert!', 'success');
+            })
+            .catch(err => {
+              console.error('Clipboard copy error:', err);
+              showToast('Kopieren fehlgeschlagen', 'warning');
+            });
+        }
+      });
+    }
 
     // -------------------------------------------------------------
     // INITIALISIERUNG BEIM START
