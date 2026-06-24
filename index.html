@@ -1443,6 +1443,90 @@
       cursor: not-allowed;
       box-shadow: none;
     }
+
+    /* Sidebar Menu Tabs */
+    .menu-tabs {
+      display: flex;
+      gap: 5px;
+      margin-top: 15px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--glass-border);
+      padding-bottom: 8px;
+    }
+
+    .menu-tab-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      padding: 6px 0;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .menu-tab-btn.active {
+      color: var(--color-purple);
+      border-bottom: 2px solid var(--color-purple);
+    }
+
+    .menu-pane {
+      display: none;
+    }
+
+    .menu-pane.active {
+      display: block;
+    }
+
+    /* Global Comments Overview in Sidebar */
+    .global-comment-item {
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+      border-radius: 12px;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: left;
+    }
+
+    .global-comment-item:hover {
+      border-color: var(--color-purple);
+      transform: translateY(-1px);
+    }
+
+    .global-comment-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 8px;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+
+    .global-comment-day {
+      font-weight: 700;
+      color: var(--color-purple);
+    }
+
+    .global-comment-user {
+      font-weight: 600;
+    }
+
+    .global-comment-snippet {
+      font-size: 11px;
+      line-height: 1.4;
+      color: var(--text-primary);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   </style>
 
   <!-- Firebase SDKs (Compat-Mode) -->
@@ -1622,19 +1706,33 @@
         </div>
       </div>
 
-      <!-- Section 2: Favorited bookmarks lists -->
-      <div class="menu-section">
-        <h3>Gesetzte Lesezeichen</h3>
-        <div id="bookmarks-list" class="bookmarks-list-container">
-          <!-- Rendered dynamically -->
-        </div>
+      <!-- Navigation Tabs (Lesezeichen, Notizen, Global) -->
+      <div class="menu-tabs">
+        <button id="menu-tab-bookmarks" class="menu-tab-btn active" onclick="switchMenuTab('bookmarks')">Lesezeichen</button>
+        <button id="menu-tab-notes" class="menu-tab-btn" onclick="switchMenuTab('notes')">Notizen</button>
+        <button id="menu-tab-global" class="menu-tab-btn" onclick="switchMenuTab('global')">Global</button>
       </div>
 
-      <!-- Section 3: Commented days list -->
-      <div class="menu-section">
-        <h3>Tage mit Notizen</h3>
-        <div id="notes-list" class="bookmarks-list-container">
-          <!-- Rendered dynamically -->
+      <div class="menu-tab-content">
+        <!-- Bookmarks Pane -->
+        <div id="menu-pane-bookmarks" class="menu-pane active">
+          <div id="bookmarks-list" class="bookmarks-list-container">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+        
+        <!-- Notes Pane -->
+        <div id="menu-pane-notes" class="menu-pane">
+          <div id="notes-list" class="bookmarks-list-container">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Global Comments Pane -->
+        <div id="menu-pane-global" class="menu-pane">
+          <div id="global-comments-overview" class="bookmarks-list-container">
+            <div class="empty-state">Kommentare werden geladen...</div>
+          </div>
         </div>
       </div>
     </div>
@@ -2775,16 +2873,21 @@
 
         commentsListener = db.collection("global_comments")
           .where("page", "==", currentPage)
-          .orderBy("createdAt", "asc")
           .onSnapshot((querySnapshot) => {
             const list = [];
             querySnapshot.forEach((doc) => {
               list.push(doc.data());
             });
+            // Client-seitige Sortierung nach Erstelldatum (verhindert Index-Erfordernis)
+            list.sort((a, b) => {
+              const t1 = a.createdAt?.seconds || (a.createdAt ? new Date(a.createdAt).getTime() : 0);
+              const t2 = b.createdAt?.seconds || (b.createdAt ? new Date(b.createdAt).getTime() : 0);
+              return t1 - t2;
+            });
             renderComments(list);
           }, (error) => {
             console.error("Firestore loading error:", error);
-            commentsList.innerHTML = '<div class="empty-state text-orange">Verbindung zu Firebase fehlgeschlagen</div>';
+            commentsList.innerHTML = `<div class="empty-state text-orange" style="font-size: 11px; padding: 10px;">Verbindung zu Firebase fehlgeschlagen:<br><span style="opacity: 0.8; font-family: monospace;">${error.message || error}</span></div>`;
           });
       } else {
         // Mock fallback using localStorage
@@ -2929,7 +3032,110 @@
         console.log("No user logged in.");
       }
       syncCommentsForCurrentPage();
+      
+      // Update global comments feed when auth state completes
+      if (document.getElementById('menu-pane-global')?.classList.contains('active')) {
+        updateGlobalCommentsOverview();
+      }
     });
+
+    // -------------------------------------------------------------
+    // SIDEBAR NAVIGATION TABS LOGIC
+    // -------------------------------------------------------------
+    window.switchMenuTab = function(tabName) {
+      // Deactivate all tabs and panes
+      document.querySelectorAll('.menu-tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.menu-pane').forEach(pane => pane.classList.remove('active'));
+      
+      // Activate target tab and pane
+      const targetBtn = document.getElementById(`menu-tab-${tabName}`);
+      const targetPane = document.getElementById(`menu-pane-${tabName}`);
+      if (targetBtn) targetBtn.classList.add('active');
+      if (targetPane) targetPane.classList.add('active');
+      
+      if (tabName === 'global') {
+        updateGlobalCommentsOverview();
+      }
+    };
+
+    function updateGlobalCommentsOverview() {
+      const overviewContainer = document.getElementById('global-comments-overview');
+      if (!overviewContainer) return;
+      
+      if (db) {
+        // Fetch last 50 comments (no filters needed, so no index required)
+        db.collection("global_comments")
+          .limit(50)
+          .get()
+          .then((querySnapshot) => {
+            const list = [];
+            querySnapshot.forEach((doc) => {
+              const data = doc.data();
+              list.push(data);
+            });
+            // Client-side sort by createdAt descending
+            list.sort((a, b) => {
+              const t1 = a.createdAt?.seconds || (a.createdAt ? new Date(a.createdAt).getTime() : 0);
+              const t2 = b.createdAt?.seconds || (b.createdAt ? new Date(b.createdAt).getTime() : 0);
+              return t2 - t1; // Descending
+            });
+            
+            // Limit to top 20
+            renderGlobalCommentsOverview(list.slice(0, 20));
+          })
+          .catch((error) => {
+            console.error("Firestore overview loading error:", error);
+            overviewContainer.innerHTML = `<div class="empty-state text-orange" style="font-size: 11px; padding: 10px;">Verbindung fehlgeschlagen:<br><span style="opacity: 0.8; font-family: monospace;">${error.message || error}</span></div>`;
+          });
+      } else {
+        // Local simulation fallback
+        const allComments = getDemoComments();
+        allComments.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        renderGlobalCommentsOverview(allComments.slice(0, 20));
+      }
+    }
+
+    function renderGlobalCommentsOverview(list) {
+      const overviewContainer = document.getElementById('global-comments-overview');
+      if (!overviewContainer) return;
+      
+      if (list.length === 0) {
+        overviewContainer.innerHTML = '<div class="empty-state">Noch keine globalen Kommentare vorhanden.</div>';
+        return;
+      }
+      
+      overviewContainer.innerHTML = '';
+      list.forEach(c => {
+        const item = document.createElement('div');
+        item.className = 'global-comment-item';
+        
+        let dateStr = '';
+        if (c.createdAt) {
+          const date = c.createdAt.toDate ? c.createdAt.toDate() : new Date(c.createdAt);
+          dateStr = date.toLocaleDateString('de-DE', { day: 'numeric', month: 'short' });
+        }
+        
+        let dayStr = `Seite ${c.page}`;
+        if (parsedPages[c.page]) {
+          dayStr = parsedPages[c.page].date || dayStr;
+        }
+        
+        item.innerHTML = `
+          <div class="global-comment-meta">
+            <span class="global-comment-day">${dayStr}</span>
+            <span class="global-comment-user">${c.userName || 'Anonym'} (${dateStr})</span>
+          </div>
+          <div class="global-comment-snippet">${escapeHtml(c.text)}</div>
+        `;
+        
+        item.addEventListener('click', () => {
+          goToPage(c.page);
+          closeSlideOver();
+        });
+        
+        overviewContainer.appendChild(item);
+      });
+    }
 
     // -------------------------------------------------------------
     // AUTOMATISCHE GERÄTE- & LAYOUTANPASSUNG
