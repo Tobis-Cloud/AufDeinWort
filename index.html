@@ -2637,6 +2637,23 @@
           navigator.share({
             title: `Andacht vom ${item.date}`,
             text: shareText
+          })
+          .then(() => showToast('Erfolgreich geteilt', 'success'))
+          .catch(err => console.log('Share error:', err));
+        } else {
+          // Fallback: copy to clipboard
+          navigator.clipboard.writeText(shareText)
+            .then(() => {
+              showToast('In Zwischenablage kopiert!', 'success');
+            })
+            .catch(err => {
+              console.error('Clipboard copy error:', err);
+              showToast('Kopieren fehlgeschlagen', 'warning');
+            });
+        }
+      });
+    }
+
     // -------------------------------------------------------------
     // AUTH MODAL & COMMENTS INTEGRATION LOGIC
     // -------------------------------------------------------------
