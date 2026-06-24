@@ -1171,12 +1171,318 @@
         display: none !important;
       }
     }
+
+    /* -------------------------------------------------------------
+       8. AUTHENTIFIZIERUNG & KOMMENTARE (Firebase UI)
+       ------------------------------------------------------------- */
+    /* Auth Modal Overlay */
+    .auth-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      z-index: 3000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .auth-modal.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .auth-modal-content {
+      width: 90%;
+      max-width: 360px;
+      padding: 24px;
+      border-radius: 20px;
+      box-sizing: border-box;
+      text-align: center;
+      position: relative;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow);
+    }
+
+    .auth-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--glass-border);
+      padding-bottom: 8px;
+    }
+
+    .auth-tab-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      padding: 6px 0;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .auth-tab-btn.active {
+      color: var(--color-purple);
+      border-bottom: 2px solid var(--color-purple);
+    }
+
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .auth-input {
+      width: 100%;
+      box-sizing: border-box;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      color: var(--text-primary);
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      outline: none;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .auth-input:focus {
+      border-color: var(--color-purple);
+      box-shadow: var(--glow-purple);
+    }
+
+    .auth-submit-btn {
+      width: 100%;
+      box-sizing: border-box;
+      background: var(--color-purple);
+      color: var(--active-cell-text);
+      border: none;
+      padding: 10px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: var(--glow-purple);
+      transition: all 0.3s ease;
+      font-family: inherit;
+      margin-top: 5px;
+    }
+
+    .auth-submit-btn:hover {
+      opacity: 0.9;
+    }
+
+    .auth-close-btn {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: color 0.2s ease;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .auth-close-btn:hover {
+      color: var(--color-red);
+    }
+
+    /* Comments Section */
+    .comments-section {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease-out, margin-bottom 0.4s ease-out, padding-bottom 0.4s ease-out;
+      margin-bottom: 0;
+      box-sizing: border-box;
+    }
+
+    .comments-section.open {
+      max-height: 380px;
+      margin-bottom: 20px;
+      border-bottom: 1px dashed var(--glass-border);
+      padding-bottom: 15px;
+    }
+
+    .comments-header {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .comments-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 320px;
+      overflow-y: auto;
+      padding-right: 4px;
+      box-sizing: border-box;
+    }
+
+    .comment-bubble {
+      display: flex;
+      flex-direction: column;
+      max-width: 80%;
+      padding: 8px 12px;
+      box-sizing: border-box;
+    }
+
+    .comment-bubble.me {
+      align-self: flex-end;
+      background: rgba(182, 102, 255, 0.12);
+      border-radius: 12px 12px 2px 12px;
+      border: 1px solid rgba(182, 102, 255, 0.25);
+    }
+
+    .comment-bubble.other {
+      align-self: flex-start;
+      background: var(--input-bg);
+      border-radius: 12px 12px 12px 2px;
+      border: 1px solid var(--input-border);
+    }
+
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 3px;
+    }
+
+    .comment-user {
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--color-purple);
+    }
+
+    .comment-time {
+      font-size: 7px;
+      color: var(--text-secondary);
+    }
+
+    .comment-text {
+      font-size: 12px;
+      line-height: 1.45;
+      color: var(--text-primary);
+      text-align: left;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .comment-badge {
+      position: absolute;
+      top: -4px;
+      right: -6px;
+      background: var(--color-purple);
+      color: var(--active-cell-text);
+      font-size: 8px;
+      font-weight: 700;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--glow-purple);
+    }
+
+    /* Note Post Button */
+    .post-btn {
+      width: 100%;
+      padding: 8px 16px;
+      border-radius: 10px;
+      border: 1px solid var(--color-purple);
+      background: rgba(182, 102, 255, 0.06);
+      color: var(--text-primary);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 8px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-family: inherit;
+    }
+
+    .post-btn:hover {
+      background: rgba(182, 102, 255, 0.18);
+      box-shadow: var(--glow-purple);
+    }
+
+    .post-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
   </style>
+
+  <!-- Firebase SDKs (Compat-Mode) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
   <!-- Ambient background light glows -->
   <div class="bg-aura"></div>
+
+  <!-- Firebase Auth Modal (Login/Register) -->
+  <div id="auth-modal" class="auth-modal">
+    <div class="auth-modal-content">
+      <button id="auth-close-btn" class="auth-close-btn" title="Schließen (Passives Lesen)">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+      
+      <div class="auth-tabs">
+        <button id="tab-login-btn" class="auth-tab-btn active" onclick="switchAuthTab('login')">Anmelden</button>
+        <button id="tab-register-btn" class="auth-tab-btn" onclick="switchAuthTab('register')">Registrieren</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="login-form" class="auth-form" onsubmit="handleAuthSubmit(event, 'login')">
+        <input type="email" id="login-email" class="auth-input" placeholder="E-Mail-Adresse" required autocomplete="email">
+        <input type="password" id="login-password" class="auth-input" placeholder="Passwort" required autocomplete="current-password">
+        <button type="submit" class="auth-submit-btn">Anmelden</button>
+      </form>
+
+      <!-- Register Form -->
+      <form id="register-form" class="auth-form" onsubmit="handleAuthSubmit(event, 'register')" style="display: none;">
+        <input type="text" id="register-name" class="auth-input" placeholder="Benutzername (für Kommentare)" required autocomplete="username">
+        <input type="email" id="register-email" class="auth-input" placeholder="E-Mail-Adresse" required autocomplete="email">
+        <input type="password" id="register-password" class="auth-input" placeholder="Passwort (min. 6 Zeichen)" required autocomplete="new-password">
+        <button type="submit" class="auth-submit-btn">Konto erstellen</button>
+      </form>
+    </div>
+  </div>
 
   <div class="app-container">
     <!-- Top Header Navigation -->
@@ -1219,6 +1525,11 @@
           <!-- Left side empty or reserved for future title info -->
         </div>
         <div class="reader-controls">
+          <!-- Comments Button (Speech Bubble with counter badge) -->
+          <button id="comments-toggle-btn" class="zoom-btn" title="Globale Kommentare öffnen" style="margin-right: 12px; display: inline-flex; align-items: center; justify-content: center; padding: 2px; position: relative;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            <span id="comments-badge" class="comment-badge" style="display: none;">0</span>
+          </button>
           <!-- Share Button (Apple Style) -->
           <button id="share-btn" class="zoom-btn" title="Andacht teilen" style="margin-right: 12px; display: inline-flex; align-items: center; justify-content: center; padding: 2px;">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
@@ -1269,6 +1580,10 @@
         <span class="saved-indicator" id="saved-indicator">Auto-gespeichert</span>
       </div>
       <textarea id="notes-textarea" class="glass-textarea" placeholder=""></textarea>
+      <button id="post-note-btn" class="post-btn" title="Gedanken in Firebase veröffentlichen">
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        Öffentlich posten
+      </button>
     </section>
   </div>
 
@@ -1332,6 +1647,132 @@
   <div id="toast" class="toast">Aktion erfolgreich</div>
 
   <script>
+    // -------------------------------------------------------------
+    // FIREBASE INITIALISIERUNG & KONFIGURATION
+    // -------------------------------------------------------------
+    // TODO: Ersetze diese Platzhalter-Konfiguration mit deinen echten Firebase-Schlüsseln!
+    // Du findest diese in der Firebase Console unter "Projekteinstellungen" -> "Web-App hinzufügen".
+    const firebaseConfig = {
+      apiKey: "AIzaSyCDhAumGFM0lRqIg5KVWE2h-cydIG5udVw",
+      authDomain: "andacht.firebaseapp.com",
+      projectId: "andacht",
+      storageBucket: "andacht.firebasestorage.app",
+      messagingSenderId: "358611003885",
+      appId: "1:358611003885:web:7f1ebcefb7dc296bf5dfe4"
+    };
+
+    let db = null;
+    let auth = null;
+    let currentUser = null;
+    let commentsListener = null;
+
+    // Demo Fallback Speicher (LocalStorage, falls kein Firebase konfiguriert ist)
+    const getDemoComments = () => JSON.parse(localStorage.getItem('adw_demo_comments') || '[]');
+    const saveDemoComments = (list) => localStorage.setItem('adw_demo_comments', JSON.stringify(list));
+    const getDemoUser = () => JSON.parse(localStorage.getItem('adw_demo_user') || 'null');
+    const saveDemoUser = (user) => localStorage.setItem('adw_demo_user', JSON.stringify(user));
+
+    // Custom Event Listener für Demo-Auth-Änderungen
+    const demoAuthListeners = [];
+    const registerDemoAuthListener = (cb) => {
+      demoAuthListeners.push(cb);
+      cb(getDemoUser());
+    };
+    const notifyDemoAuthListeners = (user) => {
+      currentUser = user;
+      demoAuthListeners.forEach(cb => cb(user));
+    };
+
+    if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "DEIN_API_KEY") {
+      try {
+        firebase.initializeApp(firebaseConfig);
+        db = firebase.firestore();
+        auth = firebase.auth();
+        console.log("Firebase erfolgreich initialisiert.");
+      } catch (error) {
+        console.error("Fehler bei der Firebase-Initialisierung:", error);
+      }
+    } else {
+      console.warn("Firebase läuft im Demo-Modus. Bitte trage deine Konfigurationsdaten in index.html ein, um die Live-Datenbank zu aktivieren!");
+    }
+
+    // -------------------------------------------------------------
+    // SECURE AUTH LOGIC (Aufsatz über Firebase / Demo)
+    // -------------------------------------------------------------
+    function onAuthStateChanged(callback) {
+      if (auth) {
+        auth.onAuthStateChanged((user) => {
+          currentUser = user;
+          callback(user);
+        });
+      } else {
+        registerDemoAuthListener(callback);
+      }
+    }
+
+    function loginUser(email, password) {
+      if (auth) {
+        return auth.signInWithEmailAndPassword(email, password);
+      } else {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            const users = JSON.parse(localStorage.getItem('adw_demo_registered_users') || '[]');
+            const user = users.find(u => u.email === email && u.password === password);
+            if (user) {
+              const loggedUser = { uid: "demo_" + Date.now(), email: user.email, displayName: user.displayName };
+              saveDemoUser(loggedUser);
+              notifyDemoAuthListeners(loggedUser);
+              resolve(loggedUser);
+            } else {
+              reject(new Error("Ungültige E-Mail-Adresse oder Passwort. (Hinweis: Registriere dich zuerst im Tab 'Registrieren'!)"));
+            }
+          }, 300);
+        });
+      }
+    }
+
+    function registerUser(email, password, displayName) {
+      if (auth) {
+        return auth.createUserWithEmailAndPassword(email, password).then((userCredential) => {
+          return userCredential.user.updateProfile({ displayName: displayName }).then(() => {
+            // Force reload profile in auth state
+            return auth.currentUser;
+          });
+        });
+      } else {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            if (password.length < 6) {
+              reject(new Error("Das Passwort muss mindestens 6 Zeichen lang sein."));
+              return;
+            }
+            const users = JSON.parse(localStorage.getItem('adw_demo_registered_users') || '[]');
+            if (users.find(u => u.email === email)) {
+              reject(new Error("Ein Benutzer mit dieser E-Mail-Adresse existiert bereits."));
+              return;
+            }
+            users.push({ email, password, displayName });
+            localStorage.setItem('adw_demo_registered_users', JSON.stringify(users));
+
+            const loggedUser = { uid: "demo_" + Date.now(), email: email, displayName: displayName };
+            saveDemoUser(loggedUser);
+            notifyDemoAuthListeners(loggedUser);
+            resolve(loggedUser);
+          }, 300);
+        });
+      }
+    }
+
+    function logoutUser() {
+      if (auth) {
+        return auth.signOut();
+      } else {
+        saveDemoUser(null);
+        notifyDemoAuthListeners(null);
+        return Promise.resolve();
+      }
+    }
+
     // -------------------------------------------------------------
     // KERN-LOGIK & STATE-MANAGEMENT
     // -------------------------------------------------------------
@@ -1725,15 +2166,37 @@
         bodyParagraphsHtml += `<p>${p}</p>`;
       }
       
+      const isCommentsOpen = document.getElementById('comments-section')?.classList.contains('open');
+      const commentsStyles = isCommentsOpen 
+        ? 'max-height: 380px; margin-bottom: 20px; border-bottom: 1px dashed var(--glass-border); padding-bottom: 15px;' 
+        : '';
+      const commentsOpenClass = isCommentsOpen ? 'open' : '';
+
       devotionalCard.innerHTML = `
         <div class="scripture-container">
           <p class="scripture-quote">„${item.quote}“</p>
           <div class="scripture-reference">${item.reference}</div>
         </div>
+        
+        <!-- Collapsible Comments Panel -->
+        <div id="comments-section" class="comments-section ${commentsOpenClass}" style="${commentsStyles}">
+          <div class="comments-header">
+            <span>Globale Kommentare</span>
+            <span id="comments-count-label">0 Kommentare</span>
+          </div>
+          <div id="global-comments-list" class="comments-list">
+            <div class="empty-state">Kommentare werden geladen...</div>
+          </div>
+        </div>
+
         <div class="devotional-body" style="font-size: ${baseFontSize}px;">
           ${bodyParagraphsHtml}
         </div>
       `;
+
+      if (typeof syncCommentsForCurrentPage === 'function') {
+        syncCommentsForCurrentPage();
+      }
     }
 
     // -------------------------------------------------------------
@@ -2174,22 +2637,282 @@
           navigator.share({
             title: `Andacht vom ${item.date}`,
             text: shareText
+    // -------------------------------------------------------------
+    // AUTH MODAL & COMMENTS INTEGRATION LOGIC
+    // -------------------------------------------------------------
+    const authModal = document.getElementById('auth-modal');
+    const authCloseBtn = document.getElementById('auth-close-btn');
+    const commentsToggleBtn = document.getElementById('comments-toggle-btn');
+    const commentsBadge = document.getElementById('comments-badge');
+    const postNoteBtn = document.getElementById('post-note-btn');
+
+    // Authentication UI Switches
+    window.switchAuthTab = function(tab) {
+      const loginForm = document.getElementById('login-form');
+      const registerForm = document.getElementById('register-form');
+      const loginBtn = document.getElementById('tab-login-btn');
+      const registerBtn = document.getElementById('tab-register-btn');
+      
+      if (tab === 'login') {
+        loginForm.style.display = 'flex';
+        registerForm.style.display = 'none';
+        loginBtn.classList.add('active');
+        registerBtn.classList.remove('active');
+      } else {
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'flex';
+        loginBtn.classList.remove('active');
+        registerBtn.classList.add('active');
+      }
+    };
+
+    window.openAuthModal = function() {
+      authModal.classList.add('open');
+    };
+
+    window.closeAuthModal = function() {
+      authModal.classList.remove('open');
+    };
+
+    authCloseBtn.addEventListener('click', closeAuthModal);
+
+    // Form Submission Handler
+    window.handleAuthSubmit = function(event, mode) {
+      event.preventDefault();
+      
+      if (mode === 'login') {
+        const email = document.getElementById('login-email').value;
+        const pass = document.getElementById('login-password').value;
+        
+        loginUser(email, pass)
+          .then((user) => {
+            showToast(`Willkommen zurück, ${user.displayName || user.email}!`, 'success');
+            closeAuthModal();
           })
-          .then(() => showToast('Erfolgreich geteilt', 'success'))
-          .catch(err => console.log('Share error:', err));
-        } else {
-          // Fallback: copy to clipboard
-          navigator.clipboard.writeText(shareText)
-            .then(() => {
-              showToast('In Zwischenablage kopiert!', 'success');
-            })
-            .catch(err => {
-              console.error('Clipboard copy error:', err);
-              showToast('Kopieren fehlgeschlagen', 'warning');
-            });
+          .catch((err) => {
+            showToast(err.message, 'warning');
+          });
+      } else {
+        const name = document.getElementById('register-name').value;
+        const email = document.getElementById('register-email').value;
+        const pass = document.getElementById('register-password').value;
+        
+        registerUser(email, pass, name)
+          .then((user) => {
+            showToast(`Konto erstellt als ${name}!`, 'success');
+            closeAuthModal();
+          })
+          .catch((err) => {
+            showToast(err.message, 'warning');
+          });
+      }
+    };
+
+    // Toggle comments visibility
+    function toggleComments() {
+      const commentsSec = document.getElementById('comments-section');
+      if (!commentsSec) return;
+
+      const isOpen = commentsSec.classList.contains('open');
+      if (isOpen) {
+        commentsSec.classList.remove('open');
+        commentsSec.style.maxHeight = '0';
+        commentsSec.style.marginBottom = '0';
+        commentsSec.style.borderBottom = 'none';
+        commentsSec.style.paddingBottom = '0';
+        commentsToggleBtn.classList.remove('active');
+        commentsToggleBtn.style.color = '';
+      } else {
+        // If not logged in, prompt login
+        if (!currentUser) {
+          openAuthModal();
+          showToast('Anmeldung erforderlich, um Kommentare zu lesen und zu posten!', 'warning');
+          return;
         }
-      });
+        
+        commentsSec.classList.add('open');
+        commentsSec.style.maxHeight = '380px';
+        commentsSec.style.marginBottom = '20px';
+        commentsSec.style.borderBottom = '1px dashed var(--glass-border)';
+        commentsSec.style.paddingBottom = '15px';
+        commentsToggleBtn.classList.add('active');
+        commentsToggleBtn.style.color = 'var(--color-purple)';
+        commentsSec.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
     }
+
+    commentsToggleBtn.addEventListener('click', toggleComments);
+
+    // Sync comments for the current page
+    function syncCommentsForCurrentPage() {
+      const commentsList = document.getElementById('global-comments-list');
+      if (!commentsList) return;
+
+      // Handle Firebase Snapshot or Demo Fallback
+      if (db) {
+        // Detach previous listener if exists
+        if (commentsListener) {
+          commentsListener();
+          commentsListener = null;
+        }
+
+        commentsListener = db.collection("global_comments")
+          .where("page", "==", currentPage)
+          .orderBy("createdAt", "asc")
+          .onSnapshot((querySnapshot) => {
+            const list = [];
+            querySnapshot.forEach((doc) => {
+              list.push(doc.data());
+            });
+            renderComments(list);
+          }, (error) => {
+            console.error("Firestore loading error:", error);
+            commentsList.innerHTML = '<div class="empty-state text-orange">Verbindung zu Firebase fehlgeschlagen</div>';
+          });
+      } else {
+        // Mock fallback using localStorage
+        const allComments = getDemoComments();
+        const filtered = allComments
+          .filter(c => c.page === currentPage)
+          .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+        renderComments(filtered);
+      }
+    }
+
+    function renderComments(list) {
+      const commentsList = document.getElementById('global-comments-list');
+      const countLabel = document.getElementById('comments-count-label');
+      if (!commentsList) return;
+
+      // Update badge and header counter
+      const count = list.length;
+      if (count > 0) {
+        commentsBadge.textContent = count;
+        commentsBadge.style.display = 'flex';
+        if (countLabel) countLabel.textContent = `${count} Kommentar${count > 1 ? 'e' : ''}`;
+      } else {
+        commentsBadge.style.display = 'none';
+        if (countLabel) countLabel.textContent = '0 Kommentare';
+      }
+
+      commentsList.innerHTML = '';
+      if (count === 0) {
+        commentsList.innerHTML = '<div class="empty-state">Noch keine globalen Kommentare für heute. Schreib den ersten!</div>';
+        return;
+      }
+
+      list.forEach(c => {
+        const bubble = document.createElement('div');
+        const isMe = currentUser && (c.userId === currentUser.uid || c.userEmail === currentUser.email);
+        bubble.className = `comment-bubble ${isMe ? 'me' : 'other'}`;
+        
+        let dateStr = '';
+        if (c.createdAt) {
+          const date = c.createdAt.toDate ? c.createdAt.toDate() : new Date(c.createdAt);
+          dateStr = date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }) + ' - ' + date.toLocaleDateString('de-DE', { day: 'numeric', month: 'short' });
+        }
+
+        bubble.innerHTML = `
+          <div class="comment-header">
+            <span class="comment-user">${c.userName || 'Anonym'}</span>
+            <span class="comment-time">${dateStr}</span>
+          </div>
+          <div class="comment-text">${escapeHtml(c.text)}</div>
+        `;
+        commentsList.appendChild(bubble);
+      });
+      
+      // Auto scroll comments list to the bottom
+      commentsList.scrollTop = commentsList.scrollHeight;
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    // Post comment logic
+    postNoteBtn.addEventListener('click', () => {
+      const text = notesArea.value.trim();
+      if (!text) {
+        showToast('Bitte trage zuerst Gedanken in deine Notizen ein!', 'warning');
+        return;
+      }
+
+      if (!currentUser) {
+        openAuthModal();
+        showToast('Du musst dich einloggen, um Beiträge zu posten!', 'warning');
+        return;
+      }
+
+      postNoteBtn.disabled = true;
+      postNoteBtn.textContent = 'Wird gepostet...';
+
+      if (db) {
+        db.collection("global_comments").add({
+          page: currentPage,
+          userId: currentUser.uid,
+          userEmail: currentUser.email,
+          userName: currentUser.displayName || "Anonymer Schreiber",
+          text: text,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        })
+        .then(() => {
+          showToast('Kommentar erfolgreich gepostet!', 'success');
+          postNoteBtn.disabled = false;
+          postNoteBtn.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            Öffentlich posten
+          `;
+        })
+        .catch(err => {
+          console.error("Firestore post error:", err);
+          showToast('Fehler beim Posten', 'warning');
+          postNoteBtn.disabled = false;
+          postNoteBtn.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            Öffentlich posten
+          `;
+        });
+      } else {
+        // Mock fallback
+        setTimeout(() => {
+          const list = getDemoComments();
+          list.push({
+            page: currentPage,
+            userId: currentUser.uid,
+            userEmail: currentUser.email,
+            userName: currentUser.displayName || "Anonymer Schreiber",
+            text: text,
+            createdAt: new Date().toISOString()
+          });
+          saveDemoComments(list);
+          showToast('Demo-Kommentar gepostet! (Lokal simuliert)', 'success');
+          
+          postNoteBtn.disabled = false;
+          postNoteBtn.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            Öffentlich posten
+          `;
+          syncCommentsForCurrentPage();
+        }, 400);
+      }
+    });
+
+    // Listen to Auth State Changes
+    onAuthStateChanged((user) => {
+      if (user) {
+        console.log("Logged in user:", user.displayName || user.email);
+      } else {
+        console.log("No user logged in.");
+      }
+      syncCommentsForCurrentPage();
+    });
 
     // -------------------------------------------------------------
     // AUTOMATISCHE GERÄTE- & LAYOUTANPASSUNG
@@ -2223,6 +2946,13 @@
     document.addEventListener('DOMContentLoaded', () => {
       loadCalendarData();
       adjustLayoutForDevice();
+      
+      // Auto-öffnen des Login-Fensters beim ersten Laden, falls nicht eingeloggt
+      setTimeout(() => {
+        if (!currentUser) {
+          openAuthModal();
+        }
+      }, 800);
     });
   </script>
 
