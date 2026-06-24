@@ -1527,6 +1527,87 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+
+    /* Today Button with Label in Header */
+    .today-labeled-btn {
+      width: auto !important;
+      padding: 0 14px !important;
+      gap: 6px;
+      display: flex;
+      align-items: center;
+      border-radius: 12px;
+      height: 36px;
+    }
+    .today-labeled-btn span {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Menu Brand Section with Random Button */
+    .menu-brand-section {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .menu-brand-logo {
+      max-height: 48px;
+      border-radius: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+    #menu-random-btn {
+      width: auto;
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 16px;
+      height: 44px;
+      border-radius: 12px;
+    }
+    #menu-random-btn span {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Hide font size value display */
+    #text-size-value {
+      display: none !important;
+    }
+
+    /* Prevent double-tap zoom via CSS */
+    html, body {
+      touch-action: manipulation;
+    }
+
+    /* Light Theme Button Enhancements */
+    @media (prefers-color-scheme: light) {
+      .glass-icon-btn {
+        background: rgba(0, 0, 0, 0.04) !important;
+        border-color: rgba(0, 0, 0, 0.18) !important;
+      }
+      .glass-icon-btn:hover {
+        background: rgba(0, 0, 0, 0.1) !important;
+        border-color: rgba(0, 0, 0, 0.35) !important;
+      }
+      .zoom-btn {
+        opacity: 0.85 !important;
+        color: rgba(0, 0, 0, 0.8) !important;
+      }
+      .zoom-btn:hover {
+        opacity: 1 !important;
+        color: rgba(0, 0, 0, 1) !important;
+      }
+      .day-cell {
+        border-color: rgba(0, 0, 0, 0.12) !important;
+      }
+    }
   </style>
 
   <!-- Firebase SDKs (Compat-Mode) -->
@@ -1572,11 +1653,9 @@
     <!-- Top Header Navigation -->
     <header class="top-bar glass-card">
       <div class="header-left">
-        <button id="today-btn" class="glass-icon-btn btn-purple breathing-glow-purple" title="Zum aktuellen Tag (Heute)">
+        <button id="today-btn" class="glass-icon-btn btn-purple breathing-glow-purple today-labeled-btn" title="Zum aktuellen Tag (Heute)">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-        </button>
-        <button id="random-btn" class="glass-icon-btn btn-orange" title="Zufällige Seite laden">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><circle cx="15.5" cy="15.5" r="1.5"></circle><circle cx="15.5" cy="8.5" r="1.5"></circle><circle cx="8.5" cy="15.5" r="1.5"></circle><circle cx="12" cy="12" r="1.5"></circle></svg>
+          <span>heute</span>
         </button>
       </div>
       
@@ -1681,9 +1760,13 @@
     </div>
 
     <div class="slide-over-content">
-      <!-- App Brand Logo -->
+      <!-- App Brand Logo & Zufälliger Tag Button -->
       <div class="menu-brand-section">
         <img src="AufDeinWort.jpeg" class="menu-brand-logo" alt="Auf dein Wort Logo" onerror="this.style.display='none'">
+        <button id="menu-random-btn" class="glass-icon-btn btn-orange" title="Zufällige Seite laden">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><circle cx="15.5" cy="15.5" r="1.5"></circle><circle cx="15.5" cy="8.5" r="1.5"></circle><circle cx="8.5" cy="15.5" r="1.5"></circle><circle cx="12" cy="12" r="1.5"></circle></svg>
+          <span>Zufällig</span>
+        </button>
       </div>
 
       <!-- Section 1: Graphical Monthly Calendar Navigation -->
@@ -2266,7 +2349,7 @@
       
       const isCommentsOpen = document.getElementById('comments-section')?.classList.contains('open');
       const commentsStyles = isCommentsOpen 
-        ? 'max-height: 380px; margin-bottom: 20px; border-bottom: 1px dashed var(--glass-border); padding-bottom: 15px;' 
+        ? 'max-height: 380px; margin-top: 20px; border-top: 1px dashed var(--glass-border); padding-top: 15px;' 
         : '';
       const commentsOpenClass = isCommentsOpen ? 'open' : '';
 
@@ -2276,7 +2359,11 @@
           <div class="scripture-reference">${item.reference}</div>
         </div>
         
-        <!-- Collapsible Comments Panel -->
+        <div class="devotional-body" style="font-size: ${baseFontSize}px;">
+          ${bodyParagraphsHtml}
+        </div>
+
+        <!-- Collapsible Comments Panel at the bottom -->
         <div id="comments-section" class="comments-section ${commentsOpenClass}" style="${commentsStyles}">
           <div class="comments-header">
             <span>Globale Kommentare</span>
@@ -2285,10 +2372,6 @@
           <div id="global-comments-list" class="comments-list">
             <div class="empty-state">Kommentare werden geladen...</div>
           </div>
-        </div>
-
-        <div class="devotional-body" style="font-size: ${baseFontSize}px;">
-          ${bodyParagraphsHtml}
         </div>
       `;
 
@@ -2320,11 +2403,15 @@
     });
 
     // 3. "Zufällige Seite"-Button: Würfel / Inspiration
-    document.getElementById('random-btn').addEventListener('click', () => {
-      const rand = Math.floor(Math.random() * (372 - 7 + 1)) + 7;
-      goToPage(rand);
-      showToast('Zufällige Seite geladen', 'warning');
-    });
+    const menuRandomBtn = document.getElementById('menu-random-btn');
+    if (menuRandomBtn) {
+      menuRandomBtn.addEventListener('click', () => {
+        const rand = Math.floor(Math.random() * (372 - 7 + 1)) + 7;
+        goToPage(rand);
+        closeSlideOver();
+        showToast('Zufällige Seite geladen', 'warning');
+      });
+    }
 
     // 4. Lesezeichen & Notizen speichern
     bookmarkBtn.addEventListener('click', () => {
@@ -2715,6 +2802,11 @@
       }
     }, { passive: false });
 
+    // Prevent double-click zoom in JS
+    document.addEventListener('dblclick', (e) => {
+      e.preventDefault();
+    }, { passive: false });
+
     // Apply font size state
     textSizeValue.textContent = `${baseFontSize}px`;
 
@@ -2832,9 +2924,9 @@
       if (isOpen) {
         commentsSec.classList.remove('open');
         commentsSec.style.maxHeight = '0';
-        commentsSec.style.marginBottom = '0';
-        commentsSec.style.borderBottom = 'none';
-        commentsSec.style.paddingBottom = '0';
+        commentsSec.style.marginTop = '0';
+        commentsSec.style.borderTop = 'none';
+        commentsSec.style.paddingTop = '0';
         commentsToggleBtn.classList.remove('active');
         commentsToggleBtn.style.color = '';
       } else {
@@ -2847,9 +2939,9 @@
         
         commentsSec.classList.add('open');
         commentsSec.style.maxHeight = '380px';
-        commentsSec.style.marginBottom = '20px';
-        commentsSec.style.borderBottom = '1px dashed var(--glass-border)';
-        commentsSec.style.paddingBottom = '15px';
+        commentsSec.style.marginTop = '20px';
+        commentsSec.style.borderTop = '1px dashed var(--glass-border)';
+        commentsSec.style.paddingTop = '15px';
         commentsToggleBtn.classList.add('active');
         commentsToggleBtn.style.color = 'var(--color-purple)';
         commentsSec.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
