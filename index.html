@@ -834,23 +834,527 @@
       gap: 20px;
     }
 
-    .admin-section {
+    /* ═══════════════════════════════════════════════
+       ADMIN PANEL — Premium Redesign
+    ═══════════════════════════════════════════════ */
+
+    .admin-modal-panel {
+      width: 100%;
+      max-width: 680px;
+      max-height: 92vh;
       display: flex;
       flex-direction: column;
+      background: rgba(12, 10, 22, 0.96);
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+      border: 1px solid rgba(168, 85, 247, 0.18);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(168,85,247,0.08), inset 0 1px 0 rgba(255,255,255,0.05);
+      animation: modalScaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .admin-section h3 {
-      font-size: 1rem;
+    /* Header */
+    .admin-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px 18px;
+      border-bottom: 1px solid rgba(168,85,247,0.12);
+      flex-shrink: 0;
+    }
+
+    .admin-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .admin-back-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      border: 1px solid rgba(168,85,247,0.25);
+      background: rgba(168,85,247,0.08);
+      color: var(--color-purple);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    .admin-back-btn svg { width: 16px; height: 16px; }
+    .admin-back-btn:hover { background: rgba(168,85,247,0.18); box-shadow: var(--glow-purple); }
+
+    .admin-panel-eyebrow {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--color-purple);
+      opacity: 0.7;
+      margin-bottom: 2px;
+    }
+
+    .admin-panel-title {
+      font-size: 1.1rem;
       font-weight: 600;
       color: var(--text-primary);
-      margin: 0 0 8px 0;
+      margin: 0;
+      line-height: 1.2;
     }
 
-    .admin-desc {
-      font-size: 0.85rem;
+    .admin-close-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
       color: var(--text-secondary);
-      margin: 0 0 12px 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    .admin-close-btn svg { width: 15px; height: 15px; }
+    .admin-close-btn:hover { background: rgba(248,113,113,0.12); border-color: rgba(248,113,113,0.3); color: #f87171; }
+
+    /* View containers */
+    .admin-view {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* ── LIST VIEW ── */
+    .admin-search-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 20px 10px;
+      flex-shrink: 0;
+    }
+
+    .admin-search-icon { width: 15px; height: 15px; color: var(--text-secondary); flex-shrink: 0; }
+
+    .admin-search-input {
+      flex: 1;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 8px 12px;
+      color: var(--text-primary);
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .admin-search-input:focus { border-color: rgba(168,85,247,0.4); box-shadow: 0 0 0 3px rgba(168,85,247,0.08); }
+    .admin-search-input::placeholder { color: var(--text-secondary); opacity: 0.5; }
+
+    .admin-list-legend {
+      display: flex;
+      gap: 8px;
+      padding: 0 20px 10px;
+      flex-shrink: 0;
+    }
+
+    .admin-badge {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      padding: 3px 8px;
+      border-radius: 20px;
+    }
+    .badge-spurgeon  { background: rgba(34,197,94,0.12); color: #4ade80; border: 1px solid rgba(34,197,94,0.2); }
+    .badge-custom    { background: rgba(168,85,247,0.12); color: var(--color-purple); border: 1px solid rgba(168,85,247,0.25); }
+    .badge-future    { background: rgba(255,255,255,0.04); color: var(--text-secondary); border: 1px solid rgba(255,255,255,0.08); }
+
+    .admin-day-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 12px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .admin-list-loading {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 24px 12px;
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .admin-spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(168,85,247,0.2);
+      border-top-color: var(--color-purple);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+
+    .admin-day-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      background: transparent;
+    }
+    .admin-day-item:hover {
+      background: rgba(168,85,247,0.06);
+      border-color: rgba(168,85,247,0.15);
+    }
+    .admin-day-item-left { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+    .admin-day-item-date { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+    .admin-day-item-ref  { font-size: 11px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .admin-day-item-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .admin-day-item-arrow { color: var(--text-secondary); opacity: 0.4; }
+    .admin-day-item-arrow svg { width: 14px; height: 14px; }
+
+    /* Firebase Batch Section */
+    .admin-firebase-section {
+      flex-shrink: 0;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding: 14px 20px 18px;
+      background: rgba(251,146,60,0.03);
+    }
+
+    .admin-firebase-header {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--color-orange, #fb923c);
+      margin-bottom: 6px;
+    }
+
+    .admin-firebase-desc {
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin: 0 0 10px;
+    }
+
+    .admin-file-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .admin-file-pick-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(251,146,60,0.3);
+      background: rgba(251,146,60,0.07);
+      color: var(--color-orange, #fb923c);
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    .admin-file-pick-btn:hover { background: rgba(251,146,60,0.15); }
+
+    .admin-file-name {
+      font-size: 11px;
+      color: var(--text-secondary);
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+    }
+
+    /* ── EDITOR VIEW ── */
+    #admin-view-editor {
+      overflow-y: auto;
+      padding: 18px 24px 20px;
+      gap: 18px;
+    }
+
+    .admin-source-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      margin-bottom: 4px;
+    }
+
+    .admin-select-wrapper {
+      position: relative;
+      flex: 1;
+    }
+
+    .admin-source-select {
+      width: 100%;
+      appearance: none;
+      -webkit-appearance: none;
+      background: rgba(168,85,247,0.06);
+      border: 1px solid rgba(168,85,247,0.25);
+      border-radius: 10px;
+      padding: 9px 36px 9px 14px;
+      color: var(--text-primary);
+      font-size: 13px;
+      font-family: inherit;
+      font-weight: 500;
+      cursor: pointer;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .admin-source-select:focus { border-color: var(--color-purple); box-shadow: 0 0 0 3px rgba(168,85,247,0.12); }
+    .admin-source-select option { background: #1a1128; }
+
+    .admin-select-arrow {
+      position: absolute;
+      right: 11px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 14px;
+      height: 14px;
+      color: var(--color-purple);
+      pointer-events: none;
+    }
+
+    /* Spurgeon preview (read-only) */
+    .admin-spurgeon-preview {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 16px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .admin-readonly-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      color: var(--text-secondary);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 20px;
+      padding: 4px 10px;
+      align-self: flex-start;
+    }
+
+    .admin-preview-quote {
+      font-size: 14px;
+      font-style: italic;
+      color: var(--text-primary);
+      line-height: 1.6;
+      border-left: 2px solid var(--color-purple);
+      padding-left: 12px;
+    }
+
+    .admin-preview-reference {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-purple);
+      letter-spacing: 0.5px;
+    }
+
+    .admin-preview-body {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      max-height: 200px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+
+    /* Structured fields */
+    .admin-field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 14px;
+    }
+    .admin-field-group:last-of-type { margin-bottom: 0; }
+
+    .admin-field-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .admin-field-hint {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0;
+      text-transform: none;
+      opacity: 0.6;
+    }
+
+    .admin-quote-wrapper {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+
+    .admin-quote-mark {
+      font-size: 22px;
+      line-height: 1.2;
+      color: var(--color-purple);
+      opacity: 0.6;
+      flex-shrink: 0;
+      margin-top: 4px;
+      font-style: italic;
+    }
+
+    .admin-field-textarea,
+    .admin-field-input {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 10px;
+      padding: 10px 13px;
+      color: var(--text-primary);
+      font-size: 13px;
+      font-family: inherit;
+      line-height: 1.6;
+      outline: none;
+      resize: vertical;
+      width: 100%;
+      box-sizing: border-box;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .admin-field-textarea:focus,
+    .admin-field-input:focus {
+      border-color: rgba(168,85,247,0.45);
+      box-shadow: 0 0 0 3px rgba(168,85,247,0.1);
+    }
+    .admin-field-textarea::placeholder,
+    .admin-field-input::placeholder { color: var(--text-secondary); opacity: 0.4; }
+
+    .admin-field-body-textarea { min-height: 120px; }
+
+    /* Upload zone */
+    .admin-upload-zone {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1.5px dashed rgba(168,85,247,0.25);
+      background: rgba(168,85,247,0.03);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+    .admin-upload-zone:hover, .admin-upload-zone.drag-over {
+      border-color: rgba(168,85,247,0.5);
+      background: rgba(168,85,247,0.07);
+    }
+
+    .admin-upload-icon { width: 28px; height: 28px; color: var(--color-purple); opacity: 0.5; }
+
+    .admin-upload-zone span {
+      font-size: 12px;
+      color: var(--text-secondary);
       line-height: 1.4;
+    }
+
+    .admin-upload-link {
+      background: none;
+      border: none;
+      color: var(--color-purple);
+      font-family: inherit;
+      font-size: 12px;
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 0;
+    }
+
+    .admin-upload-filename {
+      font-size: 12px;
+      color: var(--color-purple);
+      font-weight: 500;
+    }
+
+    /* Action buttons */
+    .admin-editor-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      margin-top: 6px;
+    }
+
+    .admin-action-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 16px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .btn-purple-solid {
+      background: var(--color-purple);
+      color: #fff;
+      border-color: var(--color-purple);
+    }
+    .btn-purple-solid:hover { background: rgba(168,85,247,0.85); box-shadow: var(--glow-purple); }
+
+    .btn-ghost-red {
+      background: rgba(248,113,113,0.07);
+      color: #f87171;
+      border-color: rgba(248,113,113,0.2);
+    }
+    .btn-ghost-red:hover { background: rgba(248,113,113,0.14); }
+
+    .btn-orange-outline {
+      background: rgba(251,146,60,0.07);
+      color: var(--color-orange, #fb923c);
+      border-color: rgba(251,146,60,0.25);
+    }
+    .btn-orange-outline:hover { background: rgba(251,146,60,0.15); }
+
+    /* Keep old rules that are still needed */
+    .admin-divider {
+      border: 0;
+      height: 1px;
+      background: var(--glass-border);
+      margin: 4px 0;
     }
 
     /* Admin-Editor bekommt extra Höhe, Notizen-Textarea bleibt kompakt */
@@ -2010,60 +2514,154 @@
     </section>
   </div>
 
-  <!-- Admin Modal Overlay -->
+  <!-- Admin Modal Overlay (Redesign) -->
   <div id="admin-modal" class="modal-overlay" style="display: none;">
-    <div class="modal-content glass-card">
-      <div class="modal-header">
-        <h2>Admin-Bereich</h2>
-        <button id="close-admin-btn" class="close-btn" title="Schließen">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    <div class="admin-modal-panel">
+
+      <!-- ═══ HEADER ═══ -->
+      <div class="admin-panel-header">
+        <div class="admin-header-left">
+          <button id="admin-back-btn" class="admin-back-btn" style="display:none;" title="Zurück zur Liste">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <div>
+            <div class="admin-panel-eyebrow">Admin-Bereich</div>
+            <h2 class="admin-panel-title" id="admin-panel-title">Andachten verwalten</h2>
+          </div>
+        </div>
+        <button id="close-admin-btn" class="admin-close-btn" title="Schließen">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
       </div>
-      <div class="modal-body">
-        <div class="admin-section">
-          <h3>Aktuellen Tag bearbeiten</h3>
-          <p id="admin-selected-day-label" style="font-weight: 500; margin-bottom: 8px; color: var(--color-purple);"></p>
-          <textarea id="admin-text-editor" class="glass-textarea" placeholder="Markdown-Text hier eingeben..."></textarea>
-          <div class="admin-actions">
-            <button id="admin-save-btn" class="glass-btn btn-purple">Speichern</button>
-            <button id="admin-reset-btn" class="glass-btn btn-red">Auf Standard zurücksetzen</button>
+
+      <!-- ═══ VIEW 1: TAG-LISTE ═══ -->
+      <div id="admin-view-list" class="admin-view">
+        <div class="admin-search-bar">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="admin-search-icon"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="admin-day-search" class="admin-search-input" placeholder="Tag suchen (Datum oder Bibelstelle)…">
+        </div>
+
+        <div class="admin-list-legend">
+          <span class="admin-badge badge-spurgeon">Spurgeon</span>
+          <span class="admin-badge badge-custom">Benutzerdefiniert</span>
+          <span class="admin-badge badge-future">Zukünftig</span>
+        </div>
+
+        <div id="admin-day-list" class="admin-day-list">
+          <div class="admin-list-loading">
+            <div class="admin-spinner"></div>
+            <span>Tage werden geladen…</span>
           </div>
         </div>
 
-        <hr class="admin-divider" />
-
-        <div class="admin-section">
-          <h3>Einzelne Andacht hochladen (.md)</h3>
-          <p class="admin-desc">Lade eine Markdown-Datei für den aktuell ausgewählten Tag hoch.</p>
-          <div class="file-upload-wrapper">
-            <input type="file" id="admin-file-single" accept=".md" class="file-input-hidden" />
-            <button id="admin-file-single-btn" class="glass-btn btn-blue">Datei auswählen</button>
-            <span id="admin-file-single-name" class="file-name">Keine Datei ausgewählt</span>
+        <!-- Firebase Batch-Upload Sektion -->
+        <div class="admin-firebase-section">
+          <div class="admin-firebase-header">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;color:var(--color-orange)"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+            <span>Firebase Batch-Import</span>
           </div>
-          <button id="admin-upload-single-btn" class="glass-btn btn-purple" style="margin-top: 10px;">Andacht hochladen</button>
-        </div>
-
-        <hr class="admin-divider" />
-
-        <div class="admin-section">
-          <h3>Jahres-Markdown hochladen (.md)</h3>
-          <p class="admin-desc">Lade eine Markdown-Datei mit allen Andachten für das gesamte Jahr hoch. Sie wird automatisch nach Tagen geparst und hochgeladen.</p>
-          <div class="file-upload-wrapper">
-            <input type="file" id="admin-file-year" accept=".md" class="file-input-hidden" />
-            <button id="admin-file-year-btn" class="glass-btn btn-orange">Datei auswählen</button>
-            <span id="admin-file-year-name" class="file-name">Keine Datei ausgewählt</span>
+          <p class="admin-firebase-desc">Lade eine vollständige Jahres-Markdown-Datei hoch. Sie wird automatisch nach Tagen geparst und in Batches (50 Dok.) nach Firestore gestreamt.</p>
+          <div class="admin-file-row">
+            <input type="file" id="admin-file-year" accept=".md,.txt" class="file-input-hidden">
+            <button id="admin-file-year-btn" class="admin-file-pick-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              Datei wählen
+            </button>
+            <span id="admin-file-year-name" class="admin-file-name">Keine Datei</span>
+            <button id="admin-upload-year-btn" class="admin-action-btn btn-orange-outline">Hochladen</button>
           </div>
-          <button id="admin-upload-year-btn" class="glass-btn btn-purple" style="margin-top: 10px;">Jahresdatei verarbeiten &amp; hochladen</button>
-          <div id="admin-upload-progress" class="upload-progress-container" style="display: none;">
-            <div class="progress-bar-bg">
-              <div id="admin-progress-bar-fill" class="progress-bar-fill"></div>
-            </div>
+          <div id="admin-upload-progress" class="upload-progress-container" style="display:none;">
+            <div class="progress-bar-bg"><div id="admin-progress-bar-fill" class="progress-bar-fill"></div></div>
             <span id="admin-progress-text" class="progress-text">0% verarbeitet</span>
           </div>
         </div>
       </div>
-    </div>
-  </div>
+
+      <!-- ═══ VIEW 2: TAG-EDITOR ═══ -->
+      <div id="admin-view-editor" class="admin-view" style="display:none;">
+
+        <!-- Quelle Dropdown -->
+        <div class="admin-source-row">
+          <label class="admin-field-label">Quelle</label>
+          <div class="admin-select-wrapper">
+            <select id="admin-source-select" class="admin-source-select">
+              <option value="spurgeon">Spurgeon (Original)</option>
+              <option value="weitere">Weitere (Benutzerdefiniert)</option>
+            </select>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="admin-select-arrow"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </div>
+        </div>
+
+        <!-- Spurgeon: schreibgeschützte Vorschau -->
+        <div id="admin-spurgeon-preview" class="admin-spurgeon-preview">
+          <div class="admin-readonly-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            Schreibgeschützt — Original-Spurgeon-Andacht
+          </div>
+          <div class="admin-preview-quote" id="admin-preview-quote"></div>
+          <div class="admin-preview-reference" id="admin-preview-reference"></div>
+          <div class="admin-preview-body" id="admin-preview-body"></div>
+        </div>
+
+        <!-- Weitere: strukturierte Eingabe -->
+        <div id="admin-weitere-editor" style="display:none;">
+          <!-- Bibelvers -->
+          <div class="admin-field-group">
+            <label class="admin-field-label" for="admin-field-quote">
+              Bibelvers
+              <span class="admin-field-hint">Wird automatisch in „…" eingerahmt</span>
+            </label>
+            <div class="admin-quote-wrapper">
+              <span class="admin-quote-mark">„</span>
+              <textarea id="admin-field-quote" class="admin-field-textarea" rows="2" placeholder="Bibelvers hier eingeben…"></textarea>
+              <span class="admin-quote-mark">"</span>
+            </div>
+          </div>
+
+          <!-- Bibelstelle -->
+          <div class="admin-field-group">
+            <label class="admin-field-label" for="admin-field-reference">Bibelstelle</label>
+            <input type="text" id="admin-field-reference" class="admin-field-input" placeholder="z.B. Johannes 3,16">
+          </div>
+
+          <!-- Andachtstext -->
+          <div class="admin-field-group">
+            <label class="admin-field-label" for="admin-field-body">Andachtstext</label>
+            <textarea id="admin-field-body" class="admin-field-textarea admin-field-body-textarea" rows="6" placeholder="Andachtstext hier eingeben…"></textarea>
+          </div>
+
+          <!-- Datei hochladen -->
+          <div class="admin-field-group">
+            <label class="admin-field-label">
+              Datei hochladen
+              <span class="admin-field-hint">.md · .txt · .docx — Inhalt wird in die Felder oben geparst</span>
+            </label>
+            <div class="admin-upload-zone" id="admin-upload-zone">
+              <input type="file" id="admin-file-single" accept=".md,.txt,.docx" class="file-input-hidden">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="admin-upload-icon"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              <span id="admin-upload-zone-label">Datei hierher ziehen oder <button id="admin-file-single-btn" class="admin-upload-link">durchsuchen</button></span>
+              <span id="admin-file-single-name" class="admin-upload-filename" style="display:none;"></span>
+            </div>
+          </div>
+
+          <!-- Aktionen -->
+          <div class="admin-editor-actions">
+            <button id="admin-reset-btn" class="admin-action-btn btn-ghost-red">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 .49-4.65"></path></svg>
+              Auf Spurgeon zurücksetzen
+            </button>
+            <button id="admin-save-btn" class="admin-action-btn btn-purple-solid">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+              Speichern
+            </button>
+          </div>
+        </div>
+
+      </div><!-- /admin-view-editor -->
+
+    </div><!-- /admin-modal-panel -->
+  </div><!-- /admin-modal -->
+
 
   <!-- Navigation Slide-Over Sidebar Menu -->
   <div id="slide-over" class="slide-over">
@@ -2549,296 +3147,382 @@
 
         if (line.startsWith('*') && line.endsWith('*')) {
           const cleanLine = line.slice(1, -1).trim();
-          currentPara.push({ text: cleanLine, type: 'italic' });
-        } else {
-          currentPara.push({ text: line, type: 'normal' });
-        }
-      }
+          currentPara.push({ tex    // Current page being edited in the admin panel
+    let adminEditingPage = null;
 
-      if (currentPara.length > 0) {
-        paragraphs.push(currentPara);
-      }
+    const MONTH_NAMES = ["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"];
 
-      return {
-        date: dateLabel,
-        quote: quoteText,
-        reference: refText,
-        paragraphs: paragraphs,
-        page: pageNum
-      };
-    }
-
+    // ── Navigate to list view ──
     function openAdminModal() {
-      const modal = document.getElementById('admin-modal');
-      const label = document.getElementById('admin-selected-day-label');
-      const editor = document.getElementById('admin-text-editor');
-      
-      if (!modal || !editor) return;
-
-      const dateStr = getDateForPage(currentPage, 6, 366);
-      const monthNames = [
-        "Januar", "Februar", "März", "April", "Mai", "Juni", 
-        "Juli", "August", "September", "Oktober", "November", "Dezember"
-      ];
-      label.textContent = dateStr 
-        ? `${dateStr.getDate()}. ${monthNames[dateStr.getMonth()]} (Seite ${currentPage})`
-        : `Seite ${currentPage}`;
-
-      const item = customDevotionals[currentPage] || parsedPages[currentPage];
-      if (item) {
-        let reconstructed = '';
-        if (item.quote) reconstructed += `„${item.quote}“\n`;
-        if (item.reference) reconstructed += `${item.reference}\n\n`;
-        
-        if (item.paragraphs) {
-          const paraTexts = item.paragraphs.map(p => {
-            if (Array.isArray(p)) {
-              return p.map(chunk => {
-                if (chunk.type === 'italic') return `*${chunk.text}*`;
-                return chunk.text;
-              }).join(' ');
-            }
-            return p;
-          });
-          reconstructed += paraTexts.join('\n\n');
-        }
-        editor.value = reconstructed;
-      } else {
-        editor.value = '';
-      }
-
-      modal.style.display = 'flex';
+      document.getElementById('admin-modal').style.display = 'flex';
+      showAdminListView();
       closeSlideOver();
     }
 
     function closeAdminModal() {
-      const modal = document.getElementById('admin-modal');
-      if (modal) modal.style.display = 'none';
-      
-      const singleFileInput = document.getElementById('admin-file-single');
-      const yearFileInput = document.getElementById('admin-file-year');
-      if (singleFileInput) singleFileInput.value = '';
-      if (yearFileInput) yearFileInput.value = '';
-      document.getElementById('admin-file-single-name').textContent = 'Keine Datei ausgewählt';
-      document.getElementById('admin-file-year-name').textContent = 'Keine Datei ausgewählt';
+      document.getElementById('admin-modal').style.display = 'none';
+      adminEditingPage = null;
+    }
+
+    function showAdminListView() {
+      document.getElementById('admin-view-list').style.display = 'flex';
+      document.getElementById('admin-view-editor').style.display = 'none';
+      document.getElementById('admin-back-btn').style.display = 'none';
+      document.getElementById('admin-panel-title').textContent = 'Andachten verwalten';
+      renderAdminDayList('');
+    }
+
+    function showAdminEditorView(pageNum) {
+      adminEditingPage = pageNum;
+      document.getElementById('admin-view-list').style.display = 'none';
+      document.getElementById('admin-view-editor').style.display = 'flex';
+      document.getElementById('admin-back-btn').style.display = 'flex';
+
+      const date = getDateForPage(pageNum, 6, 366);
+      const label = date
+        ? `${date.getDate()}. ${MONTH_NAMES[date.getMonth()]} ${date.getFullYear()}`
+        : `Seite ${pageNum}`;
+      document.getElementById('admin-panel-title').textContent = label;
+
+      // Determine source
+      const hasCustom = !!customDevotionals[pageNum];
+      const sourceSelect = document.getElementById('admin-source-select');
+      sourceSelect.value = hasCustom ? 'weitere' : 'spurgeon';
+      onAdminSourceChange(sourceSelect.value, pageNum);
+    }
+
+    // ── Build the day list ──
+    function renderAdminDayList(query) {
+      const container = document.getElementById('admin-day-list');
+      container.innerHTML = '';
+
+      const lowerQ = query.toLowerCase().trim();
+      const todayPage = getPageForDate(new Date(), 6, 366);
+
+      const fragment = document.createDocumentFragment();
+      let shown = 0;
+
+      for (let p = 7; p <= 372; p++) {
+        const pageData = parsedPages[p];
+        if (!pageData) continue;
+
+        const date = getDateForPage(p, 6, 366);
+        const dateStr = date ? `${date.getDate()}. ${MONTH_NAMES[date.getMonth()]}` : `Seite ${p}`;
+        const ref = pageData.reference || '—';
+
+        // Search filter
+        if (lowerQ && !dateStr.toLowerCase().includes(lowerQ) && !ref.toLowerCase().includes(lowerQ)) continue;
+
+        // Badge
+        const isCustom = !!customDevotionals[p];
+        const isFuture = p > todayPage;
+        let badge, badgeClass;
+        if (isCustom) { badge = 'Benutzerdefiniert'; badgeClass = 'badge-custom'; }
+        else if (isFuture) { badge = 'Zukünftig'; badgeClass = 'badge-future'; }
+        else { badge = 'Spurgeon'; badgeClass = 'badge-spurgeon'; }
+
+        const item = document.createElement('div');
+        item.className = 'admin-day-item';
+        item.innerHTML = `
+          <div class="admin-day-item-left">
+            <span class="admin-day-item-date">${dateStr}</span>
+            <span class="admin-day-item-ref">${ref}</span>
+          </div>
+          <div class="admin-day-item-right">
+            <span class="admin-badge ${badgeClass}">${badge}</span>
+            <span class="admin-day-item-arrow">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+        `;
+        item.addEventListener('click', () => showAdminEditorView(p));
+        fragment.appendChild(item);
+        shown++;
+        if (shown >= 200 && !lowerQ) break; // initial cap for performance
+      }
+
+      if (shown === 0) {
+        container.innerHTML = '<div class="admin-list-loading"><span>Keine Einträge gefunden.</span></div>';
+      } else {
+        container.appendChild(fragment);
+      }
+    }
+
+    // ── Source dropdown change ──
+    function onAdminSourceChange(source, pageNum) {
+      const pg = pageNum ?? adminEditingPage;
+      const spurgeonPreview = document.getElementById('admin-spurgeon-preview');
+      const weitereEditor = document.getElementById('admin-weitere-editor');
+
+      if (source === 'spurgeon') {
+        spurgeonPreview.style.display = 'flex';
+        weitereEditor.style.display = 'none';
+        // Fill read-only preview from parsedPages
+        const item = parsedPages[pg];
+        document.getElementById('admin-preview-quote').textContent = item ? `„${item.quote}"` : '(Kein Original-Text vorhanden)';
+        document.getElementById('admin-preview-reference').textContent = item ? item.reference : '';
+        if (item && item.paragraphs) {
+          const body = item.paragraphs.map(p => {
+            if (Array.isArray(p)) return p.map(c => c.text).join(' ');
+            return p;
+          }).join('\n\n');
+          document.getElementById('admin-preview-body').textContent = body;
+        } else {
+          document.getElementById('admin-preview-body').textContent = '';
+        }
+      } else {
+        spurgeonPreview.style.display = 'none';
+        weitereEditor.style.display = 'flex';
+        // Pre-fill from customDevotionals or empty
+        const item = customDevotionals[pg];
+        document.getElementById('admin-field-quote').value = item ? item.quote : '';
+        document.getElementById('admin-field-reference').value = item ? item.reference : '';
+        if (item && item.paragraphs) {
+          const body = item.paragraphs.map(p => {
+            if (Array.isArray(p)) return p.map(c => c.text).join(' ');
+            return p;
+          }).join('\n\n');
+          document.getElementById('admin-field-body').value = body;
+        } else {
+          document.getElementById('admin-field-body').value = '';
+        }
+      }
+    }
+
+    // ── Parse uploaded file content into fields ──
+    function parseFileIntoFields(content, filename) {
+      const ext = filename.split('.').pop().toLowerCase();
+      let text = content;
+
+      // Try to parse structured
+      const lines = text.split('\n');
+      let quote = '', reference = '', bodyLines = [];
+      let quoteFound = false, refFound = false;
+
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (!line) continue;
+
+        if (!quoteFound && (line.startsWith('„') || line.startsWith('"') || line.startsWith('"'))) {
+          quote = line.replace(/^[„""]|["""]\s*$/g, '').trim();
+          quoteFound = true;
+          continue;
+        }
+        if (quoteFound && !refFound) {
+          reference = line;
+          refFound = true;
+          continue;
+        }
+        if (quoteFound && refFound) {
+          bodyLines.push(line);
+        }
+      }
+
+      document.getElementById('admin-field-quote').value = quote || '';
+      document.getElementById('admin-field-reference').value = reference || '';
+      document.getElementById('admin-field-body').value = bodyLines.join('\n').trim();
+
+      // Reset file label
+      const nameEl = document.getElementById('admin-file-single-name');
+      const labelEl = document.getElementById('admin-upload-zone-label');
+      nameEl.textContent = filename;
+      nameEl.style.display = 'block';
+      labelEl.style.display = 'none';
+
+      showToast('Datei geparst — bitte prüfen und speichern', 'success');
+    }
+
+    // ── mammoth.js lazy loader for .docx ──
+    function loadMammothAndParse(file) {
+      if (window.mammoth) {
+        mammoth.extractRawText({ arrayBuffer: file }).then(r => parseFileIntoFields(r.value, file.name));
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js';
+      script.onload = () => {
+        const reader = new FileReader();
+        reader.onload = evt => mammoth.extractRawText({ arrayBuffer: evt.target.result }).then(r => parseFileIntoFields(r.value, file.name));
+        reader.readAsArrayBuffer(file);
+      };
+      script.onerror = () => showToast('Fehler beim Laden der DOCX-Bibliothek', 'error');
+      document.head.appendChild(script);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      // ── Admin open/close ──
       const menuAdminBtn = document.getElementById('menu-admin-btn');
-      if (menuAdminBtn) {
-        menuAdminBtn.addEventListener('click', openAdminModal);
-      }
+      if (menuAdminBtn) menuAdminBtn.addEventListener('click', openAdminModal);
 
-      const closeAdminBtn = document.getElementById('close-admin-btn');
-      if (closeAdminBtn) {
-        closeAdminBtn.addEventListener('click', closeAdminModal);
-      }
+      document.getElementById('close-admin-btn').addEventListener('click', closeAdminModal);
+      document.getElementById('admin-back-btn').addEventListener('click', showAdminListView);
 
-      const saveBtn = document.getElementById('admin-save-btn');
-      if (saveBtn) {
-        saveBtn.addEventListener('click', () => {
-          const editorText = document.getElementById('admin-text-editor').value.trim();
-          if (!editorText) {
-            showToast('Editor ist leer!', 'warning');
-            return;
-          }
+      // ── Search ──
+      document.getElementById('admin-day-search').addEventListener('input', (e) => {
+        renderAdminDayList(e.target.value);
+      });
 
-          if (!db) {
-            showToast('Firebase nicht initialisiert', 'error');
-            return;
-          }
+      // ── Source dropdown ──
+      document.getElementById('admin-source-select').addEventListener('change', (e) => {
+        onAdminSourceChange(e.target.value);
+      });
 
-          db.collection("custom_devotionals").doc(String(currentPage)).set({
-            rawMarkdown: editorText
-          })
+      // ── Save ──
+      document.getElementById('admin-save-btn').addEventListener('click', () => {
+        if (!adminEditingPage) return;
+        if (!db) { showToast('Firebase nicht initialisiert', 'error'); return; }
+
+        const quote = document.getElementById('admin-field-quote').value.trim();
+        const reference = document.getElementById('admin-field-reference').value.trim();
+        const body = document.getElementById('admin-field-body').value.trim();
+
+        if (!quote && !body) { showToast('Bitte mindestens Bibelvers oder Text eingeben', 'warning'); return; }
+
+        const rawMarkdown = `„${quote}"\n${reference}\n\n${body}`;
+        db.collection('custom_devotionals').doc(String(adminEditingPage)).set({ rawMarkdown })
           .then(() => {
-            showToast('Andacht erfolgreich gespeichert!', 'success');
-            customDevotionals[currentPage] = parseSinglePageMarkdown(editorText, currentPage);
+            customDevotionals[adminEditingPage] = parseSinglePageMarkdown(rawMarkdown, adminEditingPage);
+            showToast('Andacht gespeichert!', 'success');
             goToPage(currentPage);
-            closeAdminModal();
+            showAdminListView();
           })
-          .catch(err => {
-            console.error("Error saving devotional:", err);
-            showToast('Fehler beim Speichern', 'error');
-          });
-        });
-      }
+          .catch(err => { console.error(err); showToast('Fehler beim Speichern', 'error'); });
+      });
 
-      const resetBtn = document.getElementById('admin-reset-btn');
-      if (resetBtn) {
-        resetBtn.addEventListener('click', () => {
-          if (!confirm('Möchtest du diese Andacht wirklich auf den Standard-Text zurücksetzen?')) {
-            return;
-          }
+      // ── Reset to Spurgeon ──
+      document.getElementById('admin-reset-btn').addEventListener('click', () => {
+        if (!adminEditingPage) return;
+        if (!db) { showToast('Firebase nicht initialisiert', 'error'); return; }
+        if (!confirm('Möchtest du diese Andacht auf Spurgeon zurücksetzen?')) return;
 
-          if (!db) {
-            showToast('Firebase nicht initialisiert', 'error');
-            return;
-          }
-
-          db.collection("custom_devotionals").doc(String(currentPage)).delete()
+        db.collection('custom_devotionals').doc(String(adminEditingPage)).delete()
           .then(() => {
-            showToast('Auf Standard zurückgesetzt', 'warning');
-            delete customDevotionals[currentPage];
+            delete customDevotionals[adminEditingPage];
+            showToast('Auf Spurgeon zurückgesetzt', 'warning');
             goToPage(currentPage);
-            closeAdminModal();
+            showAdminListView();
           })
-          .catch(err => {
-            console.error("Error resetting page:", err);
-            showToast('Fehler beim Zurücksetzen', 'error');
-          });
-        });
-      }
+          .catch(err => { console.error(err); showToast('Fehler beim Zurücksetzen', 'error'); });
+      });
 
-      const fileSingleBtn = document.getElementById('admin-file-single-btn');
+      // ── Single file upload (drag & drop + browse) ──
+      const uploadZone = document.getElementById('admin-upload-zone');
       const fileSingleInput = document.getElementById('admin-file-single');
-      if (fileSingleBtn && fileSingleInput) {
-        fileSingleBtn.addEventListener('click', () => fileSingleInput.click());
+      const fileSingleBtn = document.getElementById('admin-file-single-btn');
+
+      if (fileSingleBtn) fileSingleBtn.addEventListener('click', (e) => { e.stopPropagation(); fileSingleInput.click(); });
+      if (uploadZone) uploadZone.addEventListener('click', () => fileSingleInput.click());
+
+      if (uploadZone) {
+        uploadZone.addEventListener('dragover', (e) => { e.preventDefault(); uploadZone.classList.add('drag-over'); });
+        uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
+        uploadZone.addEventListener('drop', (e) => {
+          e.preventDefault();
+          uploadZone.classList.remove('drag-over');
+          const file = e.dataTransfer.files[0];
+          if (file) handleSingleFile(file);
+        });
+      }
+
+      if (fileSingleInput) {
         fileSingleInput.addEventListener('change', (e) => {
           const file = e.target.files[0];
-          document.getElementById('admin-file-single-name').textContent = file ? file.name : 'Keine Datei ausgewählt';
+          if (file) handleSingleFile(file);
         });
       }
 
+      function handleSingleFile(file) {
+        const ext = file.name.split('.').pop().toLowerCase();
+        if (ext === 'docx') {
+          loadMammothAndParse(file);
+        } else {
+          const reader = new FileReader();
+          reader.onload = (evt) => parseFileIntoFields(evt.target.result, file.name);
+          reader.readAsText(file);
+        }
+      }
+
+      // ── Year batch upload ──
       const fileYearBtn = document.getElementById('admin-file-year-btn');
       const fileYearInput = document.getElementById('admin-file-year');
       if (fileYearBtn && fileYearInput) {
         fileYearBtn.addEventListener('click', () => fileYearInput.click());
         fileYearInput.addEventListener('change', (e) => {
           const file = e.target.files[0];
-          document.getElementById('admin-file-year-name').textContent = file ? file.name : 'Keine Datei ausgewählt';
-        });
-      }
-
-      const uploadSingleBtn = document.getElementById('admin-upload-single-btn');
-      if (uploadSingleBtn) {
-        uploadSingleBtn.addEventListener('click', () => {
-          const fileInput = document.getElementById('admin-file-single');
-          const file = fileInput.files[0];
-          if (!file) {
-            showToast('Bitte wähle zuerst eine .md Datei aus!', 'warning');
-            return;
-          }
-
-          const reader = new FileReader();
-          reader.onload = function(evt) {
-            const fileContent = evt.target.result.trim();
-            if (!fileContent) {
-              showToast('Die Datei ist leer!', 'warning');
-              return;
-            }
-            document.getElementById('admin-text-editor').value = fileContent;
-            showToast('Datei in den Editor geladen. Klicke "Speichern" zum Hochladen.', 'success');
-          };
-          reader.readAsText(file);
+          document.getElementById('admin-file-year-name').textContent = file ? file.name : 'Keine Datei';
         });
       }
 
       const uploadYearBtn = document.getElementById('admin-upload-year-btn');
       if (uploadYearBtn) {
         uploadYearBtn.addEventListener('click', () => {
-          const fileInput = document.getElementById('admin-file-year');
-          const file = fileInput.files[0];
-          if (!file) {
-            showToast('Bitte wähle zuerst eine .md Jahresdatei aus!', 'warning');
-            return;
-          }
-
-          if (!db) {
-            showToast('Firebase nicht initialisiert', 'error');
-            return;
-          }
-
-          if (!confirm('Dies überschreibt alle benutzerdefinierten Andachten der entsprechenden Tage. Fortfahren?')) {
-            return;
-          }
+          const file = fileYearInput.files[0];
+          if (!file) { showToast('Bitte zuerst eine Datei wählen', 'warning'); return; }
+          if (!db) { showToast('Firebase nicht initialisiert', 'error'); return; }
+          if (!confirm('Alle benutzerdefinierten Andachten der enthaltenen Tage werden überschrieben. Fortfahren?')) return;
 
           const reader = new FileReader();
           reader.onload = function(evt) {
             try {
-              const fileContent = evt.target.result;
-              const parsedResults = parseMarkdownCalendar(fileContent);
+              const parsedResults = parseMarkdownCalendar(evt.target.result);
               const keys = Object.keys(parsedResults);
               const total = keys.length;
-              if (total === 0) {
-                showToast('Keine gültigen Andachten in der Jahresdatei gefunden!', 'error');
-                return;
-              }
+              if (total === 0) { showToast('Keine Andachten in der Datei gefunden', 'error'); return; }
 
               let processed = 0;
-              const progressBarContainer = document.getElementById('admin-upload-progress');
-              const progressBarFill = document.getElementById('admin-progress-bar-fill');
+              const progressContainer = document.getElementById('admin-upload-progress');
+              const progressFill = document.getElementById('admin-progress-bar-fill');
               const progressText = document.getElementById('admin-progress-text');
-
-              progressBarContainer.style.display = 'block';
-              progressBarFill.style.width = '0%';
-              progressText.textContent = `0 von ${total} Andachten verarbeitet...`;
+              progressContainer.style.display = 'block';
+              progressFill.style.width = '0%';
+              progressText.textContent = `0 von ${total} verarbeitet…`;
 
               const chunkSize = 50;
-
               function uploadChunk(index) {
                 if (index >= total) {
-                  progressBarFill.style.width = '100%';
-                  progressText.textContent = `Erfolgreich! ${total} Andachten importiert.`;
-                  showToast('Jahresdatei erfolgreich verarbeitet!', 'success');
+                  progressFill.style.width = '100%';
+                  progressText.textContent = `Fertig! ${total} Andachten importiert.`;
+                  showToast('Jahresdatei erfolgreich importiert!', 'success');
                   loadCustomDevotionals();
-                  setTimeout(() => {
-                    progressBarContainer.style.display = 'none';
-                  }, 4000);
+                  setTimeout(() => { progressContainer.style.display = 'none'; }, 4000);
                   return;
                 }
-
                 const batch = db.batch();
-                const chunkKeys = keys.slice(index, index + chunkSize);
-
-                chunkKeys.forEach(pageNum => {
+                keys.slice(index, index + chunkSize).forEach(pageNum => {
                   const item = parsedResults[pageNum];
-                  const docRef = db.collection("custom_devotionals").doc(String(pageNum));
-
-                  let reconstructed = '';
-                  if (item.quote) reconstructed += `„${item.quote}“\n`;
-                  if (item.reference) reconstructed += `${item.reference}\n\n`;
+                  let md = '';
+                  if (item.quote) md += `„${item.quote}"\n`;
+                  if (item.reference) md += `${item.reference}\n\n`;
                   if (item.paragraphs) {
-                    const paraTexts = item.paragraphs.map(p => {
-                      if (Array.isArray(p)) {
-                        return p.map(chunk => {
-                          if (chunk.type === 'italic') return `*${chunk.text}*`;
-                          return chunk.text;
-                        }).join(' ');
-                      }
-                      return p;
-                    });
-                    reconstructed += paraTexts.join('\n\n');
+                    md += item.paragraphs.map(p => Array.isArray(p) ? p.map(c => c.type === 'italic' ? `*${c.text}*` : c.text).join(' ') : p).join('\n\n');
                   }
-
-                  batch.set(docRef, { rawMarkdown: reconstructed });
+                  batch.set(db.collection('custom_devotionals').doc(String(pageNum)), { rawMarkdown: md });
                 });
-
                 batch.commit()
-                .then(() => {
-                  processed += chunkKeys.length;
-                  const pct = Math.round((processed / total) * 100);
-                  progressBarFill.style.width = `${pct}%`;
-                  progressText.textContent = `${processed} von ${total} Andachten verarbeitet...`;
-                  uploadChunk(index + chunkSize);
-                })
-                .catch(err => {
-                  console.error("Batch upload error:", err);
-                  showToast('Fehler beim Stapel-Upload', 'error');
-                  progressBarContainer.style.display = 'none';
-                });
+                  .then(() => {
+                    processed += Math.min(chunkSize, total - index);
+                    progressFill.style.width = `${Math.round(processed/total*100)}%`;
+                    progressText.textContent = `${processed} von ${total} verarbeitet…`;
+                    uploadChunk(index + chunkSize);
+                  })
+                  .catch(err => { console.error(err); showToast('Fehler beim Batch-Upload', 'error'); progressContainer.style.display = 'none'; });
               }
-
               uploadChunk(0);
             } catch(e) {
-              console.error("Parsing error:", e);
-              showToast('Fehler beim Parsen der Jahresdatei', 'error');
+              console.error(e);
+              showToast('Fehler beim Parsen der Datei', 'error');
             }
           };
           reader.readAsText(file);
         });
       }
-    });
+
+      // ── Close modal on backdrop click ──
+      document.getElementById('admin-modal').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('admin-modal')) closeAdminModal();
+      });
+
+
 
     // -------------------------------------------------------------
     // APP DATA LOAD & INITIALIZATION
