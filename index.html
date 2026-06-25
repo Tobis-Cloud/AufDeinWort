@@ -1029,6 +1029,10 @@
       background: rgba(168,85,247,0.06);
       border-color: rgba(168,85,247,0.15);
     }
+    .admin-day-item.current-admin-day {
+      background: rgba(168,85,247,0.12);
+      border-color: rgba(168,85,247,0.3);
+    }
     .admin-day-item-left { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
     .admin-day-item-date { font-size: 13px; font-weight: 500; color: var(--text-primary); }
     .admin-day-item-ref  { font-size: 11px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -2344,9 +2348,11 @@
       margin-bottom: 20px;
     }
     .menu-brand-logo {
-      max-height: 48px;
+      width: 48px;
+      height: 48px;
       border-radius: 12px;
       box-shadow: var(--shadow-sm);
+      object-fit: cover;
     }
     #menu-admin-btn {
       width: 44px;
@@ -3252,8 +3258,11 @@
         else if (isFuture) { badge = 'Zukünftig'; badgeClass = 'badge-future'; }
         else { badge = 'Spurgeon'; badgeClass = 'badge-spurgeon'; }
 
-        const item = document.createElement('div');
+         const item = document.createElement('div');
         item.className = 'admin-day-item';
+        if (p === currentPage) {
+          item.classList.add('current-admin-day');
+        }
         item.innerHTML = `
           <div class="admin-day-item-left">
             <span class="admin-day-item-date">${dateStr}</span>
@@ -3276,6 +3285,16 @@
         container.innerHTML = '<div class="admin-list-loading"><span>Keine Einträge gefunden.</span></div>';
       } else {
         container.appendChild(fragment);
+        
+        // Scroll to the current day if not searching
+        if (!lowerQ) {
+          const currentItem = container.querySelector('.current-admin-day');
+          if (currentItem) {
+            setTimeout(() => {
+              currentItem.scrollIntoView({ block: 'center', behavior: 'smooth' });
+            }, 60);
+          }
+        }
       }
     }
 
@@ -3732,6 +3751,13 @@
       }
       if (typeof updateNotesUI === 'function') {
         updateNotesUI();
+      }
+      
+      const globalPane = document.getElementById('menu-pane-global');
+      if (globalPane && globalPane.classList.contains('active')) {
+        if (typeof updateGlobalCommentsOverview === 'function') {
+          updateGlobalCommentsOverview();
+        }
       }
     }
 
@@ -4782,8 +4808,9 @@
       if (!overviewContainer) return;
       
       if (db) {
-        // Fetch last 50 comments (no filters needed, so no index required)
+        // Fetch comments only for the current page/day (no index required for single field equality query)
         db.collection("global_comments")
+          .where("page", "==", currentPage)
           .limit(50)
           .get()
           .then((querySnapshot) => {
@@ -4799,8 +4826,7 @@
               return t2 - t1; // Descending
             });
             
-            // Limit to top 20
-            renderGlobalCommentsOverview(list.slice(0, 20));
+            renderGlobalCommentsOverview(list);
           })
           .catch((error) => {
             console.error("Firestore overview loading error:", error);
@@ -4808,9 +4834,9 @@
           });
       } else {
         // Local simulation fallback
-        const allComments = getDemoComments();
+        const allComments = getDemoComments().filter(c => c.page === currentPage);
         allComments.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        renderGlobalCommentsOverview(allComments.slice(0, 20));
+        renderGlobalCommentsOverview(allComments);
       }
     }
 
@@ -4819,7 +4845,7 @@
       if (!overviewContainer) return;
       
       if (list.length === 0) {
-        overviewContainer.innerHTML = '<div class="empty-state">Noch keine globalen Kommentare vorhanden.</div>';
+        overviewContainer.innerHTML = '<div class="empty-state">Noch keine Kommentare für diesen Tag vorhanden.</div>';
         return;
       }
       
