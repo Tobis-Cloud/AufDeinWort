@@ -853,25 +853,37 @@
       line-height: 1.4;
     }
 
-    .glass-textarea {
-      width: 100%;
+    /* Admin-Editor bekommt extra Höhe, Notizen-Textarea bleibt kompakt */
+    #admin-text-editor.glass-textarea {
       min-height: 150px;
+      height: 180px;
       padding: 12px;
       border-radius: 12px;
-      background: var(--input-bg);
-      border: 1px solid var(--input-border);
-      color: var(--text-primary);
-      font-family: inherit;
       font-size: 0.9rem;
       resize: vertical;
-      transition: all 0.3s ease;
       margin-bottom: 12px;
+      overflow: auto;
     }
 
-    .glass-textarea:focus {
+    #admin-text-editor.glass-textarea:focus {
       border-color: var(--color-purple);
       box-shadow: var(--glow-purple);
       outline: none;
+    }
+
+    /* Notizen-Textarea: Höhe explizit, damit die globale Regel nicht greift */
+    #notes-textarea.glass-textarea {
+      height: 36px !important;
+      min-height: unset !important;
+      resize: none !important;
+      overflow: hidden;
+      margin-bottom: 0;
+      padding: 8px 12px;
+    }
+
+    #notes-textarea.glass-textarea.expanded {
+      height: 110px !important;
+      overflow: auto;
     }
 
     .admin-actions {
