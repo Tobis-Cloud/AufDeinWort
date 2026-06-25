@@ -669,8 +669,19 @@
 
     .notes-input-row {
       display: flex;
+      flex-direction: row;
       gap: 8px;
-      align-items: flex-start;
+      align-items: center;
+      transition: all 0.25s ease;
+    }
+
+    .notes-input-row.expanded {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .notes-input-row.expanded .post-btn {
+      align-self: flex-end;
     }
 
     .notes-header {
@@ -1383,6 +1394,8 @@
       overflow: hidden;
       margin-bottom: 0;
       padding: 8px 12px;
+      width: 100%;
+      transition: height 0.25s ease;
     }
 
     #notes-textarea.glass-textarea.expanded {
@@ -3521,7 +3534,7 @@
       document.getElementById('admin-modal').addEventListener('click', (e) => {
         if (e.target === document.getElementById('admin-modal')) closeAdminModal();
       });
-
+    }); // end DOMContentLoaded
 
 
     // -------------------------------------------------------------
@@ -3808,12 +3821,15 @@
     // Expand notes textarea on focus, collapse on blur
     notesArea.addEventListener('focus', () => {
       notesArea.classList.add('expanded');
+      const row = notesArea.closest('.notes-input-row');
+      if (row) row.classList.add('expanded');
     });
     notesArea.addEventListener('blur', () => {
-      // Only collapse if the textarea is not being used by the post button click
       setTimeout(() => {
         if (document.activeElement !== notesArea) {
           notesArea.classList.remove('expanded');
+          const row = notesArea.closest('.notes-input-row');
+          if (row) row.classList.remove('expanded');
         }
       }, 150);
     });
