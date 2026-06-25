@@ -657,7 +657,7 @@
       -moz-appearance: textfield;
     }
 
-    /* Extrem kompakte Notizen-Leiste am Fußende */
+    /* Kompakte Notizen-Leiste am Fußende – Textarea & Button nebeneinander */
     .bottom-notes-bar {
       padding: 8px 12px;
       border-radius: 16px;
@@ -665,6 +665,12 @@
       flex-direction: column;
       gap: 4px;
       box-sizing: border-box;
+    }
+
+    .notes-input-row {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
     }
 
     .notes-header {
@@ -704,13 +710,19 @@
       padding: 8px 12px;
       font-size: 13px;
       outline: none;
-      transition: all 0.3s ease;
+      transition: height 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
       width: 100%;
       box-sizing: border-box;
-      height: 48px;
+      height: 36px;
       resize: none;
       font-family: inherit;
       line-height: 1.35;
+      overflow: hidden;
+    }
+
+    .glass-textarea.expanded {
+      height: 110px;
+      overflow: auto;
     }
 
     .glass-textarea:focus {
@@ -1329,7 +1341,11 @@
       }
 
       .slide-over .bottom-notes-bar .glass-textarea {
-        height: 80px; /* give it a bit more height on desktop */
+        height: 36px; /* Compact, matches post button height */
+      }
+
+      .slide-over .bottom-notes-bar .glass-textarea.expanded {
+        height: 110px;
       }
 
       /* Hide mobile specific elements */
@@ -1586,8 +1602,9 @@
 
     /* Note Post Button */
     .post-btn {
-      width: 100%;
-      padding: 8px 16px;
+      flex-shrink: 0;
+      padding: 0 14px;
+      height: 36px;
       border-radius: 10px;
       border: 1px solid var(--color-purple);
       background: rgba(182, 102, 255, 0.06);
@@ -1598,13 +1615,13 @@
       text-transform: uppercase;
       cursor: pointer;
       transition: all 0.3s ease;
-      margin-top: 8px;
       box-sizing: border-box;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
       font-family: inherit;
+      white-space: nowrap;
     }
 
     .post-btn:hover {
@@ -1616,6 +1633,76 @@
       opacity: 0.5;
       cursor: not-allowed;
       box-shadow: none;
+    }
+
+    /* Comment action buttons (edit/delete for own or admin) */
+    .comment-actions {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .comment-action-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 3px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      transition: background 0.2s ease, opacity 0.2s ease;
+      opacity: 0.5;
+    }
+    .comment-action-btn:hover { opacity: 1; background: rgba(255,255,255,0.08); }
+    .comment-action-btn.edit-btn { color: var(--color-purple); }
+    .comment-action-btn.delete-btn { color: #f87171; }
+
+    /* Inline edit textarea inside comment bubble */
+    .comment-edit-area {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--color-purple);
+      border-radius: 8px;
+      color: var(--text-primary);
+      padding: 6px 8px;
+      font-size: 13px;
+      font-family: inherit;
+      resize: none;
+      outline: none;
+      margin-top: 6px;
+      box-sizing: border-box;
+      line-height: 1.4;
+    }
+
+    .comment-edit-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 5px;
+      justify-content: flex-end;
+    }
+
+    .comment-edit-save {
+      background: rgba(168,85,247,0.15);
+      border: 1px solid var(--color-purple);
+      color: var(--text-primary);
+      border-radius: 7px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .comment-edit-cancel {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--input-border);
+      color: var(--text-secondary);
+      border-radius: 7px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
     }
 
     /* Sidebar Menu Tabs */
@@ -1895,17 +1982,19 @@
 
     </main>
 
-    <!-- Extrem kompakte Notizen-Leiste am Fußende -->
+    <!-- Kompakte Notizen-Leiste am Fußende -->
     <section class="bottom-notes-bar glass-card">
       <div class="notes-header">
         <label for="notes-textarea">Persönliche Notizen</label>
         <span class="saved-indicator" id="saved-indicator">Auto-gespeichert</span>
       </div>
-      <textarea id="notes-textarea" class="glass-textarea" placeholder=""></textarea>
-      <button id="post-note-btn" class="post-btn" title="Gedanken in Firebase veröffentlichen">
-        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-        Öffentlich posten
-      </button>
+      <div class="notes-input-row">
+        <textarea id="notes-textarea" class="glass-textarea" placeholder="Notiz..."></textarea>
+        <button id="post-note-btn" class="post-btn" title="Gedanken in Firebase veröffentlichen">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+          Öffentlich posten
+        </button>
+      </div>
     </section>
   </div>
 
@@ -3020,6 +3109,19 @@
       updateNotesUI();
     });
 
+    // Expand notes textarea on focus, collapse on blur
+    notesArea.addEventListener('focus', () => {
+      notesArea.classList.add('expanded');
+    });
+    notesArea.addEventListener('blur', () => {
+      // Only collapse if the textarea is not being used by the post button click
+      setTimeout(() => {
+        if (document.activeElement !== notesArea) {
+          notesArea.classList.remove('expanded');
+        }
+      }, 150);
+    });
+
     // Font Size Adjustments
     document.getElementById('text-size-out').addEventListener('click', () => {
       if (baseFontSize > 13) {
@@ -3603,11 +3705,19 @@
           dateStr = date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }) + ' - ' + date.toLocaleDateString('de-DE', { day: 'numeric', month: 'short' });
         }
 
-        const deleteButtonHtml = isAdminEnabled && c.id
-          ? `<button class="delete-comment-btn" data-comment-id="${c.id}" title="Kommentar löschen" style="background: none; border: none; color: var(--color-red); cursor: pointer; padding: 0 4px; margin-left: 8px; vertical-align: middle;">
-               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon" style="width: 14px; height: 14px;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-             </button>`
-          : '';
+        // Action buttons: edit for own, delete for own + admin
+        const canEdit = isMe && c.id && db;
+        const canDelete = c.id && db && (isAdminEnabled || isMe);
+
+        const editBtnHtml = canEdit
+          ? `<button class="comment-action-btn edit-btn" title="Bearbeiten">
+               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+             </button>` : '';
+
+        const deleteBtnHtml = canDelete
+          ? `<button class="comment-action-btn delete-btn" title="Löschen">
+               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+             </button>` : '';
 
         bubble.innerHTML = `
           <div class="comment-header" style="display: flex; justify-content: space-between; align-items: center;">
@@ -3615,26 +3725,76 @@
               <span class="comment-user">${c.userName || 'Anonym'}</span>
               <span class="comment-time">${dateStr}</span>
             </div>
-            ${deleteButtonHtml}
+            <div class="comment-actions">${editBtnHtml}${deleteBtnHtml}</div>
           </div>
-          <div class="comment-text">${escapeHtml(c.text)}</div>
+          <div class="comment-text" data-original="${escapeHtml(c.text)}">${escapeHtml(c.text)}</div>
         `;
 
-        if (isAdminEnabled && c.id) {
-          const delBtn = bubble.querySelector('.delete-comment-btn');
+        // Delete handler
+        if (canDelete) {
+          const delBtn = bubble.querySelector('.delete-btn');
           if (delBtn) {
             delBtn.addEventListener('click', (e) => {
               e.stopPropagation();
               if (confirm('Möchtest du diesen Kommentar wirklich löschen?')) {
                 db.collection("global_comments").doc(c.id).delete()
-                  .then(() => {
-                    showToast('Kommentar gelöscht', 'warning');
-                  })
-                  .catch(err => {
-                    console.error("Error deleting comment:", err);
-                    showToast('Fehler beim Löschen', 'error');
-                  });
+                  .then(() => showToast('Kommentar gelöscht', 'warning'))
+                  .catch(err => { console.error(err); showToast('Fehler beim Löschen', 'error'); });
               }
+            });
+          }
+        }
+
+        // Edit handler (inline)
+        if (canEdit) {
+          const editBtn = bubble.querySelector('.edit-btn');
+          const commentTextEl = bubble.querySelector('.comment-text');
+          if (editBtn && commentTextEl) {
+            editBtn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              // Don't open another editor if one is already open
+              if (bubble.querySelector('.comment-edit-area')) return;
+
+              const currentText = c.text;
+              const editArea = document.createElement('textarea');
+              editArea.className = 'comment-edit-area';
+              editArea.value = currentText;
+              editArea.rows = 3;
+
+              const editActions = document.createElement('div');
+              editActions.className = 'comment-edit-actions';
+              editActions.innerHTML = `
+                <button class="comment-edit-cancel">Abbrechen</button>
+                <button class="comment-edit-save">Speichern</button>
+              `;
+
+              commentTextEl.style.display = 'none';
+              bubble.appendChild(editArea);
+              bubble.appendChild(editActions);
+              editArea.focus();
+              editArea.setSelectionRange(editArea.value.length, editArea.value.length);
+
+              editActions.querySelector('.comment-edit-cancel').addEventListener('click', () => {
+                editArea.remove();
+                editActions.remove();
+                commentTextEl.style.display = '';
+              });
+
+              editActions.querySelector('.comment-edit-save').addEventListener('click', () => {
+                const newText = editArea.value.trim();
+                if (!newText) { showToast('Kommentar darf nicht leer sein', 'warning'); return; }
+                db.collection("global_comments").doc(c.id).update({ text: newText })
+                  .then(() => {
+                    showToast('Kommentar aktualisiert', 'success');
+                    // Update local display immediately
+                    c.text = newText;
+                    commentTextEl.textContent = newText;
+                    editArea.remove();
+                    editActions.remove();
+                    commentTextEl.style.display = '';
+                  })
+                  .catch(err => { console.error(err); showToast('Fehler beim Speichern', 'error'); });
+              });
             });
           }
         }
