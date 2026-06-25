@@ -762,6 +762,168 @@
       visibility: visible;
     }
 
+    /* 6b. ADMIN MODAL */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .modal-content {
+      width: 100%;
+      max-width: 600px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), var(--glow-purple);
+      animation: modalScaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes modalScaleIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--glass-border);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .modal-header h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0;
+    }
+
+    .modal-body {
+      padding: 24px;
+      overflow-y: auto;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .admin-section {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .admin-section h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0 0 8px 0;
+    }
+
+    .admin-desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin: 0 0 12px 0;
+      line-height: 1.4;
+    }
+
+    .glass-textarea {
+      width: 100%;
+      min-height: 150px;
+      padding: 12px;
+      border-radius: 12px;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 0.9rem;
+      resize: vertical;
+      transition: all 0.3s ease;
+      margin-bottom: 12px;
+    }
+
+    .glass-textarea:focus {
+      border-color: var(--color-purple);
+      box-shadow: var(--glow-purple);
+      outline: none;
+    }
+
+    .admin-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .admin-divider {
+      border: 0;
+      height: 1px;
+      background: var(--glass-border);
+      margin: 4px 0;
+    }
+
+    .file-upload-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .file-input-hidden {
+      display: none;
+    }
+
+    .file-name {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 250px;
+    }
+
+    .upload-progress-container {
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .progress-bar-bg {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--color-purple), var(--color-blue));
+      box-shadow: var(--glow-purple);
+      border-radius: 3px;
+      transition: width 0.1s ease;
+    }
+
+    .progress-text {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
     .slide-over-header {
       display: flex;
       justify-content: space-between;
@@ -920,6 +1082,12 @@
       opacity: 0.25 !important;
       cursor: not-allowed !important;
       pointer-events: none !important;
+    }
+
+    .calendar-cell.future-day-admin {
+      opacity: 0.65;
+      border: 1px dashed rgba(168, 85, 247, 0.4);
+      cursor: pointer !important;
     }
 
     .calendar-cell.empty {
@@ -1564,22 +1732,13 @@
       border-radius: 12px;
       box-shadow: var(--shadow-sm);
     }
-    #menu-random-btn {
-      width: auto;
-      flex-grow: 1;
+    #menu-admin-btn {
+      width: 44px;
+      height: 44px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      padding: 0 16px;
-      height: 44px;
       border-radius: 12px;
-    }
-    #menu-random-btn span {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
 
     /* Hide font size value display */
@@ -1750,6 +1909,61 @@
     </section>
   </div>
 
+  <!-- Admin Modal Overlay -->
+  <div id="admin-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-content glass-card">
+      <div class="modal-header">
+        <h2>Admin-Bereich</h2>
+        <button id="close-admin-btn" class="close-btn" title="Schließen">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="admin-section">
+          <h3>Aktuellen Tag bearbeiten</h3>
+          <p id="admin-selected-day-label" style="font-weight: 500; margin-bottom: 8px; color: var(--color-purple);"></p>
+          <textarea id="admin-text-editor" class="glass-textarea" placeholder="Markdown-Text hier eingeben..."></textarea>
+          <div class="admin-actions">
+            <button id="admin-save-btn" class="glass-btn btn-purple">Speichern</button>
+            <button id="admin-reset-btn" class="glass-btn btn-red">Auf Standard zurücksetzen</button>
+          </div>
+        </div>
+
+        <hr class="admin-divider" />
+
+        <div class="admin-section">
+          <h3>Einzelne Andacht hochladen (.md)</h3>
+          <p class="admin-desc">Lade eine Markdown-Datei für den aktuell ausgewählten Tag hoch.</p>
+          <div class="file-upload-wrapper">
+            <input type="file" id="admin-file-single" accept=".md" class="file-input-hidden" />
+            <button id="admin-file-single-btn" class="glass-btn btn-blue">Datei auswählen</button>
+            <span id="admin-file-single-name" class="file-name">Keine Datei ausgewählt</span>
+          </div>
+          <button id="admin-upload-single-btn" class="glass-btn btn-purple" style="margin-top: 10px;">Andacht hochladen</button>
+        </div>
+
+        <hr class="admin-divider" />
+
+        <div class="admin-section">
+          <h3>Jahres-Markdown hochladen (.md)</h3>
+          <p class="admin-desc">Lade eine Markdown-Datei mit allen Andachten für das gesamte Jahr hoch. Sie wird automatisch nach Tagen geparst und hochgeladen.</p>
+          <div class="file-upload-wrapper">
+            <input type="file" id="admin-file-year" accept=".md" class="file-input-hidden" />
+            <button id="admin-file-year-btn" class="glass-btn btn-orange">Datei auswählen</button>
+            <span id="admin-file-year-name" class="file-name">Keine Datei ausgewählt</span>
+          </div>
+          <button id="admin-upload-year-btn" class="glass-btn btn-purple" style="margin-top: 10px;">Jahresdatei verarbeiten &amp; hochladen</button>
+          <div id="admin-upload-progress" class="upload-progress-container" style="display: none;">
+            <div class="progress-bar-bg">
+              <div id="admin-progress-bar-fill" class="progress-bar-fill"></div>
+            </div>
+            <span id="admin-progress-text" class="progress-text">0% verarbeitet</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Navigation Slide-Over Sidebar Menu -->
   <div id="slide-over" class="slide-over">
     <div class="slide-over-header">
@@ -1760,12 +1974,11 @@
     </div>
 
     <div class="slide-over-content">
-      <!-- App Brand Logo & Zufälliger Tag Button -->
+      <!-- App Brand Logo & Admin Panel Button (square) -->
       <div class="menu-brand-section">
         <img src="AufDeinWort.jpeg" class="menu-brand-logo" alt="Auf dein Wort Logo" onerror="this.style.display='none'">
-        <button id="menu-random-btn" class="glass-icon-btn btn-orange" title="Zufällige Seite laden">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><circle cx="15.5" cy="15.5" r="1.5"></circle><circle cx="15.5" cy="8.5" r="1.5"></circle><circle cx="8.5" cy="15.5" r="1.5"></circle><circle cx="12" cy="12" r="1.5"></circle></svg>
-          <span>Zufällig</span>
+        <button id="menu-admin-btn" class="glass-icon-btn btn-orange" title="Admin-Bereich öffnen" style="display: none;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
         </button>
       </div>
 
@@ -1846,6 +2059,8 @@
     let auth = null;
     let currentUser = null;
     let commentsListener = null;
+    let isAdminEnabled = false;
+    let customDevotionals = {};
 
     // Demo Fallback Speicher (LocalStorage, falls kein Firebase konfiguriert ist)
     const getDemoComments = () => JSON.parse(localStorage.getItem('adw_demo_comments') || '[]');
@@ -2167,6 +2382,364 @@
     }
 
     // -------------------------------------------------------------
+    // ADMIN FUNCTIONS & LIFECYCLE
+    // -------------------------------------------------------------
+    function loadCustomDevotionals() {
+      if (!db) return;
+      db.collection("custom_devotionals").get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            const pageNum = parseInt(doc.id, 10);
+            if (!isNaN(pageNum)) {
+              const data = doc.data();
+              if (data && data.rawMarkdown) {
+                customDevotionals[pageNum] = parseSinglePageMarkdown(data.rawMarkdown, pageNum);
+              }
+            }
+          });
+          console.log(`Loaded ${Object.keys(customDevotionals).length} custom devotionals.`);
+          if (customDevotionals[currentPage]) {
+            goToPage(currentPage);
+          }
+        })
+        .catch(err => {
+          console.error("Error loading custom devotionals:", err);
+        });
+    }
+
+    function parseSinglePageMarkdown(markdownText, pageNum) {
+      const lines = markdownText.split('\n');
+      let quoteText = '';
+      let refText = '';
+      const paragraphs = [];
+      let currentPara = [];
+      let quoteMatched = false;
+
+      const pageDate = getDateForPage(pageNum, 6, 366);
+      let dateLabel = `Seite ${pageNum}`;
+      if (pageDate) {
+        const monthNames = [
+          "Januar", "Februar", "März", "April", "Mai", "Juni", 
+          "Juli", "August", "September", "Oktober", "November", "Dezember"
+        ];
+        dateLabel = `${pageDate.getDate()}. ${monthNames[pageDate.getMonth()]}`;
+      }
+
+      for (let j = 0; j < lines.length; j++) {
+        let line = lines[j].trim();
+        if (line.length === 0) {
+          if (currentPara.length > 0) {
+            paragraphs.push(currentPara);
+            currentPara = [];
+          }
+          continue;
+        }
+
+        if (!quoteMatched && (line.startsWith('„') || line.startsWith('"') || line.startsWith('“'))) {
+          quoteText = line.replace(/^[„"“]|(?:[“"”]\s*)$/g, '');
+          quoteMatched = true;
+          continue;
+        }
+
+        if (quoteMatched && !refText) {
+          refText = line;
+          continue;
+        }
+
+        if (line.startsWith('*') && line.endsWith('*')) {
+          const cleanLine = line.slice(1, -1).trim();
+          currentPara.push({ text: cleanLine, type: 'italic' });
+        } else {
+          currentPara.push({ text: line, type: 'normal' });
+        }
+      }
+
+      if (currentPara.length > 0) {
+        paragraphs.push(currentPara);
+      }
+
+      return {
+        date: dateLabel,
+        quote: quoteText,
+        reference: refText,
+        paragraphs: paragraphs,
+        page: pageNum
+      };
+    }
+
+    function openAdminModal() {
+      const modal = document.getElementById('admin-modal');
+      const label = document.getElementById('admin-selected-day-label');
+      const editor = document.getElementById('admin-text-editor');
+      
+      if (!modal || !editor) return;
+
+      const dateStr = getDateForPage(currentPage, 6, 366);
+      const monthNames = [
+        "Januar", "Februar", "März", "April", "Mai", "Juni", 
+        "Juli", "August", "September", "Oktober", "November", "Dezember"
+      ];
+      label.textContent = dateStr 
+        ? `${dateStr.getDate()}. ${monthNames[dateStr.getMonth()]} (Seite ${currentPage})`
+        : `Seite ${currentPage}`;
+
+      const item = customDevotionals[currentPage] || parsedPages[currentPage];
+      if (item) {
+        let reconstructed = '';
+        if (item.quote) reconstructed += `„${item.quote}“\n`;
+        if (item.reference) reconstructed += `${item.reference}\n\n`;
+        
+        if (item.paragraphs) {
+          const paraTexts = item.paragraphs.map(p => {
+            if (Array.isArray(p)) {
+              return p.map(chunk => {
+                if (chunk.type === 'italic') return `*${chunk.text}*`;
+                return chunk.text;
+              }).join(' ');
+            }
+            return p;
+          });
+          reconstructed += paraTexts.join('\n\n');
+        }
+        editor.value = reconstructed;
+      } else {
+        editor.value = '';
+      }
+
+      modal.style.display = 'flex';
+      closeSlideOver();
+    }
+
+    function closeAdminModal() {
+      const modal = document.getElementById('admin-modal');
+      if (modal) modal.style.display = 'none';
+      
+      const singleFileInput = document.getElementById('admin-file-single');
+      const yearFileInput = document.getElementById('admin-file-year');
+      if (singleFileInput) singleFileInput.value = '';
+      if (yearFileInput) yearFileInput.value = '';
+      document.getElementById('admin-file-single-name').textContent = 'Keine Datei ausgewählt';
+      document.getElementById('admin-file-year-name').textContent = 'Keine Datei ausgewählt';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const menuAdminBtn = document.getElementById('menu-admin-btn');
+      if (menuAdminBtn) {
+        menuAdminBtn.addEventListener('click', openAdminModal);
+      }
+
+      const closeAdminBtn = document.getElementById('close-admin-btn');
+      if (closeAdminBtn) {
+        closeAdminBtn.addEventListener('click', closeAdminModal);
+      }
+
+      const saveBtn = document.getElementById('admin-save-btn');
+      if (saveBtn) {
+        saveBtn.addEventListener('click', () => {
+          const editorText = document.getElementById('admin-text-editor').value.trim();
+          if (!editorText) {
+            showToast('Editor ist leer!', 'warning');
+            return;
+          }
+
+          if (!db) {
+            showToast('Firebase nicht initialisiert', 'error');
+            return;
+          }
+
+          db.collection("custom_devotionals").doc(String(currentPage)).set({
+            rawMarkdown: editorText
+          })
+          .then(() => {
+            showToast('Andacht erfolgreich gespeichert!', 'success');
+            customDevotionals[currentPage] = parseSinglePageMarkdown(editorText, currentPage);
+            goToPage(currentPage);
+            closeAdminModal();
+          })
+          .catch(err => {
+            console.error("Error saving devotional:", err);
+            showToast('Fehler beim Speichern', 'error');
+          });
+        });
+      }
+
+      const resetBtn = document.getElementById('admin-reset-btn');
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          if (!confirm('Möchtest du diese Andacht wirklich auf den Standard-Text zurücksetzen?')) {
+            return;
+          }
+
+          if (!db) {
+            showToast('Firebase nicht initialisiert', 'error');
+            return;
+          }
+
+          db.collection("custom_devotionals").doc(String(currentPage)).delete()
+          .then(() => {
+            showToast('Auf Standard zurückgesetzt', 'warning');
+            delete customDevotionals[currentPage];
+            goToPage(currentPage);
+            closeAdminModal();
+          })
+          .catch(err => {
+            console.error("Error resetting page:", err);
+            showToast('Fehler beim Zurücksetzen', 'error');
+          });
+        });
+      }
+
+      const fileSingleBtn = document.getElementById('admin-file-single-btn');
+      const fileSingleInput = document.getElementById('admin-file-single');
+      if (fileSingleBtn && fileSingleInput) {
+        fileSingleBtn.addEventListener('click', () => fileSingleInput.click());
+        fileSingleInput.addEventListener('change', (e) => {
+          const file = e.target.files[0];
+          document.getElementById('admin-file-single-name').textContent = file ? file.name : 'Keine Datei ausgewählt';
+        });
+      }
+
+      const fileYearBtn = document.getElementById('admin-file-year-btn');
+      const fileYearInput = document.getElementById('admin-file-year');
+      if (fileYearBtn && fileYearInput) {
+        fileYearBtn.addEventListener('click', () => fileYearInput.click());
+        fileYearInput.addEventListener('change', (e) => {
+          const file = e.target.files[0];
+          document.getElementById('admin-file-year-name').textContent = file ? file.name : 'Keine Datei ausgewählt';
+        });
+      }
+
+      const uploadSingleBtn = document.getElementById('admin-upload-single-btn');
+      if (uploadSingleBtn) {
+        uploadSingleBtn.addEventListener('click', () => {
+          const fileInput = document.getElementById('admin-file-single');
+          const file = fileInput.files[0];
+          if (!file) {
+            showToast('Bitte wähle zuerst eine .md Datei aus!', 'warning');
+            return;
+          }
+
+          const reader = new FileReader();
+          reader.onload = function(evt) {
+            const fileContent = evt.target.result.trim();
+            if (!fileContent) {
+              showToast('Die Datei ist leer!', 'warning');
+              return;
+            }
+            document.getElementById('admin-text-editor').value = fileContent;
+            showToast('Datei in den Editor geladen. Klicke "Speichern" zum Hochladen.', 'success');
+          };
+          reader.readAsText(file);
+        });
+      }
+
+      const uploadYearBtn = document.getElementById('admin-upload-year-btn');
+      if (uploadYearBtn) {
+        uploadYearBtn.addEventListener('click', () => {
+          const fileInput = document.getElementById('admin-file-year');
+          const file = fileInput.files[0];
+          if (!file) {
+            showToast('Bitte wähle zuerst eine .md Jahresdatei aus!', 'warning');
+            return;
+          }
+
+          if (!db) {
+            showToast('Firebase nicht initialisiert', 'error');
+            return;
+          }
+
+          if (!confirm('Dies überschreibt alle benutzerdefinierten Andachten der entsprechenden Tage. Fortfahren?')) {
+            return;
+          }
+
+          const reader = new FileReader();
+          reader.onload = function(evt) {
+            try {
+              const fileContent = evt.target.result;
+              const parsedResults = parseMarkdownCalendar(fileContent);
+              const keys = Object.keys(parsedResults);
+              const total = keys.length;
+              if (total === 0) {
+                showToast('Keine gültigen Andachten in der Jahresdatei gefunden!', 'error');
+                return;
+              }
+
+              let processed = 0;
+              const progressBarContainer = document.getElementById('admin-upload-progress');
+              const progressBarFill = document.getElementById('admin-progress-bar-fill');
+              const progressText = document.getElementById('admin-progress-text');
+
+              progressBarContainer.style.display = 'block';
+              progressBarFill.style.width = '0%';
+              progressText.textContent = `0 von ${total} Andachten verarbeitet...`;
+
+              const chunkSize = 50;
+
+              function uploadChunk(index) {
+                if (index >= total) {
+                  progressBarFill.style.width = '100%';
+                  progressText.textContent = `Erfolgreich! ${total} Andachten importiert.`;
+                  showToast('Jahresdatei erfolgreich verarbeitet!', 'success');
+                  loadCustomDevotionals();
+                  setTimeout(() => {
+                    progressBarContainer.style.display = 'none';
+                  }, 4000);
+                  return;
+                }
+
+                const batch = db.batch();
+                const chunkKeys = keys.slice(index, index + chunkSize);
+
+                chunkKeys.forEach(pageNum => {
+                  const item = parsedResults[pageNum];
+                  const docRef = db.collection("custom_devotionals").doc(String(pageNum));
+
+                  let reconstructed = '';
+                  if (item.quote) reconstructed += `„${item.quote}“\n`;
+                  if (item.reference) reconstructed += `${item.reference}\n\n`;
+                  if (item.paragraphs) {
+                    const paraTexts = item.paragraphs.map(p => {
+                      if (Array.isArray(p)) {
+                        return p.map(chunk => {
+                          if (chunk.type === 'italic') return `*${chunk.text}*`;
+                          return chunk.text;
+                        }).join(' ');
+                      }
+                      return p;
+                    });
+                    reconstructed += paraTexts.join('\n\n');
+                  }
+
+                  batch.set(docRef, { rawMarkdown: reconstructed });
+                });
+
+                batch.commit()
+                .then(() => {
+                  processed += chunkKeys.length;
+                  const pct = Math.round((processed / total) * 100);
+                  progressBarFill.style.width = `${pct}%`;
+                  progressText.textContent = `${processed} von ${total} Andachten verarbeitet...`;
+                  uploadChunk(index + chunkSize);
+                })
+                .catch(err => {
+                  console.error("Batch upload error:", err);
+                  showToast('Fehler beim Stapel-Upload', 'error');
+                  progressBarContainer.style.display = 'none';
+                });
+              }
+
+              uploadChunk(0);
+            } catch(e) {
+              console.error("Parsing error:", e);
+              showToast('Fehler beim Parsen der Jahresdatei', 'error');
+            }
+          };
+          reader.readAsText(file);
+        });
+      }
+    });
+
+    // -------------------------------------------------------------
     // APP DATA LOAD & INITIALIZATION
     // -------------------------------------------------------------
     function loadCalendarData() {
@@ -2208,6 +2781,7 @@
       devotionalCard.style.display = 'block';
       
       todayPage = getPageForDate(new Date(), 6, 366);
+      loadCustomDevotionals();
       goToPage(todayPage);
     }
 
@@ -2282,7 +2856,7 @@
       if (pageNumber > 372) pageNumber = 372;
       
       // Zukünftige Tage sperren
-      if (pageNumber > todayPage) {
+      if (pageNumber > todayPage && !isAdminEnabled) {
         showToast('Zukünftige Tage sind noch nicht freigeschaltet!', 'warning');
         return;
       }
@@ -2290,12 +2864,12 @@
       currentPage = pageNumber;
       
       // Check if data is loaded
-      if (Object.keys(parsedPages).length === 0) {
+      if (Object.keys(parsedPages).length === 0 && Object.keys(customDevotionals).length === 0) {
         showFallbackUpload();
         return;
       }
       
-      const item = parsedPages[currentPage];
+      const item = customDevotionals[currentPage] || parsedPages[currentPage];
       if (!item) {
         console.warn(`No calendar item found for page ${currentPage}`);
         return;
@@ -2397,14 +2971,12 @@
       showToast('Heute geladen', 'success');
     });
 
-    // 3. "Zufällige Seite"-Button: Würfel / Inspiration
-    const menuRandomBtn = document.getElementById('menu-random-btn');
-    if (menuRandomBtn) {
-      menuRandomBtn.addEventListener('click', () => {
-        const rand = Math.floor(Math.random() * (372 - 7 + 1)) + 7;
-        goToPage(rand);
+    // 3. Admin-Bereich Button
+    const menuAdminBtn = document.getElementById('menu-admin-btn');
+    if (menuAdminBtn) {
+      menuAdminBtn.addEventListener('click', () => {
         closeSlideOver();
-        showToast('Zufällige Seite geladen', 'warning');
+        openAdminModal();
       });
     }
 
@@ -2572,9 +3144,12 @@
         }
 
         // Zukünftige Tage ausgrauen und sperren
-        if (cellPage > cellTodayPage) {
+        if (cellPage > cellTodayPage && !isAdminEnabled) {
           cell.classList.add('future-day');
         } else {
+          if (cellPage > cellTodayPage) {
+            cell.classList.add('future-day-admin');
+          }
           cell.addEventListener('click', () => {
             goToPage(cellPage);
             closeSlideOver();
@@ -2972,7 +3547,7 @@
           .onSnapshot((querySnapshot) => {
             const list = [];
             querySnapshot.forEach((doc) => {
-              list.push(doc.data());
+              list.push({ id: doc.id, ...doc.data() });
             });
             // Client-seitige Sortierung nach Erstelldatum (verhindert Index-Erfordernis)
             list.sort((a, b) => {
@@ -3028,13 +3603,42 @@
           dateStr = date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }) + ' - ' + date.toLocaleDateString('de-DE', { day: 'numeric', month: 'short' });
         }
 
+        const deleteButtonHtml = isAdminEnabled && c.id
+          ? `<button class="delete-comment-btn" data-comment-id="${c.id}" title="Kommentar löschen" style="background: none; border: none; color: var(--color-red); cursor: pointer; padding: 0 4px; margin-left: 8px; vertical-align: middle;">
+               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon" style="width: 14px; height: 14px;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+             </button>`
+          : '';
+
         bubble.innerHTML = `
-          <div class="comment-header">
-            <span class="comment-user">${c.userName || 'Anonym'}</span>
-            <span class="comment-time">${dateStr}</span>
+          <div class="comment-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <span class="comment-user">${c.userName || 'Anonym'}</span>
+              <span class="comment-time">${dateStr}</span>
+            </div>
+            ${deleteButtonHtml}
           </div>
           <div class="comment-text">${escapeHtml(c.text)}</div>
         `;
+
+        if (isAdminEnabled && c.id) {
+          const delBtn = bubble.querySelector('.delete-comment-btn');
+          if (delBtn) {
+            delBtn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              if (confirm('Möchtest du diesen Kommentar wirklich löschen?')) {
+                db.collection("global_comments").doc(c.id).delete()
+                  .then(() => {
+                    showToast('Kommentar gelöscht', 'warning');
+                  })
+                  .catch(err => {
+                    console.error("Error deleting comment:", err);
+                    showToast('Fehler beim Löschen', 'error');
+                  });
+              }
+            });
+          }
+        }
+
         commentsList.appendChild(bubble);
       });
       
@@ -3125,8 +3729,33 @@
       if (user) {
         console.log("Logged in user:", user.displayName || user.email);
         syncUserDataFromFirestore(user);
+        
+        // Check if user is Admin
+        if (db) {
+          db.collection("admins").doc(user.uid).get()
+            .then((doc) => {
+              if (doc.exists) {
+                console.log("User is Admin!");
+                isAdminEnabled = true;
+              } else {
+                console.log("User is not Admin.");
+                isAdminEnabled = false;
+              }
+              updateAdminUI();
+            })
+            .catch((err) => {
+              console.error("Error checking admin status:", err);
+              isAdminEnabled = false;
+              updateAdminUI();
+            });
+        } else {
+          isAdminEnabled = false;
+          updateAdminUI();
+        }
       } else {
         console.log("No user logged in.");
+        isAdminEnabled = false;
+        updateAdminUI();
         // Clear local variables and cache on logout for security
         bookmarks = [];
         notes = {};
@@ -3145,6 +3774,22 @@
         updateGlobalCommentsOverview();
       }
     });
+
+    function updateAdminUI() {
+      const adminBtn = document.getElementById('menu-admin-btn');
+      if (adminBtn) {
+        adminBtn.style.display = isAdminEnabled ? 'flex' : 'none';
+      }
+      if (typeof updateCalendarDisplay === 'function') {
+        updateCalendarDisplay();
+      }
+      if (typeof syncCommentsForCurrentPage === 'function') {
+        syncCommentsForCurrentPage();
+      }
+      if (typeof updateGlobalCommentsOverview === 'function') {
+        updateGlobalCommentsOverview();
+      }
+    }
 
     // Firestore data syncing helpers
     function syncUserDataFromFirestore(user) {
@@ -3235,7 +3880,7 @@
             const list = [];
             querySnapshot.forEach((doc) => {
               const data = doc.data();
-              list.push(data);
+              list.push({ id: doc.id, ...data });
             });
             // Client-side sort by createdAt descending
             list.sort((a, b) => {
@@ -3284,13 +3929,40 @@
           dayStr = parsedPages[c.page].date || dayStr;
         }
         
+        const deleteButtonHtml = isAdminEnabled && c.id
+          ? `<button class="delete-comment-btn" data-comment-id="${c.id}" title="Kommentar löschen" style="background: none; border: none; color: var(--color-red); cursor: pointer; padding: 0; margin-left: 8px; vertical-align: middle; z-index: 10; position: relative;">
+               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon" style="width: 14px; height: 14px;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+             </button>`
+          : '';
+
         item.innerHTML = `
-          <div class="global-comment-meta">
-            <span class="global-comment-day">${dayStr}</span>
-            <span class="global-comment-user">${c.userName || 'Anonym'} (${dateStr})</span>
+          <div class="global-comment-meta" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <div>
+              <span class="global-comment-day">${dayStr}</span>
+              <span class="global-comment-user">${c.userName || 'Anonym'} (${dateStr})</span>
+            </div>
+            ${deleteButtonHtml}
           </div>
           <div class="global-comment-snippet">${escapeHtml(c.text)}</div>
         `;
+        
+        const deleteBtn = item.querySelector('.delete-comment-btn');
+        if (deleteBtn) {
+          deleteBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Avoid navigating to the page
+            if (confirm('Möchtest du diesen Kommentar wirklich löschen?')) {
+              db.collection("global_comments").doc(c.id).delete()
+                .then(() => {
+                  showToast('Kommentar gelöscht', 'warning');
+                  updateGlobalCommentsOverview();
+                })
+                .catch(err => {
+                  console.error("Error deleting comment:", err);
+                  showToast('Fehler beim Löschen', 'error');
+                });
+            }
+          });
+        }
         
         item.addEventListener('click', () => {
           goToPage(c.page);
