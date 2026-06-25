@@ -3160,7 +3160,25 @@
 
         if (line.startsWith('*') && line.endsWith('*')) {
           const cleanLine = line.slice(1, -1).trim();
-          currentPara.push({ tex    // Current page being edited in the admin panel
+          currentPara.push({ text: cleanLine, type: 'italic' });
+        } else {
+          currentPara.push({ text: line, type: 'normal' });
+        }
+      }
+
+      if (currentPara.length > 0) {
+        paragraphs.push(currentPara);
+      }
+
+      return {
+        date: dateLabel,
+        quote: quoteText,
+        reference: refText,
+        paragraphs: paragraphs,
+        page: pageNum
+      };
+    }
+
     let adminEditingPage = null;
 
     const MONTH_NAMES = ["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"];
@@ -3720,7 +3738,17 @@
     function renderDevotionalText(item) {
       let bodyParagraphsHtml = '';
       for (const p of item.paragraphs) {
-        bodyParagraphsHtml += `<p>${p}</p>`;
+        if (Array.isArray(p)) {
+          const html = p.map(c => {
+            if (c.type === 'italic') {
+              return `<em>${c.text}</em>`;
+            }
+            return c.text;
+          }).join(' ');
+          bodyParagraphsHtml += `<p>${html}</p>`;
+        } else {
+          bodyParagraphsHtml += `<p>${p}</p>`;
+        }
       }
       
       const isCommentsOpen = document.getElementById('comments-section')?.classList.contains('open');
@@ -4211,10 +4239,20 @@
     const shareBtn = document.getElementById('share-btn');
     if (shareBtn) {
       shareBtn.addEventListener('click', () => {
-        const item = parsedPages[currentPage];
+        const item = customDevotionals[currentPage] || parsedPages[currentPage];
         if (!item) return;
         
-        const shareText = `Andacht vom ${item.date}\n„${item.quote}“ (${item.reference})\n\n${item.paragraphs.join('\n\n')}`;
+        const textParagraphs = item.paragraphs.map(p => {
+          if (Array.isArray(p)) {
+            return p.map(c => {
+              if (c.type === 'italic') return `*${c.text}*`;
+              return c.text;
+            }).join(' ');
+          }
+          return p;
+        });
+        
+        const shareText = `Andacht vom ${item.date}\n„${item.quote}“ (${item.reference})\n\n${textParagraphs.join('\n\n')}`;
         
         if (navigator.share) {
           navigator.share({
