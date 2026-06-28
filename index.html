@@ -850,43 +850,26 @@
     ═══════════════════════════════════════════════ */
 
     .admin-modal-panel {
-      width: 100%;
-      max-width: 680px;
-      max-height: 92vh;
+      width: 96vw;
+      max-width: 940px;
+      max-height: 90vh;
       display: flex;
       flex-direction: column;
-      background: rgba(12, 10, 22, 0.96);
+      background: rgba(10, 8, 20, 0.97);
       backdrop-filter: blur(40px);
       -webkit-backdrop-filter: blur(40px);
       border: 1px solid rgba(168, 85, 247, 0.18);
-      border-radius: 24px;
+      border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(168,85,247,0.08), inset 0 1px 0 rgba(255,255,255,0.05);
-      animation: modalScaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(168,85,247,0.08), inset 0 1px 0 rgba(255,255,255,0.05);
+      animation: modalScaleIn 0.28s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* Mobile: Bottom-Sheet style */
+    /* Kein Mobile-Admin (Admin nur für Laptop) */
     @media (max-width: 640px) {
-      .admin-modal-panel {
-        max-width: 100%;
-        width: 100%;
-        max-height: 95vh;
-        height: 95vh;
-        border-radius: 20px 20px 0 0;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        animation: slideUpSheet 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-      }
-      @keyframes slideUpSheet {
-        from { transform: translateY(100%); opacity: 0; }
-        to   { transform: translateY(0);    opacity: 1; }
-      }
-      #admin-modal {
-        align-items: flex-end !important;
-      }
+      #admin-modal { display: none !important; }
     }
+
 
     /* Header */
     .admin-panel-header {
@@ -1125,29 +1108,128 @@
       min-width: 0;
     }
 
-    /* ── EDITOR VIEW ── */
+    /* ── EDITOR VIEW: 2-Spalten Split-Layout ── */
     #admin-view-editor {
-      overflow-y: auto;
-      padding: 14px 18px 0;
-      gap: 12px;
+      display: flex;
+      flex-direction: column;
       flex: 1;
       min-height: 0;
+      overflow: hidden;
     }
+
+    /* Obere Leiste (Quelle / Source) bleibt gleich */
+    #admin-view-editor .admin-source-row {
+      flex-shrink: 0;
+    }
+
+    /* Horizontaler Split: Baukasten links (60%), Vorschau rechts (40%) */
+    .admin-editor-split {
+      display: flex;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+      gap: 0;
+    }
+
+    .admin-editor-left {
+      flex: 0 0 60%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border-right: 1px solid rgba(168,85,247,0.1);
+    }
+
+    .admin-editor-left-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 14px 0 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .admin-editor-right {
+      flex: 0 0 40%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: rgba(0,0,0,0.15);
+    }
+
+    .admin-preview-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px 8px;
+      border-bottom: 1px solid rgba(168,85,247,0.08);
+      flex-shrink: 0;
+    }
+
+    .admin-preview-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--color-purple);
+      opacity: 0.7;
+    }
+
+    .admin-preview-refresh-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 9px;
+      border-radius: 6px;
+      border: 1px solid rgba(168,85,247,0.2);
+      background: rgba(168,85,247,0.06);
+      color: var(--color-purple);
+      font-size: 9px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      letter-spacing: 0.4px;
+    }
+    .admin-preview-refresh-btn:hover {
+      background: rgba(168,85,247,0.15);
+      box-shadow: 0 0 8px rgba(168,85,247,0.2);
+    }
+    .admin-preview-refresh-btn svg { width: 10px; height: 10px; }
+
+    #admin-preview-pane {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px;
+    }
+
+    /* Stile der Vorschau-Elemente (wie Reader, aber kompakt) */
+    #admin-preview-pane .scripture-container {
+      padding: 10px 14px;
+      margin: 0 0 10px 0;
+    }
+    #admin-preview-pane .scripture-quote { font-size: 12px; line-height: 1.5; }
+    #admin-preview-pane .scripture-reference { font-size: 9px; margin-top: 6px; }
+    #admin-preview-pane .devotional-body { font-size: 12px; line-height: 1.6; margin-top: 10px; }
+    #admin-preview-pane .devotional-body p { margin-bottom: 10px; }
+    #admin-preview-pane .devotional-prayer-card { padding: 10px 12px; margin: 8px 0; gap: 6px; }
+    #admin-preview-pane .devotional-prayer-card .devotional-icon { width: 12px; height: 12px; }
+    #admin-preview-pane .devotional-prayer-text { font-size: 11px; }
+    #admin-preview-pane .devotional-question-card { padding: 10px 12px; margin: 8px 0; }
+    #admin-preview-pane .devotional-question-text { font-size: 11px; }
+    #admin-preview-pane .devotional-subheading { font-size: 12px; margin: 10px 0 6px; }
+    #admin-preview-pane .devotional-blockquote { font-size: 11px; padding: 8px 12px; margin: 8px 0; }
 
     /* Fixed footer bar inside editor view */
     .admin-editor-actions {
-      position: sticky;
-      bottom: 0;
-      background: rgba(12, 10, 22, 0.97);
+      flex-shrink: 0;
+      background: rgba(10, 8, 20, 0.97);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border-top: 1px solid rgba(168,85,247,0.12);
       padding: 10px 18px;
-      margin: 0 -18px;
       display: flex;
       gap: 10px;
       justify-content: flex-end;
-      flex-shrink: 0;
       z-index: 2;
     }
 
@@ -2858,8 +2940,8 @@
       <!-- ═══ VIEW 2: TAG-EDITOR ═══ -->
       <div id="admin-view-editor" class="admin-view" style="display:none;">
 
-        <!-- Quelle Dropdown -->
-        <div class="admin-source-row">
+        <!-- Quelle Dropdown (oben, full-width) -->
+        <div class="admin-source-row" style="padding: 10px 16px; border-bottom: 1px solid rgba(168,85,247,0.08);">
           <label class="admin-field-label">Quelle</label>
           <div class="admin-select-wrapper">
             <select id="admin-source-select" class="admin-source-select">
@@ -2870,8 +2952,8 @@
           </div>
         </div>
 
-        <!-- Spurgeon: schreibgeschützte Vorschau -->
-        <div id="admin-spurgeon-preview" class="admin-spurgeon-preview">
+        <!-- ─ Spurgeon: schreibgeschützte Vorschau (full-width, single column) ─ -->
+        <div id="admin-spurgeon-preview" class="admin-spurgeon-preview" style="overflow-y: auto; flex: 1; padding: 16px 20px;">
           <div class="admin-readonly-badge">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
             Schreibgeschützt — Original-Spurgeon-Andacht
@@ -2881,55 +2963,84 @@
           <div class="admin-preview-body" id="admin-preview-body"></div>
         </div>
 
-        <!-- Weitere: Andachten-Baukasten (Block-Editor) -->
-        <div id="admin-weitere-editor" style="display:none;">
-          
-          <!-- Container für dynamische Blöcke -->
-          <div id="admin-blocks-container" class="admin-blocks-list"></div>
+        <!-- ─ Weitere: 2-Spalten-Split (Baukasten links | Vorschau rechts) ─ -->
+        <div id="admin-weitere-editor" style="display:none; flex: 1; min-height: 0; flex-direction: column; overflow: hidden;">
 
-          <!-- Symbol-Hinzufügen-Leiste -->
-          <div class="admin-add-block-bar" id="admin-add-block-bar">
-            <button class="admin-add-block-btn" data-type="paragraph">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="admin-block-icon" style="width:12px;height:12px"><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="12" x2="3" y2="12"></line><line x1="21" y1="18" x2="3" y2="18"></line></svg>
-              + Text
-            </button>
-            <button class="admin-add-block-btn" data-type="quote_verse">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="admin-block-icon" style="width:12px;height:12px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-              + Bibelvers
-            </button>
-            <button class="admin-add-block-btn" data-type="reference">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="admin-block-icon" style="width:12px;height:12px"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-              + Bibelstelle
-            </button>
-            <button class="admin-add-block-btn" data-type="prayer">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="admin-block-icon" style="width:12px;height:12px"><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path><path d="M2 12h20"></path></svg>
-              + Gebet
-            </button>
-            <button class="admin-add-block-btn" data-type="question">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="admin-block-icon" style="width:12px;height:12px"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-              + Frage
-            </button>
-            <button class="admin-add-block-btn" data-type="subheading">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="admin-block-icon" style="width:12px;height:12px"><path d="M4 12h16"></path><path d="M4 6h16"></path><path d="M4 18h16"></path></svg>
-              + Überschrift
-            </button>
-            <button class="admin-add-block-btn" data-type="quote">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="admin-block-icon" style="width:12px;height:12px"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-              + Zitat
-            </button>
-          </div>
+          <!-- Split-Container -->
+          <div class="admin-editor-split">
 
-          <!-- Baukasten-Import (Datei hochladen) -->
-          <div class="admin-field-group">
-            <div class="admin-upload-zone" id="admin-upload-zone">
-              <input type="file" id="admin-file-single" accept=".md,.txt,.docx,.tex" class="file-input-hidden">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="admin-upload-icon"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-              <span id="admin-upload-zone-label">Dokument (.docx, .md, .tex, .txt) ablegen oder <button id="admin-file-single-btn" class="admin-upload-link">durchsuchen</button>, um Baukasten zu befüllen</span>
-              <span id="admin-file-single-name" class="admin-upload-filename" style="display:none;"></span>
-            </div>
-          </div>
+            <!-- LINKE SPALTE: Baukasten -->
+            <div class="admin-editor-left">
+              <div class="admin-editor-left-scroll">
+                <!-- Container für dynamische Blöcke -->
+                <div id="admin-blocks-container" class="admin-blocks-list"></div>
 
-          <!-- Aktionen -->
+                <!-- Block-Hinzufügen-Leiste -->
+                <div class="admin-add-block-bar" id="admin-add-block-bar">
+                  <button class="admin-add-block-btn" data-type="paragraph">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="admin-block-icon" style="width:10px;height:10px"><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="12" x2="3" y2="12"></line><line x1="21" y1="18" x2="3" y2="18"></line></svg>
+                    + Text
+                  </button>
+                  <button class="admin-add-block-btn" data-type="quote_verse">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="admin-block-icon" style="width:10px;height:10px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    + Bibelvers
+                  </button>
+                  <button class="admin-add-block-btn" data-type="reference">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="admin-block-icon" style="width:10px;height:10px"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                    + Bibelstelle
+                  </button>
+                  <button class="admin-add-block-btn" data-type="prayer">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="admin-block-icon" style="width:10px;height:10px"><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path><path d="M2 12h20"></path></svg>
+                    + Gebet
+                  </button>
+                  <button class="admin-add-block-btn" data-type="question">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="admin-block-icon" style="width:10px;height:10px"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    + Frage
+                  </button>
+                  <button class="admin-add-block-btn" data-type="subheading">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="admin-block-icon" style="width:10px;height:10px"><path d="M4 12h16"></path><path d="M4 6h16"></path><path d="M4 18h16"></path></svg>
+                    + Überschrift
+                  </button>
+                  <button class="admin-add-block-btn" data-type="quote">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="admin-block-icon" style="width:10px;height:10px"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    + Zitat
+                  </button>
+                </div>
+
+                <!-- Upload-Zone -->
+                <div class="admin-field-group" style="margin-bottom: 8px;">
+                  <div class="admin-upload-zone" id="admin-upload-zone">
+                    <input type="file" id="admin-file-single" accept=".md,.txt,.docx,.tex" class="file-input-hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="admin-upload-icon"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                    <span id="admin-upload-zone-label">Dokument (.docx, .md, .tex, .txt) ablegen oder <button id="admin-file-single-btn" class="admin-upload-link">durchsuchen</button></span>
+                    <span id="admin-file-single-name" class="admin-upload-filename" style="display:none;"></span>
+                  </div>
+                </div>
+              </div><!-- /admin-editor-left-scroll -->
+            </div><!-- /admin-editor-left -->
+
+            <!-- RECHTE SPALTE: Live-Vorschau -->
+            <div class="admin-editor-right">
+              <div class="admin-preview-header">
+                <span class="admin-preview-label">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:9px;height:9px;display:inline;vertical-align:middle;margin-right:4px"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                  Vorschau
+                </span>
+                <button class="admin-preview-refresh-btn" id="admin-preview-refresh-btn">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 .49-4.65"></path></svg>
+                  Aktualisieren
+                </button>
+              </div>
+              <div id="admin-preview-pane">
+                <div style="text-align:center; padding: 30px 20px; color: var(--text-secondary); font-size: 11px; opacity: 0.5;">
+                  Klicke „Aktualisieren" um die<br>Vorschau zu laden
+                </div>
+              </div>
+            </div><!-- /admin-editor-right -->
+
+          </div><!-- /admin-editor-split -->
+
+          <!-- Aktions-Footer -->
           <div class="admin-editor-actions">
             <button id="admin-reset-btn" class="admin-action-btn btn-ghost-red">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 .49-4.65"></path></svg>
@@ -2940,9 +3051,12 @@
               Speichern
             </button>
           </div>
-        </div>
+        </div><!-- /admin-weitere-editor -->
 
       </div><!-- /admin-view-editor -->
+
+
+
 
     </div><!-- /admin-modal-panel -->
   </div><!-- /admin-modal -->
