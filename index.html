@@ -865,6 +865,29 @@
       animation: modalScaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
+    /* Mobile: Bottom-Sheet style */
+    @media (max-width: 640px) {
+      .admin-modal-panel {
+        max-width: 100%;
+        width: 100%;
+        max-height: 95vh;
+        height: 95vh;
+        border-radius: 20px 20px 0 0;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        animation: slideUpSheet 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      @keyframes slideUpSheet {
+        from { transform: translateY(100%); opacity: 0; }
+        to   { transform: translateY(0);    opacity: 1; }
+      }
+      #admin-modal {
+        align-items: flex-end !important;
+      }
+    }
+
     /* Header */
     .admin-panel-header {
       display: flex;
@@ -1105,8 +1128,27 @@
     /* ── EDITOR VIEW ── */
     #admin-view-editor {
       overflow-y: auto;
-      padding: 18px 24px 20px;
-      gap: 18px;
+      padding: 14px 18px 0;
+      gap: 12px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    /* Fixed footer bar inside editor view */
+    .admin-editor-actions {
+      position: sticky;
+      bottom: 0;
+      background: rgba(12, 10, 22, 0.97);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(168,85,247,0.12);
+      padding: 10px 18px;
+      margin: 0 -18px;
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      flex-shrink: 0;
+      z-index: 2;
     }
 
     .admin-source-row {
@@ -1252,22 +1294,23 @@
     .admin-field-input {
       background: rgba(255,255,255,0.04);
       border: 1px solid rgba(255,255,255,0.09);
-      border-radius: 10px;
-      padding: 10px 13px;
+      border-radius: 7px;
+      padding: 6px 10px;
       color: var(--text-primary);
-      font-size: 13px;
+      font-size: 12px;
       font-family: inherit;
-      line-height: 1.6;
+      line-height: 1.5;
       outline: none;
-      resize: vertical;
+      resize: none;
       width: 100%;
       box-sizing: border-box;
       transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      overflow: hidden;
     }
     .admin-field-textarea:focus,
     .admin-field-input:focus {
       border-color: rgba(168,85,247,0.45);
-      box-shadow: 0 0 0 3px rgba(168,85,247,0.1);
+      box-shadow: 0 0 0 2px rgba(168,85,247,0.1);
     }
     .admin-field-textarea::placeholder,
     .admin-field-input::placeholder { color: var(--text-secondary); opacity: 0.4; }
@@ -1364,26 +1407,26 @@
     }
     .btn-orange-outline:hover { background: rgba(251,146,60,0.15); }
 
-    /* ── BLOCK BUILDER (BAUKASTEN) STYLES ── */
+    /* ── BLOCK BUILDER (BAUKASTEN) STYLES — KOMPAKT ── */
     .admin-blocks-list {
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      margin-bottom: 16px;
+      gap: 6px;
+      margin-bottom: 10px;
     }
 
     .admin-block-item {
       background: rgba(255, 255, 255, 0.02);
       border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 12px;
-      padding: 12px 14px;
+      border-radius: 8px;
+      padding: 6px 10px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      gap: 5px;
+      transition: border-color 0.2s ease;
     }
     .admin-block-item:hover {
-      border-color: rgba(168, 85, 247, 0.15);
+      border-color: rgba(168, 85, 247, 0.2);
       background: rgba(255, 255, 255, 0.03);
     }
 
@@ -1391,25 +1434,23 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-      padding-bottom: 8px;
+      gap: 6px;
     }
 
     .admin-block-title-area {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 5px;
       color: var(--text-secondary);
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 700;
-      letter-spacing: 1px;
+      letter-spacing: 0.8px;
       text-transform: uppercase;
     }
 
     .admin-block-icon {
-      width: 14px;
-      height: 14px;
+      width: 11px;
+      height: 11px;
       color: var(--color-purple);
       opacity: 0.8;
     }
@@ -1417,16 +1458,16 @@
     .admin-block-controls {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
     }
 
     .admin-block-select {
       background: rgba(20, 10, 35, 0.6);
       border: 1px solid rgba(255, 255, 255, 0.08);
       color: var(--text-primary);
-      padding: 4px 24px 4px 8px;
-      border-radius: 6px;
-      font-size: 11px;
+      padding: 2px 20px 2px 6px;
+      border-radius: 5px;
+      font-size: 9px;
       font-family: inherit;
       cursor: pointer;
       outline: none;
@@ -1434,9 +1475,10 @@
       -webkit-appearance: none;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a855f7' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
-      background-position: right 8px center;
-      background-size: 10px;
+      background-position: right 6px center;
+      background-size: 8px;
       transition: all 0.2s ease;
+      height: 20px;
     }
     .admin-block-select:hover {
       background-color: rgba(168, 85, 247, 0.08);
@@ -1451,9 +1493,9 @@
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 255, 255, 0.08);
       color: var(--text-primary);
-      width: 24px;
-      height: 24px;
-      border-radius: 6px;
+      width: 20px;
+      height: 20px;
+      border-radius: 5px;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -1473,25 +1515,25 @@
     .admin-add-block-bar {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      padding: 12px;
+      gap: 5px;
+      padding: 8px;
       background: rgba(168, 85, 247, 0.02);
       border: 1px dashed rgba(168, 85, 247, 0.15);
-      border-radius: 12px;
+      border-radius: 8px;
       justify-content: center;
-      margin: 8px 0 16px 0;
+      margin: 4px 0 10px 0;
     }
 
     .admin-add-block-btn {
       display: flex;
       align-items: center;
-      gap: 6px;
-      padding: 7px 11px;
-      border-radius: 8px;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: 6px;
       border: 1px solid rgba(168, 85, 247, 0.15);
       background: rgba(168, 85, 247, 0.04);
       color: var(--text-secondary);
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 600;
       font-family: inherit;
       cursor: pointer;
@@ -1501,7 +1543,7 @@
       background: var(--color-purple);
       border-color: var(--color-purple);
       color: #fff;
-      box-shadow: 0 0 10px rgba(168, 85, 247, 0.15);
+      box-shadow: 0 0 8px rgba(168, 85, 247, 0.2);
     }
 
     /* ── BLOCK READER COMPONENT STYLES ── */
@@ -2961,7 +3003,7 @@
       <div class="menu-tabs">
         <button id="menu-tab-bookmarks" class="menu-tab-btn active" onclick="switchMenuTab('bookmarks')">Lesezeichen</button>
         <button id="menu-tab-notes" class="menu-tab-btn" onclick="switchMenuTab('notes')">Notizen</button>
-        <button id="menu-tab-global" class="menu-tab-btn" onclick="switchMenuTab('global')">Global</button>
+        <button id="menu-tab-global" class="menu-tab-btn" onclick="switchMenuTab('global')" style="display:none;">Global</button>
       </div>
 
       <div class="menu-tab-content">
@@ -5429,10 +5471,14 @@
         }
         if (menuAuthBtn) {
           menuAuthBtn.textContent = "Abmelden";
-          menuAuthBtn.style.background = 'rgba(239, 68, 68, 0.2)'; // soft red
+          menuAuthBtn.style.background = 'rgba(239, 68, 68, 0.2)';
           menuAuthBtn.style.borderColor = 'rgba(239, 68, 68, 0.3)';
-          menuAuthBtn.style.color = '#f87171'; // red text
+          menuAuthBtn.style.color = '#f87171';
         }
+
+        // Global-Tab für eingeloggte Nutzer einblenden
+        const globalTab = document.getElementById('menu-tab-global');
+        if (globalTab) globalTab.style.display = '';
 
         // Check if user is Admin
         if (db) {
@@ -5473,6 +5519,14 @@
           menuAuthBtn.style.background = '';
           menuAuthBtn.style.borderColor = '';
           menuAuthBtn.style.color = '';
+        }
+
+        // Global-Tab für nicht eingeloggte Nutzer ausblenden
+        const globalTabOut = document.getElementById('menu-tab-global');
+        if (globalTabOut) globalTabOut.style.display = 'none';
+        // Falls Global-Pane aktiv, zu Lesezeichen wechseln
+        if (document.getElementById('menu-pane-global')?.classList.contains('active')) {
+          switchMenuTab('bookmarks');
         }
 
         // Clear local variables and cache on logout for security
