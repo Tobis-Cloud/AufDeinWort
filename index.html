@@ -1364,6 +1364,223 @@
     }
     .btn-orange-outline:hover { background: rgba(251,146,60,0.15); }
 
+    /* ── BLOCK BUILDER (BAUKASTEN) STYLES ── */
+    .admin-blocks-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .admin-block-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .admin-block-item:hover {
+      border-color: rgba(168, 85, 247, 0.15);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .admin-block-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      padding-bottom: 8px;
+    }
+
+    .admin-block-title-area {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-secondary);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .admin-block-icon {
+      width: 14px;
+      height: 14px;
+      color: var(--color-purple);
+      opacity: 0.8;
+    }
+
+    .admin-block-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .admin-block-select {
+      background: rgba(20, 10, 35, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-primary);
+      padding: 4px 24px 4px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-family: inherit;
+      cursor: pointer;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a855f7' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      background-size: 10px;
+      transition: all 0.2s ease;
+    }
+    .admin-block-select:hover {
+      background-color: rgba(168, 85, 247, 0.08);
+      border-color: rgba(168, 85, 247, 0.3);
+    }
+    .admin-block-select option {
+      background: #1a1128;
+      color: var(--text-primary);
+    }
+
+    .admin-block-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-primary);
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+    .admin-block-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+    .admin-block-btn.btn-trash:hover {
+      color: #f87171;
+      background: rgba(248, 113, 113, 0.15);
+      border-color: rgba(248, 113, 113, 0.25);
+    }
+
+    .admin-add-block-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px;
+      background: rgba(168, 85, 247, 0.02);
+      border: 1px dashed rgba(168, 85, 247, 0.15);
+      border-radius: 12px;
+      justify-content: center;
+      margin: 8px 0 16px 0;
+    }
+
+    .admin-add-block-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 11px;
+      border-radius: 8px;
+      border: 1px solid rgba(168, 85, 247, 0.15);
+      background: rgba(168, 85, 247, 0.04);
+      color: var(--text-secondary);
+      font-size: 11px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .admin-add-block-btn:hover {
+      background: var(--color-purple);
+      border-color: var(--color-purple);
+      color: #fff;
+      box-shadow: 0 0 10px rgba(168, 85, 247, 0.15);
+    }
+
+    /* ── BLOCK READER COMPONENT STYLES ── */
+    .devotional-prayer-card {
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.07) 0%, rgba(236, 72, 153, 0.02) 100%);
+      border: 1px solid rgba(168, 85, 247, 0.18);
+      border-radius: 14px;
+      padding: 14px 18px;
+      margin: 16px 0;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .devotional-question-card {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.07) 0%, rgba(147, 51, 234, 0.02) 100%);
+      border: 1px solid rgba(59, 130, 246, 0.18);
+      border-radius: 14px;
+      padding: 14px 18px;
+      margin: 16px 0;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .devotional-prayer-text,
+    .devotional-question-text {
+      margin: 0;
+      font-size: 1em;
+      line-height: 1.6;
+      color: var(--text-primary);
+    }
+
+    .devotional-question-text strong {
+      color: #93c5fd; /* Soft light blue */
+    }
+
+    .devotional-prayer-text {
+      font-style: italic;
+    }
+
+    .devotional-icon {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      opacity: 0.85;
+    }
+    .devotional-prayer-card .devotional-icon {
+      color: var(--color-purple);
+    }
+    .devotional-question-card .devotional-icon {
+      color: #60a5fa; /* Blue */
+    }
+
+    .devotional-subheading {
+      font-size: 1.2em;
+      font-weight: 700;
+      color: #fff;
+      margin: 22px 0 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 6px;
+      letter-spacing: 0.2px;
+    }
+
+    .devotional-blockquote {
+      font-size: 0.95em;
+      font-style: italic;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      border-left: 3px solid var(--color-purple);
+      padding-left: 14px;
+      margin: 14px 0 14px 10px;
+    }
+
     /* Keep old rules that are still needed */
     .admin-divider {
       border: 0;
@@ -2622,43 +2839,50 @@
           <div class="admin-preview-body" id="admin-preview-body"></div>
         </div>
 
-        <!-- Weitere: strukturierte Eingabe -->
+        <!-- Weitere: Andachten-Baukasten (Block-Editor) -->
         <div id="admin-weitere-editor" style="display:none;">
-          <!-- Bibelvers -->
-          <div class="admin-field-group">
-            <label class="admin-field-label" for="admin-field-quote">
-              Bibelvers
-              <span class="admin-field-hint">Wird automatisch in „…" eingerahmt</span>
-            </label>
-            <div class="admin-quote-wrapper">
-              <span class="admin-quote-mark">„</span>
-              <textarea id="admin-field-quote" class="admin-field-textarea" rows="2" placeholder="Bibelvers hier eingeben…"></textarea>
-              <span class="admin-quote-mark">"</span>
-            </div>
+          
+          <!-- Container für dynamische Blöcke -->
+          <div id="admin-blocks-container" class="admin-blocks-list"></div>
+
+          <!-- Symbol-Hinzufügen-Leiste -->
+          <div class="admin-add-block-bar" id="admin-add-block-bar">
+            <button class="admin-add-block-btn" data-type="paragraph">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="admin-block-icon" style="width:12px;height:12px"><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="12" x2="3" y2="12"></line><line x1="21" y1="18" x2="3" y2="18"></line></svg>
+              + Text
+            </button>
+            <button class="admin-add-block-btn" data-type="quote_verse">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="admin-block-icon" style="width:12px;height:12px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              + Bibelvers
+            </button>
+            <button class="admin-add-block-btn" data-type="reference">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="admin-block-icon" style="width:12px;height:12px"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+              + Bibelstelle
+            </button>
+            <button class="admin-add-block-btn" data-type="prayer">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="admin-block-icon" style="width:12px;height:12px"><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path><path d="M2 12h20"></path></svg>
+              + Gebet
+            </button>
+            <button class="admin-add-block-btn" data-type="question">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="admin-block-icon" style="width:12px;height:12px"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              + Frage
+            </button>
+            <button class="admin-add-block-btn" data-type="subheading">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="admin-block-icon" style="width:12px;height:12px"><path d="M4 12h16"></path><path d="M4 6h16"></path><path d="M4 18h16"></path></svg>
+              + Überschrift
+            </button>
+            <button class="admin-add-block-btn" data-type="quote">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="admin-block-icon" style="width:12px;height:12px"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+              + Zitat
+            </button>
           </div>
 
-          <!-- Bibelstelle -->
+          <!-- Baukasten-Import (Datei hochladen) -->
           <div class="admin-field-group">
-            <label class="admin-field-label" for="admin-field-reference">Bibelstelle</label>
-            <input type="text" id="admin-field-reference" class="admin-field-input" placeholder="z.B. Johannes 3,16">
-          </div>
-
-          <!-- Andachtstext -->
-          <div class="admin-field-group">
-            <label class="admin-field-label" for="admin-field-body">Andachtstext</label>
-            <textarea id="admin-field-body" class="admin-field-textarea admin-field-body-textarea" rows="6" placeholder="Andachtstext hier eingeben…"></textarea>
-          </div>
-
-          <!-- Datei hochladen -->
-          <div class="admin-field-group">
-            <label class="admin-field-label">
-              Datei hochladen
-              <span class="admin-field-hint">.md · .txt · .docx — Inhalt wird in die Felder oben geparst</span>
-            </label>
             <div class="admin-upload-zone" id="admin-upload-zone">
-              <input type="file" id="admin-file-single" accept=".md,.txt,.docx" class="file-input-hidden">
+              <input type="file" id="admin-file-single" accept=".md,.txt,.docx,.tex" class="file-input-hidden">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="admin-upload-icon"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-              <span id="admin-upload-zone-label">Datei hierher ziehen oder <button id="admin-file-single-btn" class="admin-upload-link">durchsuchen</button></span>
+              <span id="admin-upload-zone-label">Dokument (.docx, .md, .tex, .txt) ablegen oder <button id="admin-file-single-btn" class="admin-upload-link">durchsuchen</button>, um Baukasten zu befüllen</span>
               <span id="admin-file-single-name" class="admin-upload-filename" style="display:none;"></span>
             </div>
           </div>
@@ -3134,6 +3358,7 @@
               const data = doc.data();
               if (data && data.rawMarkdown) {
                 customDevotionals[pageNum] = parseSinglePageMarkdown(data.rawMarkdown, pageNum);
+                customDevotionals[pageNum].rawMarkdown = data.rawMarkdown;
               }
             }
           });
@@ -3208,6 +3433,7 @@
     }
 
     let adminEditingPage = null;
+    let adminBlocks = [];
 
     const MONTH_NAMES = ["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"];
 
@@ -3320,7 +3546,307 @@
       }
     }
 
-    // ── Source dropdown change ──
+    // ── Andachten-Baukasten (Block-Editor) Logik ──
+
+    function decompileSpurgeonToBlocks(item) {
+      if (!item) return [];
+      const blocks = [];
+      
+      blocks.push({ type: 'quote_verse', text: item.quote || '' });
+      blocks.push({ type: 'reference', text: item.reference || '' });
+      
+      if (item.paragraphs) {
+        item.paragraphs.forEach(p => {
+          if (Array.isArray(p)) {
+            const hasItalic = p.some(c => c.type === 'italic');
+            const text = p.map(c => c.text).join(' ');
+            blocks.push({ type: hasItalic ? 'prayer' : 'paragraph', text });
+          } else {
+            blocks.push({ type: 'paragraph', text: p });
+          }
+        });
+      }
+      return blocks;
+    }
+
+    function decompileMarkdownToBlocks(markdownText, pageNum) {
+      if (!markdownText) return [];
+      
+      const lines = markdownText.split('\n');
+      const blocks = [];
+      let quoteText = '';
+      let refText = '';
+      let quoteMatched = false;
+      let refMatched = false;
+      
+      let currentParagraph = [];
+
+      for (let i = 0; i < lines.length; i++) {
+        let line = lines[i].trim();
+        if (line.length === 0) {
+          if (currentParagraph.length > 0) {
+            blocks.push({ type: 'paragraph', text: currentParagraph.join(' ') });
+            currentParagraph = [];
+          }
+          continue;
+        }
+
+        // 1. Bibelvers (Erste Zeile mit Anführungszeichen)
+        if (!quoteMatched && (line.startsWith('„') || line.startsWith('"') || line.startsWith('“'))) {
+          quoteText = line.replace(/^[„"“]|(?:[“"”]\s*)$/g, '').trim();
+          quoteMatched = true;
+          if (quoteText) {
+            blocks.push({ type: 'quote_verse', text: quoteText });
+          }
+          continue;
+        }
+
+        // 2. Bibelstelle (Zeile direkt nach Bibelvers)
+        if (quoteMatched && !refMatched) {
+          refText = line;
+          refMatched = true;
+          if (refText) {
+            blocks.push({ type: 'reference', text: refText });
+          }
+          continue;
+        }
+
+        // 3. Spezielle Blocktypen
+        if (line.startsWith('###') || line.startsWith('##')) {
+          if (currentParagraph.length > 0) {
+            blocks.push({ type: 'paragraph', text: currentParagraph.join(' ') });
+            currentParagraph = [];
+          }
+          const text = line.replace(/^###\s*|^##\s*/, '').trim();
+          blocks.push({ type: 'subheading', text });
+          continue;
+        }
+
+        if (line.startsWith('>')) {
+          if (currentParagraph.length > 0) {
+            blocks.push({ type: 'paragraph', text: currentParagraph.join(' ') });
+            currentParagraph = [];
+          }
+          let text = line.substring(1).trim();
+          if (text.startsWith('**Frage:**') || text.startsWith('Frage:')) {
+            text = text.replace(/^\*\*Frage:\*\*\s*|^Frage:\s*/, '').trim();
+            blocks.push({ type: 'question', text });
+          } else {
+            blocks.push({ type: 'quote', text });
+          }
+          continue;
+        }
+
+        if (line.startsWith('?') || line.startsWith('Frage:') || line.startsWith('Nachdenken:')) {
+          if (currentParagraph.length > 0) {
+            blocks.push({ type: 'paragraph', text: currentParagraph.join(' ') });
+            currentParagraph = [];
+          }
+          const text = line.replace(/^\?\s*|^Frage:\s*|^Nachdenken:\s*/, '').trim();
+          blocks.push({ type: 'question', text });
+          continue;
+        }
+
+        if (line.startsWith('*') && line.endsWith('*')) {
+          if (currentParagraph.length > 0) {
+            blocks.push({ type: 'paragraph', text: currentParagraph.join(' ') });
+            currentParagraph = [];
+          }
+          const text = line.slice(1, -1).trim();
+          blocks.push({ type: 'prayer', text });
+          continue;
+        }
+
+        if (line.startsWith('**') && line.endsWith('**')) {
+          if (currentParagraph.length > 0) {
+            blocks.push({ type: 'paragraph', text: currentParagraph.join(' ') });
+            currentParagraph = [];
+          }
+          const text = line.slice(2, -2).trim();
+          blocks.push({ type: 'reference', text });
+          continue;
+        }
+
+        // Standard-Text
+        currentParagraph.push(line);
+      }
+
+      if (currentParagraph.length > 0) {
+        blocks.push({ type: 'paragraph', text: currentParagraph.join(' ') });
+      }
+
+      // Falls Bibelvers oder Bibelstelle fehlen, leere Blöcke voranstellen
+      const hasQuote = blocks.some(b => b.type === 'quote_verse');
+      const hasRef = blocks.some(b => b.type === 'reference');
+      if (!hasQuote) blocks.unshift({ type: 'quote_verse', text: '' });
+      if (!hasRef) {
+        const quoteIdx = blocks.findIndex(b => b.type === 'quote_verse');
+        blocks.splice(quoteIdx + 1, 0, { type: 'reference', text: '' });
+      }
+
+      return blocks;
+    }
+
+    function compileBlocksToMarkdown() {
+      let quote = '';
+      let reference = '';
+      const bodyLines = [];
+
+      adminBlocks.forEach((block) => {
+        const text = block.text.trim();
+        if (!text) return;
+
+        if (block.type === 'quote_verse') {
+          quote = text;
+        } else if (block.type === 'reference') {
+          reference = text;
+        } else if (block.type === 'prayer') {
+          bodyLines.push(`*${text}*`);
+        } else if (block.type === 'question') {
+          bodyLines.push(`? ${text}`);
+        } else if (block.type === 'subheading') {
+          bodyLines.push(`### ${text}`);
+        } else if (block.type === 'quote') {
+          bodyLines.push(`> ${text}`);
+        } else {
+          bodyLines.push(text);
+        }
+      });
+
+      let markdown = '';
+      if (quote) {
+        markdown += `„${quote}“\n`;
+      } else {
+        markdown += `""\n`;
+      }
+      markdown += `${reference}\n\n`;
+      markdown += bodyLines.join('\n\n');
+
+      return markdown;
+    }
+
+    function renderAdminBlocks() {
+      const container = document.getElementById('admin-blocks-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      adminBlocks.forEach((block, index) => {
+        const item = document.createElement('div');
+        item.className = 'admin-block-item';
+        item.dataset.index = index;
+
+        let blockTitle = 'Textabsatz';
+        let blockIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="admin-block-icon"><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="12" x2="3" y2="12"></line><line x1="21" y1="18" x2="3" y2="18"></line></svg>`;
+
+        if (block.type === 'quote_verse') {
+          blockTitle = 'Bibelvers';
+          blockIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="admin-block-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>`;
+        } else if (block.type === 'reference') {
+          blockTitle = 'Bibelstelle';
+          blockIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="admin-block-icon"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`;
+        } else if (block.type === 'prayer') {
+          blockTitle = 'Gebet';
+          blockIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="admin-block-icon"><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path><path d="M2 12h20"></path></svg>`;
+        } else if (block.type === 'question') {
+          blockTitle = 'Frage';
+          blockIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="admin-block-icon"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`;
+        } else if (block.type === 'subheading') {
+          blockTitle = 'Überschrift';
+          blockIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="admin-block-icon"><path d="M4 12h16"></path><path d="M4 6h16"></path><path d="M4 18h16"></path></svg>`;
+        } else if (block.type === 'quote') {
+          blockTitle = 'Zitat';
+          blockIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="admin-block-icon"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>`;
+        }
+
+        item.innerHTML = `
+          <div class="admin-block-header">
+            <div class="admin-block-title-area">
+              ${blockIcon}
+              <span>${blockTitle}</span>
+            </div>
+            <div class="admin-block-controls">
+              <button class="admin-block-btn btn-up" title="Nach oben" ${index === 0 ? 'disabled style="opacity: 0.3; cursor: default;"' : ''}>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px"><polyline points="18 15 12 9 6 15"></polyline></svg>
+              </button>
+              <button class="admin-block-btn btn-down" title="Nach unten" ${index === adminBlocks.length - 1 ? 'disabled style="opacity: 0.3; cursor: default;"' : ''}>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </button>
+              <select class="admin-block-select" title="Typ ändern">
+                <option value="paragraph" ${block.type === 'paragraph' ? 'selected' : ''}>Text</option>
+                <option value="quote_verse" ${block.type === 'quote_verse' ? 'selected' : ''}>Bibelvers</option>
+                <option value="reference" ${block.type === 'reference' ? 'selected' : ''}>Bibelstelle</option>
+                <option value="prayer" ${block.type === 'prayer' ? 'selected' : ''}>Gebet</option>
+                <option value="question" ${block.type === 'question' ? 'selected' : ''}>Frage</option>
+                <option value="subheading" ${block.type === 'subheading' ? 'selected' : ''}>Überschrift</option>
+                <option value="quote" ${block.type === 'quote' ? 'selected' : ''}>Zitat</option>
+              </select>
+              <button class="admin-block-btn btn-trash" title="Löschen">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              </button>
+            </div>
+          </div>
+          <div class="admin-block-body">
+            <textarea class="admin-field-textarea" rows="2" placeholder="${blockTitle === 'Bibelstelle' ? 'z.B. Johannes 3,16' : blockTitle + ' hier eingeben…'}">${block.text}</textarea>
+          </div>
+        `;
+
+        const textarea = item.querySelector('textarea');
+        textarea.addEventListener('input', (e) => {
+          block.text = e.target.value;
+          autoGrowTextarea(e.target);
+        });
+
+        item.querySelector('.btn-up').addEventListener('click', () => {
+          if (index > 0) {
+            const temp = adminBlocks[index];
+            adminBlocks[index] = adminBlocks[index - 1];
+            adminBlocks[index - 1] = temp;
+            renderAdminBlocks();
+          }
+        });
+
+        item.querySelector('.btn-down').addEventListener('click', () => {
+          if (index < adminBlocks.length - 1) {
+            const temp = adminBlocks[index];
+            adminBlocks[index] = adminBlocks[index + 1];
+            adminBlocks[index + 1] = temp;
+            renderAdminBlocks();
+          }
+        });
+
+        item.querySelector('.admin-block-select').addEventListener('change', (e) => {
+          block.type = e.target.value;
+          renderAdminBlocks();
+        });
+
+        item.querySelector('.btn-trash').addEventListener('click', () => {
+          adminBlocks.splice(index, 1);
+          renderAdminBlocks();
+        });
+
+        container.appendChild(item);
+        autoGrowTextarea(textarea);
+      });
+    }
+
+    function autoGrowTextarea(textarea) {
+      if (!textarea) return;
+      textarea.style.height = 'auto';
+      textarea.style.height = (textarea.scrollHeight) + 'px';
+    }
+
+    function addAdminBlock(type) {
+      adminBlocks.push({ type: type, text: '' });
+      renderAdminBlocks();
+      setTimeout(() => {
+        const container = document.getElementById('admin-blocks-container');
+        if (container && container.lastElementChild) {
+          container.lastElementChild.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          container.lastElementChild.querySelector('textarea')?.focus();
+        }
+      }, 50);
+    }
+
     function onAdminSourceChange(source, pageNum) {
       const pg = pageNum ?? adminEditingPage;
       const spurgeonPreview = document.getElementById('admin-spurgeon-preview');
@@ -3329,9 +3855,9 @@
       if (source === 'spurgeon') {
         spurgeonPreview.style.display = 'flex';
         weitereEditor.style.display = 'none';
-        // Fill read-only preview from parsedPages
+        
         const item = parsedPages[pg];
-        document.getElementById('admin-preview-quote').textContent = item ? `„${item.quote}"` : '(Kein Original-Text vorhanden)';
+        document.getElementById('admin-preview-quote').textContent = item ? `„${item.quote}“` : '(Kein Original-Text vorhanden)';
         document.getElementById('admin-preview-reference').textContent = item ? item.reference : '';
         if (item && item.paragraphs) {
           const body = item.paragraphs.map(p => {
@@ -3345,76 +3871,215 @@
       } else {
         spurgeonPreview.style.display = 'none';
         weitereEditor.style.display = 'flex';
-        // Pre-fill from customDevotionals or empty
-        const item = customDevotionals[pg];
-        document.getElementById('admin-field-quote').value = item ? item.quote : '';
-        document.getElementById('admin-field-reference').value = item ? item.reference : '';
-        if (item && item.paragraphs) {
-          const body = item.paragraphs.map(p => {
-            if (Array.isArray(p)) return p.map(c => c.text).join(' ');
-            return p;
-          }).join('\n\n');
-          document.getElementById('admin-field-body').value = body;
+        
+        const customItem = customDevotionals[pg];
+        if (customItem) {
+          if (customItem.rawMarkdown) {
+            adminBlocks = decompileMarkdownToBlocks(customItem.rawMarkdown, pg);
+          } else {
+            adminBlocks = decompileSpurgeonToBlocks(customItem);
+          }
         } else {
-          document.getElementById('admin-field-body').value = '';
+          const origItem = parsedPages[pg];
+          adminBlocks = decompileSpurgeonToBlocks(origItem);
         }
+        renderAdminBlocks();
       }
     }
 
-    // ── Parse uploaded file content into fields ──
-    function parseFileIntoFields(content, filename) {
+    function parseFileToBlocks(content, filename) {
       const ext = filename.split('.').pop().toLowerCase();
-      let text = content;
+      let blocks = [];
 
-      // Try to parse structured
-      const lines = text.split('\n');
-      let quote = '', reference = '', bodyLines = [];
-      let quoteFound = false, refFound = false;
+      if (ext === 'tex') {
+        const lines = content.split('\n');
+        let currentPara = [];
+        
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i].trim();
+          if (!line) {
+            if (currentPara.length > 0) {
+              blocks.push({ type: 'paragraph', text: currentPara.join(' ') });
+              currentPara = [];
+            }
+            continue;
+          }
 
-      for (let i = 0; i < lines.length; i++) {
-        const line = lines[i].trim();
-        if (!line) continue;
+          if (line.startsWith('%')) continue;
 
-        if (!quoteFound && (line.startsWith('„') || line.startsWith('"') || line.startsWith('"'))) {
-          quote = line.replace(/^[„""]|["""]\s*$/g, '').trim();
-          quoteFound = true;
-          continue;
+          if (line.startsWith('\\section{') || line.startsWith('\\subsection{') || line.startsWith('\\subsubsection{')) {
+            if (currentPara.length > 0) {
+              blocks.push({ type: 'paragraph', text: currentPara.join(' ') });
+              currentPara = [];
+            }
+            const match = line.match(/\\sub*section\*?\{([^}]+)\}/);
+            if (match) {
+              blocks.push({ type: 'subheading', text: match[1].trim() });
+            }
+            continue;
+          }
+
+          if (line.startsWith('\\textbf{') && line.endsWith('}')) {
+            if (currentPara.length > 0) {
+              blocks.push({ type: 'paragraph', text: currentPara.join(' ') });
+              currentPara = [];
+            }
+            const match = line.match(/\\textbf\{([^}]+)\}/);
+            if (match) {
+              blocks.push({ type: 'reference', text: match[1].trim() });
+            }
+            continue;
+          }
+
+          if (line.startsWith('\\textit{') && line.endsWith('}')) {
+            if (currentPara.length > 0) {
+              blocks.push({ type: 'paragraph', text: currentPara.join(' ') });
+              currentPara = [];
+            }
+            const match = line.match(/\\textit\{([^}]+)\}/);
+            if (match) {
+              blocks.push({ type: 'prayer', text: match[1].trim() });
+            }
+            continue;
+          }
+
+          if (line.startsWith('\\begin{quote}')) {
+            if (currentPara.length > 0) {
+              blocks.push({ type: 'paragraph', text: currentPara.join(' ') });
+              currentPara = [];
+            }
+            let quoteContent = [];
+            i++;
+            while (i < lines.length && !lines[i].includes('\\end{quote}')) {
+              quoteContent.push(lines[i].trim());
+              i++;
+            }
+            const text = quoteContent.join(' ').replace(/^[„"“]|(?:[“"”]\s*)$/g, '').trim();
+            const hasQuoteVerse = blocks.some(b => b.type === 'quote_verse');
+            blocks.push({ type: hasQuoteVerse ? 'quote' : 'quote_verse', text });
+            continue;
+          }
+
+          let cleanLine = line
+            .replace(/\\textbf\{([^}]+)\}/g, '$1')
+            .replace(/\\textit\{([^}]+)\}/g, '$1')
+            .replace(/\\emph\{([^}]+)\}/g, '$1')
+            .replace(/\\[a-zA-Z]+\*?(\{([^}]+)\})?/g, '')
+            .replace(/[{}]/g, '')
+            .trim();
+
+          if (cleanLine.length > 0) {
+            if (!blocks.some(b => b.type === 'quote_verse') && (cleanLine.startsWith('„') || cleanLine.startsWith('"') || cleanLine.startsWith('“'))) {
+              const text = cleanLine.replace(/^[„"“]|(?:[“"”]\s*)$/g, '').trim();
+              blocks.push({ type: 'quote_verse', text });
+            } else if (cleanLine.startsWith('?') || cleanLine.startsWith('Frage:')) {
+              const text = cleanLine.replace(/^\?\s*|^Frage:\s*/, '').trim();
+              blocks.push({ type: 'question', text });
+            } else {
+              currentPara.push(cleanLine);
+            }
+          }
         }
-        if (quoteFound && !refFound) {
-          reference = line;
-          refFound = true;
-          continue;
+
+        if (currentPara.length > 0) {
+          blocks.push({ type: 'paragraph', text: currentPara.join(' ') });
         }
-        if (quoteFound && refFound) {
-          bodyLines.push(line);
-        }
+
+      } else {
+        return decompileMarkdownToBlocks(content, adminEditingPage);
       }
 
-      document.getElementById('admin-field-quote').value = quote || '';
-      document.getElementById('admin-field-reference').value = reference || '';
-      document.getElementById('admin-field-body').value = bodyLines.join('\n').trim();
+      const hasQuote = blocks.some(b => b.type === 'quote_verse');
+      const hasRef = blocks.some(b => b.type === 'reference');
+      if (!hasQuote) blocks.unshift({ type: 'quote_verse', text: '' });
+      if (!hasRef) {
+        const quoteIdx = blocks.findIndex(b => b.type === 'quote_verse');
+        blocks.splice(quoteIdx + 1, 0, { type: 'reference', text: '' });
+      }
 
-      // Reset file label
+      return blocks;
+    }
+
+    function parseHtmlToBlocks(htmlContent) {
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = htmlContent;
+      const blocks = [];
+
+      const children = Array.from(tempDiv.children);
+      children.forEach((el) => {
+        const tag = el.tagName.toLowerCase();
+        const text = el.textContent.trim();
+        if (!text) return;
+
+        if (tag === 'h1' || tag === 'h2' || tag === 'h3' || tag === 'h4') {
+          blocks.push({ type: 'subheading', text });
+        } else if (tag === 'blockquote') {
+          blocks.push({ type: 'quote', text });
+        } else if (el.querySelector('strong') && el.children.length === 1 && el.firstElementChild.tagName.toLowerCase() === 'strong') {
+          blocks.push({ type: 'reference', text });
+        } else if (el.querySelector('em') && el.children.length === 1 && el.firstElementChild.tagName.toLowerCase() === 'em') {
+          blocks.push({ type: 'prayer', text });
+        } else {
+          if (!blocks.some(b => b.type === 'quote_verse') && (text.startsWith('„') || text.startsWith('"') || text.startsWith('“'))) {
+            const cleanText = text.replace(/^[„"“]|(?:[“"”]\s*)$/g, '').trim();
+            blocks.push({ type: 'quote_verse', text: cleanText });
+          } else if (text.startsWith('?') || text.startsWith('Frage:')) {
+            const cleanText = text.replace(/^\?\s*|^Frage:\s*/, '').trim();
+            blocks.push({ type: 'question', text: cleanText });
+          } else {
+            blocks.push({ type: 'paragraph', text });
+          }
+        }
+      });
+
+      const hasQuote = blocks.some(b => b.type === 'quote_verse');
+      const hasRef = blocks.some(b => b.type === 'reference');
+      if (!hasQuote) blocks.unshift({ type: 'quote_verse', text: '' });
+      if (!hasRef) {
+        const quoteIdx = blocks.findIndex(b => b.type === 'quote_verse');
+        blocks.splice(quoteIdx + 1, 0, { type: 'reference', text: '' });
+      }
+
+      return blocks;
+    }
+
+    function updateFileLabel(filename) {
       const nameEl = document.getElementById('admin-file-single-name');
       const labelEl = document.getElementById('admin-upload-zone-label');
-      nameEl.textContent = filename;
-      nameEl.style.display = 'block';
-      labelEl.style.display = 'none';
-
-      showToast('Datei geparst — bitte prüfen und speichern', 'success');
+      if (nameEl && labelEl) {
+        nameEl.textContent = filename;
+        nameEl.style.display = 'block';
+        labelEl.style.display = 'none';
+      }
+      showToast('Datei in den Baukasten eingepflegt — bitte prüfen und speichern', 'success');
     }
 
-    // ── mammoth.js lazy loader for .docx ──
     function loadMammothAndParse(file) {
       if (window.mammoth) {
-        mammoth.extractRawText({ arrayBuffer: file }).then(r => parseFileIntoFields(r.value, file.name));
+        const reader = new FileReader();
+        reader.onload = evt => {
+          mammoth.convertToHtml({ arrayBuffer: evt.target.result })
+            .then(r => {
+              adminBlocks = parseHtmlToBlocks(r.value);
+              renderAdminBlocks();
+              updateFileLabel(file.name);
+            });
+        };
+        reader.readAsArrayBuffer(file);
         return;
       }
       const script = document.createElement('script');
       script.src = 'https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js';
       script.onload = () => {
         const reader = new FileReader();
-        reader.onload = evt => mammoth.extractRawText({ arrayBuffer: evt.target.result }).then(r => parseFileIntoFields(r.value, file.name));
+        reader.onload = evt => {
+          mammoth.convertToHtml({ arrayBuffer: evt.target.result })
+            .then(r => {
+              adminBlocks = parseHtmlToBlocks(r.value);
+              renderAdminBlocks();
+              updateFileLabel(file.name);
+            });
+        };
         reader.readAsArrayBuffer(file);
       };
       script.onerror = () => showToast('Fehler beim Laden der DOCX-Bibliothek', 'error');
@@ -3439,21 +4104,30 @@
         onAdminSourceChange(e.target.value);
       });
 
+      // ── Add Block buttons ──
+      const addBlockBar = document.getElementById('admin-add-block-bar');
+      if (addBlockBar) {
+        addBlockBar.querySelectorAll('.admin-add-block-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const type = btn.dataset.type;
+            addAdminBlock(type);
+          });
+        });
+      }
+
       // ── Save ──
       document.getElementById('admin-save-btn').addEventListener('click', () => {
         if (!adminEditingPage) return;
         if (!db) { showToast('Firebase nicht initialisiert', 'error'); return; }
 
-        const quote = document.getElementById('admin-field-quote').value.trim();
-        const reference = document.getElementById('admin-field-reference').value.trim();
-        const body = document.getElementById('admin-field-body').value.trim();
+        const rawMarkdown = compileBlocksToMarkdown();
+        const hasContent = adminBlocks.some(b => b.text.trim().length > 0);
+        if (!hasContent) { showToast('Bitte mindestens ein Baukasten-Element mit Text befüllen.', 'warning'); return; }
 
-        if (!quote && !body) { showToast('Bitte mindestens Bibelvers oder Text eingeben', 'warning'); return; }
-
-        const rawMarkdown = `„${quote}"\n${reference}\n\n${body}`;
         db.collection('custom_devotionals').doc(String(adminEditingPage)).set({ rawMarkdown })
           .then(() => {
             customDevotionals[adminEditingPage] = parseSinglePageMarkdown(rawMarkdown, adminEditingPage);
+            customDevotionals[adminEditingPage].rawMarkdown = rawMarkdown;
             showToast('Andacht gespeichert!', 'success');
             goToPage(currentPage);
             showAdminListView();
@@ -3509,7 +4183,11 @@
           loadMammothAndParse(file);
         } else {
           const reader = new FileReader();
-          reader.onload = (evt) => parseFileIntoFields(evt.target.result, file.name);
+          reader.onload = (evt) => {
+            adminBlocks = parseFileToBlocks(evt.target.result, file.name);
+            renderAdminBlocks();
+            updateFileLabel(file.name);
+          };
           reader.readAsText(file);
         }
       }
@@ -3785,17 +4463,64 @@
 
     function renderDevotionalText(item) {
       let bodyParagraphsHtml = '';
-      for (const p of item.paragraphs) {
-        if (Array.isArray(p)) {
-          const html = p.map(c => {
-            if (c.type === 'italic') {
-              return `<em>${c.text}</em>`;
+      
+      if (item.rawMarkdown) {
+        // Dynamic blocks rendering for custom devotionals
+        const blocks = decompileMarkdownToBlocks(item.rawMarkdown, item.page);
+        blocks.forEach(block => {
+          const text = block.text.trim();
+          if (!text) return;
+
+          // Note: quote_verse and reference blocks are rendered in the header container, so we skip them here.
+          if (block.type === 'quote_verse' || block.type === 'reference') return;
+
+          if (block.type === 'prayer') {
+            bodyParagraphsHtml += `
+              <div class="devotional-prayer-card">
+                <svg class="devotional-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                <p class="devotional-prayer-text">${text}</p>
+              </div>
+            `;
+          } else if (block.type === 'question') {
+            bodyParagraphsHtml += `
+              <div class="devotional-question-card">
+                <svg class="devotional-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                <p class="devotional-question-text"><strong>Frage zum Nachdenken:</strong> ${text}</p>
+              </div>
+            `;
+          } else if (block.type === 'subheading') {
+            bodyParagraphsHtml += `<h3 class="devotional-subheading">${text}</h3>`;
+          } else if (block.type === 'quote') {
+            bodyParagraphsHtml += `<blockquote class="devotional-blockquote">${text}</blockquote>`;
+          } else {
+            bodyParagraphsHtml += `<p>${text}</p>`;
+          }
+        });
+      } else {
+        // Normal paragraph rendering with prayer cards for italic sentences (Spurgeon style)
+        for (const p of item.paragraphs) {
+          if (Array.isArray(p)) {
+            const hasItalic = p.some(c => c.type === 'italic');
+            const html = p.map(c => {
+              if (c.type === 'italic') {
+                return `<em>${c.text}</em>`;
+              }
+              return c.text;
+            }).join(' ');
+
+            if (hasItalic) {
+              bodyParagraphsHtml += `
+                <div class="devotional-prayer-card">
+                  <svg class="devotional-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                  <p class="devotional-prayer-text">${html}</p>
+                </div>
+              `;
+            } else {
+              bodyParagraphsHtml += `<p>${html}</p>`;
             }
-            return c.text;
-          }).join(' ');
-          bodyParagraphsHtml += `<p>${html}</p>`;
-        } else {
-          bodyParagraphsHtml += `<p>${p}</p>`;
+          } else {
+            bodyParagraphsHtml += `<p>${p}</p>`;
+          }
         }
       }
       
