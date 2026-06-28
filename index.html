@@ -2700,6 +2700,18 @@
         </button>
       </div>
 
+      <!-- User Account Status Section -->
+      <div id="menu-user-section" class="menu-user-section glass-card" style="margin-bottom: 20px; padding: 12px; display: flex; flex-direction: column; gap: 8px; align-items: stretch; border: 1px solid var(--glass-border); background: rgba(255, 255, 255, 0.03); border-radius: 12px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div id="menu-user-avatar" style="width: 32px; height: 32px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #fff; font-size: 14px; flex-shrink: 0; border: 1px solid var(--glass-border);">?</div>
+          <div style="display: flex; flex-direction: column; min-width: 0; flex: 1;">
+            <span id="menu-user-name" style="font-size: 13px; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Nicht angemeldet</span>
+            <span id="menu-user-email" style="font-size: 11px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.8;">Melde dich an, um Kommentare zu schreiben</span>
+          </div>
+        </div>
+        <button id="menu-auth-btn" class="auth-submit-btn" style="margin-top: 4px; padding: 8px; font-size: 12px; border-radius: 8px; height: 34px; width: 100%; border: 1px solid var(--glass-border); transition: all 0.2s ease;">Anmelden</button>
+      </div>
+
       <!-- Section 1: Graphical Monthly Calendar Navigation -->
       <div class="menu-section">
         <h3>Kalendersprung</h3>
@@ -2802,6 +2814,10 @@
         firebase.initializeApp(firebaseConfig);
         db = firebase.firestore();
         auth = firebase.auth();
+        // Force local persistence to keep user logged in
+        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+          .then(() => console.log("Firebase Auth Persistence auf LOCAL gesetzt."))
+          .catch(err => console.error("Fehler beim Setzen der Auth-Persistence:", err));
         console.log("Firebase erfolgreich initialisiert.");
       } catch (error) {
         console.error("Fehler bei der Firebase-Initialisierung:", error);
@@ -2813,14 +2829,20 @@
     // -------------------------------------------------------------
     // SECURE AUTH LOGIC (Aufsatz über Firebase / Demo)
     // -------------------------------------------------------------
+    let authStateResolved = false;
     function onAuthStateChanged(callback) {
       if (auth) {
         auth.onAuthStateChanged((user) => {
           currentUser = user;
+          authStateResolved = true;
           callback(user);
         });
       } else {
-        registerDemoAuthListener(callback);
+        registerDemoAuthListener((user) => {
+          currentUser = user;
+          authStateResolved = true;
+          callback(user);
+        });
       }
     }
 
@@ -4662,10 +4684,30 @@
 
     // Listen to Auth State Changes
     onAuthStateChanged((user) => {
+      const menuUserName = document.getElementById('menu-user-name');
+      const menuUserEmail = document.getElementById('menu-user-email');
+      const menuUserAvatar = document.getElementById('menu-user-avatar');
+      const menuAuthBtn = document.getElementById('menu-auth-btn');
+
       if (user) {
         console.log("Logged in user:", user.displayName || user.email);
         syncUserDataFromFirestore(user);
         
+        // Update user section in sidebar
+        if (menuUserName) menuUserName.textContent = user.displayName || "Schreiber";
+        if (menuUserEmail) menuUserEmail.textContent = user.email;
+        if (menuUserAvatar) {
+          const firstChar = (user.displayName || user.email || "?").charAt(0).toUpperCase();
+          menuUserAvatar.textContent = firstChar;
+          menuUserAvatar.style.background = 'var(--color-purple)';
+        }
+        if (menuAuthBtn) {
+          menuAuthBtn.textContent = "Abmelden";
+          menuAuthBtn.style.background = 'rgba(239, 68, 68, 0.2)'; // soft red
+          menuAuthBtn.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+          menuAuthBtn.style.color = '#f87171'; // red text
+        }
+
         // Check if user is Admin
         if (db) {
           db.collection("admins").doc(user.uid).get()
@@ -4692,6 +4734,21 @@
         console.log("No user logged in.");
         isAdminEnabled = false;
         updateAdminUI();
+        
+        // Update user section in sidebar
+        if (menuUserName) menuUserName.textContent = "Nicht angemeldet";
+        if (menuUserEmail) menuUserEmail.textContent = "Melde dich an, um Kommentare zu schreiben";
+        if (menuUserAvatar) {
+          menuUserAvatar.textContent = "?";
+          menuUserAvatar.style.background = 'rgba(255, 255, 255, 0.1)';
+        }
+        if (menuAuthBtn) {
+          menuAuthBtn.textContent = "Anmelden";
+          menuAuthBtn.style.background = '';
+          menuAuthBtn.style.borderColor = '';
+          menuAuthBtn.style.color = '';
+        }
+
         // Clear local variables and cache on logout for security
         bookmarks = [];
         notes = {};
@@ -4942,12 +4999,37 @@
       loadCalendarData();
       adjustLayoutForDevice();
       
-      // Auto-öffnen des Login-Fensters beim ersten Laden, falls nicht eingeloggt
-      setTimeout(() => {
-        if (!currentUser) {
-          openAuthModal();
+      // Auth-Button im Menü
+      const menuAuthBtn = document.getElementById('menu-auth-btn');
+      if (menuAuthBtn) {
+        menuAuthBtn.addEventListener('click', () => {
+          if (currentUser) {
+            if (confirm("Möchtest du dich wirklich abmelden?")) {
+              logoutUser()
+                .then(() => {
+                  showToast("Erfolgreich abgemeldet.", "info");
+                })
+                .catch(err => console.error("Fehler beim Abmelden:", err));
+            }
+          } else {
+            closeSlideOver();
+            openAuthModal();
+          }
+        });
+      }
+      
+      // Auto-öffnen des Login-Fensters nur, wenn nach Initialisierung kein Nutzer angemeldet ist.
+      // Wir warten bis zu 1,5 Sekunden auf Firebase Auth.
+      let checkCount = 0;
+      const authCheckInterval = setInterval(() => {
+        checkCount++;
+        if (authStateResolved || checkCount >= 15) {
+          clearInterval(authCheckInterval);
+          if (!currentUser) {
+            openAuthModal();
+          }
         }
-      }, 800);
+      }, 100);
     });
   </script>
 
